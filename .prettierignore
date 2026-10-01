@@ -1,0 +1,10 @@
+.next
+node_modules
+.agents
+.claude
+public
+src/assets
+AGENTS.md
+CLAUDE.md
+skills-lock.json
+docs/spec.md

@@ -1,0 +1,163 @@
+{
+  "meta": {
+    "title": "LPK — Creative Technologist",
+    "description": "Independent creative technologist shaping digital products through design, artificial intelligence and motion."
+  },
+  "nav": {
+    "work": "Work",
+    "about": "About",
+    "services": "Services",
+    "contact": "Contact",
+    "menu": "Menu",
+    "close": "Close"
+  },
+  "hero": {
+    "eyebrow": "Independent Creative Technologist — Bangkok",
+    "lines": ["Designing digital", "experiences", "that move."],
+    "scroll": "Scroll to explore",
+    "availability": "Available for selected projects · Q4 2026"
+  },
+  "intro": {
+    "kicker": "Point of view",
+    "statement": "I design digital products where technology, motion and storytelling come together.",
+    "meta": ["Based in Bangkok", "Available worldwide", "Digital / AI / Product / Motion"]
+  },
+  "work": {
+    "kicker": "Selected work",
+    "count": "01 — 05",
+    "view": "View project",
+    "projects": [
+      {
+        "slug": "nissan-social-command",
+        "title": "Nissan Social Command",
+        "category": "Social CRM / AI / Analytics",
+        "year": "2026",
+        "description": "An intelligence layer turning millions of social signals into decisive customer action."
+      },
+      {
+        "slug": "synthetic-horizons",
+        "title": "Synthetic Horizons",
+        "category": "Generative Art / Direction",
+        "year": "2026",
+        "description": "A living visual identity generated from movement, atmosphere and machine perception."
+      },
+      {
+        "slug": "minority-archive",
+        "title": "Minority Archive",
+        "category": "Culture / Interactive",
+        "year": "2025",
+        "description": "A digital archive that turns overlooked stories into a tactile, evolving experience."
+      },
+      {
+        "slug": "future-of-care",
+        "title": "Future of Care",
+        "category": "Product / Service Design",
+        "year": "2025",
+        "description": "A calmer healthcare journey that gives people clarity in complex moments."
+      },
+      {
+        "slug": "form-of-intelligence",
+        "title": "Form of Intelligence",
+        "category": "AI / Spatial Experience",
+        "year": "2024",
+        "description": "An immersive installation exploring the invisible dialogue between human and machine."
+      }
+    ]
+  },
+  "showcase": {
+    "kicker": "The work, in motion",
+    "label": "Selected frames"
+  },
+  "caseStudy": {
+    "kicker": "Featured case study",
+    "title": "Nissan Social Command",
+    "steps": [
+      {
+        "label": "Overview",
+        "title": "Listening at the speed of culture",
+        "body": "A real-time command center built to transform social conversation into useful intelligence."
+      },
+      {
+        "label": "Challenge",
+        "title": "Millions of signals. One clear decision.",
+        "body": "The system had to make complexity legible for teams operating across markets, products and moments."
+      },
+      {
+        "label": "Approach",
+        "title": "Designed around attention",
+        "body": "We reduced noise, revealed patterns and used motion to guide teams toward what mattered now."
+      },
+      {
+        "label": "Solution",
+        "title": "A living intelligence layer",
+        "body": "AI classification, human judgment and responsive visual systems work together in one calm interface."
+      },
+      {
+        "label": "Result",
+        "title": "From reaction to anticipation",
+        "body": "Teams moved faster, aligned sooner and discovered opportunities before they became obvious."
+      }
+    ]
+  },
+  "services": {
+    "kicker": "Expertise",
+    "intro": "From early ambiguity to a living digital experience.",
+    "items": ["Product Design", "AI Experience", "Web Development", "Motion Design", "Digital Strategy"],
+    "details": [
+      "Systems, interfaces and prototypes that turn strategy into a useful product.",
+      "Human-centered AI concepts that feel legible, responsible and genuinely helpful.",
+      "Fast, accessible and expressive experiences built with modern web technology.",
+      "Motion systems that clarify hierarchy, create rhythm and build emotional resonance.",
+      "A clear product narrative, opportunity map and practical path from idea to launch."
+    ]
+  },
+  "lab": {
+    "kicker": "Lab / Experiments",
+    "intro": "Small provocations, unfinished questions and new ways to make technology feel human.",
+    "items": [
+      { "title": "Machine Botanica", "tag": "AI / Generative Art" },
+      { "title": "Kinetic Type 01", "tag": "Motion / Typography" },
+      { "title": "Soft Interfaces", "tag": "Experimental UI" },
+      { "title": "Signal Garden", "tag": "Interactive Web" }
+    ]
+  },
+  "about": {
+    "kicker": "About",
+    "title": "I work at the intersection of design, technology and artificial intelligence.",
+    "body": "My focus is turning complex systems into simple, human digital experiences — bringing strategy, interface and motion into one coherent story.",
+    "facts": [
+      ["Location", "Bangkok, Thailand"],
+      ["Experience", "10+ years"],
+      ["Specialization", "Creative technology"],
+      ["Current focus", "Human-centered AI"]
+    ]
+  },
+  "marquee": "Design × Technology × AI × Motion × Storytelling ×",
+  "contact": {
+    "kicker": "Start a conversation",
+    "lines": ["Have a project?", "Let's create", "something great."],
+    "cta": "Start a project",
+    "email": "hello@lpk.studio"
+  },
+  "footer": {
+    "location": "Bangkok, Thailand",
+    "localTime": "Local time",
+    "top": "Back to top"
+  },
+  "projectDetail": {
+    "overview": "Overview",
+    "problem": "Problem",
+    "process": "Process",
+    "design": "Design system",
+    "result": "Result",
+    "next": "Next project",
+    "back": "All work",
+    "copy": [
+      "A precise digital system designed to turn complexity into confident action.",
+      "The challenge was not a lack of information, but an excess of it. We reframed the experience around the decisions people actually needed to make.",
+      "Research, prototyping and motion studies ran in parallel. Each iteration tested both utility and emotional clarity.",
+      "A modular visual language brings data, narrative and interaction together without losing calm or character.",
+      "The final experience is faster to understand, easier to use and built to evolve with the organization."
+    ]
+  }
+}

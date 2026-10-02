@@ -13,6 +13,12 @@
       "skillPath": "skills/hyperframes-animation/SKILL.md",
       "computedHash": "29a5ffe950a520cfab9140ce24708c886a001ee64b6caa3e6175fb9eaab04f19"
     },
+    "resume-ats-optimizer": {
+      "source": "paramchoudhary/resumeskills",
+      "sourceType": "github",
+      "skillPath": "skills/resume-ats-optimizer/SKILL.md",
+      "computedHash": "2e3782b6176807b6d714213a14258bd86ca988d442757674eb86181d81465abd"
+    },
     "vercel-react-best-practices": {
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",

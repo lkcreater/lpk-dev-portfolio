@@ -21,7 +21,7 @@ export function SelectedWork({
           <span>03</span>
           {copy.kicker}
         </FadeUp>
-        <span>{copy.count}</span>
+        <span>01 — {String(projects.length).padStart(2, "0")}</span>
       </div>
       <div className="project-list">
         {projects.map((project, index) => {

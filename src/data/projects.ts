@@ -8,8 +8,17 @@ export type PortfolioProfile = typeof portfolioData.identity &
     skillGroups: typeof portfolioData.skillGroups;
   };
 
-export type PortfolioProject = Omit<(typeof projectsData)[number], "description"> & {
+export type PortfolioProject = {
+  slug: string;
+  title: string;
+  category: string;
+  year: string;
+  url: string | null;
+  tone: string;
+  position: string;
   description: string;
+  details: string[];
+  technologies: string[];
 };
 
 export const projectVisuals = projectsData.map(({ slug, tone, position }) => ({ slug, tone, position }));
@@ -25,8 +34,17 @@ export function getProfile(locale: Locale): PortfolioProfile {
 
 export function getProjects(locale: Locale): PortfolioProject[] {
   return projectsData.map((project) => ({
-    ...project,
+    slug: project.slug,
+    title: project.title,
+    category: project.category,
+    year: project.year,
+    url: project.url,
+    tone: project.tone,
+    position: project.position,
     description: project.description[locale],
+    details: "details" in project && project.details ? project.details[locale] : [],
+    technologies:
+      "technologies" in project && Array.isArray(project.technologies) ? project.technologies : [],
   }));
 }
 

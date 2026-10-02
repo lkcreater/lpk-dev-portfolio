@@ -32,6 +32,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const nextProject = projects[(projectIndex + 1) % projects.length];
   const detail = dictionary.projectDetail;
   const labels = [detail.overview, detail.problem, detail.process, detail.design, detail.result];
+  const narrative = project.details.length === labels.length ? project.details : detail.copy;
 
   return (
     <article className="project-detail">
@@ -46,6 +47,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </div>
         <h1>{project.title}</h1>
         <p>{project.description}</p>
+        {project.technologies.length ? (
+          <ul className="project-stack" aria-label="Technology stack">
+            {project.technologies.map((technology) => (
+              <li key={technology}>{technology}</li>
+            ))}
+          </ul>
+        ) : null}
         {project.url ? (
           <a
             className="project-site-link"
@@ -78,7 +86,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               0{index + 1} / {label}
             </span>
             <h2>{index === 0 ? project.title : label}</h2>
-            <p>{detail.copy[index]}</p>
+            <p>{narrative[index]}</p>
           </FadeUp>
         ))}
       </div>

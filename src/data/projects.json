@@ -50,5 +50,174 @@
       "en": "A digital publishing experience for the Prathaprachan specialist magazine.",
       "th": "ประสบการณ์สิ่งพิมพ์ดิจิทัลสำหรับนิตยสารเฉพาะทางพระท่าพระจันทร์"
     }
+  },
+  {
+    "slug": "lhmh",
+    "title": "LHMH",
+    "category": "Hospitality Learning Platform",
+    "year": "2026",
+    "url": null,
+    "tone": "paper",
+    "position": "42% center",
+    "technologies": ["React", "Vite", "NestJS", "TypeORM", "PostgreSQL", "AI Voice", "Playwright"],
+    "description": {
+      "en": "A gamified hospitality learning ecosystem with quizzes, voice missions and interactive 360° simulations, supported by a mission CMS and measurable training reports.",
+      "th": "ระบบฝึกอบรมบุคลากรโรงแรมแบบเกมมิฟิเคชัน รวมแบบทดสอบ ภารกิจเสียง และสถานการณ์จำลอง 360° พร้อม CMS และรายงานผลที่วัดได้"
+    },
+    "details": {
+      "en": [
+        "I built a three-part training ecosystem for hotel operations: an employee mission experience, a NestJS API and a CMS for training administrators.",
+        "Housekeeping standards, room inspection and guest-service calls had to become repeatable practice with measurable scoring instead of static course material.",
+        "I modelled choice, voice and 360° simulation missions, submission histories and scoring rubrics, then built visual editors for scenes, hotspots, tasks and question banks.",
+        "The React players and CMS connect to NestJS, TypeORM and PostgreSQL, with media uploads, AI-assisted voice evaluation and detailed attempt tracking.",
+        "Training teams can publish realistic missions, employees can practice operational scenarios, and managers can compare complete answer histories and scores across learners."
+      ],
+      "th": [
+        "ผมพัฒนาระบบฝึกอบรมงานโรงแรมแบบครบวงจร 3 ส่วน ได้แก่ แอปภารกิจสำหรับพนักงาน NestJS API และ CMS สำหรับทีมฝึกอบรม",
+        "โจทย์คือเปลี่ยนมาตรฐานงานแม่บ้าน การตรวจห้อง และการรับแจ้งจากแขก ให้เป็นการฝึกที่ทำซ้ำได้และวัดผลได้ แทนเนื้อหาคอร์สแบบอ่านอย่างเดียว",
+        "ผมออกแบบโมเดลภารกิจแบบตัวเลือก เสียง และ simulation 360° พร้อมประวัติการส่ง คะแนน rubric และเครื่องมือสร้าง scene, hotspot, task และคลังคำถาม",
+        "ตัวเล่นและ CMS บน React เชื่อมกับ NestJS, TypeORM และ PostgreSQL รองรับ media upload การประเมินเสียงด้วย AI และการติดตามผลราย attempt",
+        "ทีมฝึกอบรมสามารถเผยแพร่ภารกิจที่ใกล้เคียงสถานการณ์จริง พนักงานฝึกปฏิบัติได้ และผู้จัดการเปรียบเทียบคำตอบกับคะแนนของผู้เรียนแต่ละคนได้ครบถ้วน"
+      ]
+    }
+  },
+  {
+    "slug": "kolaxy-plus",
+    "title": "Kolaxy Plus",
+    "category": "Influencer Campaign Platform",
+    "year": "2026",
+    "url": null,
+    "tone": "silver",
+    "position": "62% center",
+    "technologies": ["Next.js", "React", "NestJS", "MongoDB", "Redis", "AI SDK", "JWT", "Terraform"],
+    "description": {
+      "en": "An end-to-end influencer campaign platform spanning a public product site, operations CMS and campaign API with KOL discovery and AI-assisted brief generation.",
+      "th": "แพลตฟอร์มบริหารแคมเปญอินฟลูเอนเซอร์ครบวงจร ครอบคลุมเว็บไซต์ผลิตภัณฑ์ ระบบหลังบ้าน การค้นหา KOL และการสร้าง campaign brief ด้วย AI"
+    },
+    "details": {
+      "en": [
+        "Kolaxy Plus combines a public marketing experience, an operations CMS and a modular campaign API into one influencer-marketing product.",
+        "The product needed to connect onboarding, authentication, campaign configuration, creator discovery, creative briefs and credit usage without fragmenting the operator workflow.",
+        "I structured the backend around campaign categories, mood tones, tag styles, AI-generated briefs, KOL discovery and a guided user-setting wizard, with explicit validation at each step.",
+        "The platform uses Next.js for the public site, React for operations and NestJS with MongoDB, Redis, JWT, OTP/Google authentication and the AI SDK for its application layer.",
+        "Campaign teams gain a single place to prepare briefs, configure campaign direction, discover creators and manage the operational data behind each launch."
+      ],
+      "th": [
+        "Kolaxy Plus รวมเว็บไซต์การตลาด ระบบ CMS สำหรับทีมปฏิบัติการ และ campaign API แบบโมดูลาร์ไว้ในผลิตภัณฑ์ influencer marketing เดียว",
+        "ระบบต้องเชื่อม onboarding, authentication, การตั้งค่าแคมเปญ การค้นหา creator การทำ creative brief และเครดิต โดยไม่ทำให้ workflow ของทีมกระจัดกระจาย",
+        "ผมวางโครง backend แยกโดเมน campaign category, mood tone, tag style, AI-generated brief, KOL discovery และ wizard ตั้งค่าผู้ใช้ พร้อม validation ชัดเจนในแต่ละขั้น",
+        "แพลตฟอร์มใช้ Next.js สำหรับเว็บสาธารณะ React สำหรับระบบปฏิบัติการ และ NestJS ร่วมกับ MongoDB, Redis, JWT, OTP/Google authentication และ AI SDK",
+        "ทีมแคมเปญสามารถเตรียม brief กำหนดทิศทาง ค้นหา creator และจัดการข้อมูลการทำงานของแต่ละแคมเปญได้จากจุดเดียว"
+      ]
+    }
+  },
+  {
+    "slug": "secom",
+    "title": "SECOM",
+    "category": "Customer Engagement Platform",
+    "year": "2026",
+    "url": null,
+    "tone": "blue",
+    "position": "28% center",
+    "technologies": [
+      "Next.js",
+      "React",
+      "Express",
+      "TypeORM",
+      "PostgreSQL",
+      "Redis",
+      "BullMQ",
+      "LINE LIFF",
+      "Salesforce"
+    ],
+    "description": {
+      "en": "A bilingual customer-engagement and lead-operations platform for a security services company, integrating LINE journeys, surveys, segmentation, automation and Salesforce.",
+      "th": "แพลตฟอร์ม customer engagement และบริหาร lead สำหรับธุรกิจระบบรักษาความปลอดภัย เชื่อม LINE, LIFF, แบบสำรวจ, segmentation, automation และ Salesforce"
+    },
+    "details": {
+      "en": [
+        "I worked across the public bilingual website, LIFF customer journeys, an internal CMS and the backend services that connect engagement data to sales operations.",
+        "The challenge was to unify content, surveys, whitepapers, LINE interactions and lead follow-up while keeping permissions, scoring and external-system sync reliable.",
+        "I designed workflows for segmentation, lead scoring, automated actions, scheduled content, rich menus, image maps, survey reporting and qualified-lead synchronization.",
+        "The solution combines Next.js and next-intl, a React operations CMS, and an Express/TypeORM/PostgreSQL backend with Redis, BullMQ, S3, LINE APIs and Salesforce queues.",
+        "Marketing and sales teams can manage acquisition content, understand audience segments and move qualified leads into downstream operations from one connected system."
+      ],
+      "th": [
+        "ผมพัฒนาทั้งเว็บไซต์สองภาษา customer journey บน LIFF ระบบ CMS ภายใน และ backend ที่เชื่อมข้อมูล engagement เข้ากับงานขาย",
+        "โจทย์คือรวม content, survey, whitepaper, interaction จาก LINE และการติดตาม lead ให้ทำงานร่วมกัน โดยยังควบคุมสิทธิ์ คะแนน และการ sync ระบบภายนอกได้อย่างน่าเชื่อถือ",
+        "ผมออกแบบ workflow สำหรับ segmentation, lead scoring, automation, scheduled content, rich menu, image map, รายงานแบบสำรวจ และการส่งต่อ qualified lead",
+        "ระบบใช้ Next.js และ next-intl, React CMS และ Express/TypeORM/PostgreSQL backend ร่วมกับ Redis, BullMQ, S3, LINE APIs และ Salesforce queue",
+        "ทีมการตลาดและฝ่ายขายสามารถจัดการเนื้อหาหาลูกค้า ทำความเข้าใจ segment และส่ง lead คุณภาพเข้าสู่กระบวนการถัดไปได้ในระบบเดียว"
+      ]
+    }
+  },
+  {
+    "slug": "vibe-notis",
+    "title": "Vibe-Notis",
+    "category": "Developer Productivity App",
+    "year": "2026",
+    "url": null,
+    "tone": "mono",
+    "position": "72% center",
+    "technologies": ["Electron", "React", "TypeScript", "IPC", "Claude Code Hooks", "Node.js"],
+    "description": {
+      "en": "A native desktop companion that brings coding-agent sessions, approval requests and questions into the MacBook notch without interrupting the developer’s flow.",
+      "th": "Desktop companion ที่นำสถานะ coding agent คำขออนุมัติ และคำถามมาไว้บริเวณ MacBook notch โดยไม่ขัดจังหวะการทำงานของนักพัฒนา"
+    },
+    "details": {
+      "en": [
+        "Vibe-Notis is an Electron companion that turns the MacBook notch into a focused status surface for active coding-agent sessions.",
+        "Long-running agent work often needs an approval or answer while the developer is in another window; the important interruption is easy to miss or requires constant context switching.",
+        "I built a local hook server, session store and transcript pipeline, then designed compact flows for approvals, plans, questions, suggestions and Markdown previews.",
+        "The app separates Electron main, preload and React renderer concerns, uses guarded IPC channels, manages multiple windows and integrates tray, sound, terminal and installer workflows.",
+        "Developers can monitor parallel sessions and respond at the right moment while keeping the primary workspace clear and uninterrupted."
+      ],
+      "th": [
+        "Vibe-Notis คือ Electron companion ที่เปลี่ยนพื้นที่ MacBook notch ให้เป็นจุดแสดงสถานะของ coding-agent session ที่กำลังทำงาน",
+        "งาน agent ที่ใช้เวลานานมักรอการอนุมัติหรือคำตอบขณะที่นักพัฒนาอยู่หน้าต่างอื่น ทำให้พลาดจังหวะสำคัญหรือต้องสลับ context ตลอดเวลา",
+        "ผมสร้าง local hook server, session store และ transcript pipeline พร้อมออกแบบ flow ขนาดกะทัดรัดสำหรับ approval, plan, question, suggestion และ Markdown preview",
+        "แอปแยก Electron main, preload และ React renderer ชัดเจน ใช้ IPC ที่มี guard จัดการหลายหน้าต่าง และเชื่อม tray, sound, terminal กับ installer workflow",
+        "นักพัฒนาติดตามหลาย session และตอบกลับในเวลาที่เหมาะสมได้ โดยยังรักษาพื้นที่ทำงานหลักให้โล่งและต่อเนื่อง"
+      ]
+    }
+  },
+  {
+    "slug": "mek-ai",
+    "title": "Mek-AI",
+    "category": "AI Business Operating Platform",
+    "year": "2026",
+    "url": null,
+    "tone": "blue",
+    "position": "54% center",
+    "technologies": [
+      "React",
+      "NestJS",
+      "PostgreSQL",
+      "Supabase",
+      "Drizzle ORM",
+      "AI SDK",
+      "Google Cloud Run",
+      "GitHub Actions"
+    ],
+    "description": {
+      "en": "A multi-tenant AI operating platform for SMEs, connecting strategy, content, creative production, advertising, commerce and omnichannel customer conversations.",
+      "th": "แพลตฟอร์ม AI แบบ multi-tenant สำหรับ SME เชื่อมกลยุทธ์ คอนเทนต์ งานสร้างสรรค์ โฆษณา การขาย และบทสนทนาลูกค้าหลายช่องทาง"
+    },
+    "details": {
+      "en": [
+        "Mek-AI is a production business platform that brings AI-assisted marketing, sales, products, customer conversations and operational controls into one workspace for SMEs.",
+        "The core challenge is coordinating many external channels, AI providers and asynchronous jobs while preserving tenant isolation, billing accuracy and a coherent user journey.",
+        "I shaped domain modules for strategy, content planning, creative generation, ads, products, orders, chatbots, knowledge, subscriptions and operations, supported by audit trails and feature flags.",
+        "The monorepo combines React applications, a NestJS backend, PostgreSQL/Supabase, Drizzle ORM, multi-provider AI tooling, queues and Cloud Run delivery through GitHub Actions.",
+        "The result is an extensible operating system where small businesses can move from planning to publishing, selling and customer support without stitching together disconnected tools."
+      ],
+      "th": [
+        "Mek-AI คือแพลตฟอร์มธุรกิจระดับ production ที่รวมการตลาด การขาย สินค้า บทสนทนาลูกค้า และเครื่องมือปฏิบัติการที่มี AI ช่วยไว้ใน workspace เดียวสำหรับ SME",
+        "โจทย์หลักคือประสานหลาย channel, AI provider และงาน asynchronous โดยยังรักษาการแยก tenant ความถูกต้องของ billing และ user journey ที่ต่อเนื่อง",
+        "ผมวาง domain module สำหรับกลยุทธ์ แผนคอนเทนต์ งานสร้างสรรค์ โฆษณา สินค้า ออเดอร์ chatbot, knowledge, subscription และงาน ops พร้อม audit trail และ feature flag",
+        "monorepo เชื่อม React applications, NestJS backend, PostgreSQL/Supabase, Drizzle ORM, เครื่องมือ AI หลาย provider, queue และการ deploy บน Cloud Run ผ่าน GitHub Actions",
+        "ผลลัพธ์คือ operating system ที่ต่อยอดได้ ช่วยให้ธุรกิจขนาดเล็กเดินจากการวางแผนไปสู่การเผยแพร่ การขาย และบริการลูกค้าได้โดยไม่ต้องต่อเครื่องมือหลายระบบเอง"
+      ]
+    }
   }
 ]

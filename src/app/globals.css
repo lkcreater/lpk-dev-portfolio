@@ -1436,6 +1436,23 @@ img {
   font-size: 0.88rem;
   line-height: 1.6;
 }
+.project-stack {
+  display: flex;
+  grid-column: 3 / 11;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.project-stack li {
+  padding: 0.42rem 0.65rem;
+  border: 1px solid var(--line);
+  color: #68665f;
+  font-size: 0.58rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
 .project-detail-image {
   position: relative;
   height: 92vh;
@@ -1805,7 +1822,8 @@ img {
     grid-template-columns: 2rem 1fr auto;
   }
   .project-detail-hero h1,
-  .project-detail-hero > p {
+  .project-detail-hero > p,
+  .project-stack {
     grid-column: 1 / -1;
   }
   .project-detail-hero > p {

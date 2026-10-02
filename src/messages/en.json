@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "LPK — Creative Technologist",
-    "description": "Independent creative technologist shaping digital products through design, artificial intelligence and motion."
+    "title": "Ponlawat Koeisuwan — Senior Full-Stack Developer",
+    "description": "Senior full-stack developer in Bangkok with 10+ years of experience building web products, APIs, systems and databases."
   },
   "nav": {
     "work": "Work",
@@ -12,61 +12,24 @@
     "close": "Close"
   },
   "hero": {
-    "eyebrow": "Independent Creative Technologist — Bangkok",
-    "lines": ["Designing digital", "experiences", "that move."],
+    "eyebrow": "Ponlawat Koeisuwan — Bangkok",
+    "lines": ["Senior full-stack", "developer building", "systems that last."],
     "scroll": "Scroll to explore",
-    "availability": "Available for selected projects · Q4 2026"
+    "availability": "Frontend · Backend · Architecture"
   },
   "intro": {
     "kicker": "Point of view",
-    "statement": "I design digital products where technology, motion and storytelling come together.",
-    "meta": ["Based in Bangkok", "Available worldwide", "Digital / AI / Product / Motion"]
+    "statement": "I turn complex requirements into reliable web products — from interface to infrastructure.",
+    "meta": ["Based in Bangkok", "10+ years of experience", "React / Next.js / Node.js / NestJS"]
   },
   "work": {
     "kicker": "Selected work",
-    "count": "01 — 05",
-    "view": "View project",
-    "projects": [
-      {
-        "slug": "nissan-social-command",
-        "title": "Nissan Social Command",
-        "category": "Social CRM / AI / Analytics",
-        "year": "2026",
-        "description": "An intelligence layer turning millions of social signals into decisive customer action."
-      },
-      {
-        "slug": "synthetic-horizons",
-        "title": "Synthetic Horizons",
-        "category": "Generative Art / Direction",
-        "year": "2026",
-        "description": "A living visual identity generated from movement, atmosphere and machine perception."
-      },
-      {
-        "slug": "minority-archive",
-        "title": "Minority Archive",
-        "category": "Culture / Interactive",
-        "year": "2025",
-        "description": "A digital archive that turns overlooked stories into a tactile, evolving experience."
-      },
-      {
-        "slug": "future-of-care",
-        "title": "Future of Care",
-        "category": "Product / Service Design",
-        "year": "2025",
-        "description": "A calmer healthcare journey that gives people clarity in complex moments."
-      },
-      {
-        "slug": "form-of-intelligence",
-        "title": "Form of Intelligence",
-        "category": "AI / Spatial Experience",
-        "year": "2024",
-        "description": "An immersive installation exploring the invisible dialogue between human and machine."
-      }
-    ]
+    "count": "01 — 04",
+    "view": "View project"
   },
   "showcase": {
-    "kicker": "The work, in motion",
-    "label": "Selected frames"
+    "kicker": "Built for production",
+    "label": "Selected platforms"
   },
   "caseStudy": {
     "kicker": "Featured case study",
@@ -101,14 +64,20 @@
   },
   "services": {
     "kicker": "Expertise",
-    "intro": "From early ambiguity to a living digital experience.",
-    "items": ["Product Design", "AI Experience", "Web Development", "Motion Design", "Digital Strategy"],
+    "intro": "From a rough requirement to a system ready for production.",
+    "items": [
+      "Frontend Engineering",
+      "Backend & REST APIs",
+      "System Architecture",
+      "Database Design",
+      "CI/CD & Testing"
+    ],
     "details": [
-      "Systems, interfaces and prototypes that turn strategy into a useful product.",
-      "Human-centered AI concepts that feel legible, responsible and genuinely helpful.",
-      "Fast, accessible and expressive experiences built with modern web technology.",
-      "Motion systems that clarify hierarchy, create rhythm and build emotional resonance.",
-      "A clear product narrative, opportunity map and practical path from idea to launch."
+      "Responsive product interfaces built with React, Next.js, Angular, Vue.js and TypeScript.",
+      "Maintainable services and REST APIs built with Node.js, Express and NestJS.",
+      "Practical technical decisions that connect product requirements, applications and infrastructure.",
+      "Relational data models using SQL, PostgreSQL and modern ORM workflows.",
+      "Reliable delivery pipelines with GitHub Actions plus unit and end-to-end testing."
     ]
   },
   "lab": {
@@ -123,21 +92,21 @@
   },
   "about": {
     "kicker": "About",
-    "title": "I work at the intersection of design, technology and artificial intelligence.",
-    "body": "My focus is turning complex systems into simple, human digital experiences — bringing strategy, interface and motion into one coherent story.",
+    "title": "I care about the whole system, not just the screen.",
+    "body": "Over the past decade I have worked across frontend, backend, databases and delivery pipelines. I enjoy learning, solving difficult requirements and turning them into clear, dependable products.",
     "facts": [
       ["Location", "Bangkok, Thailand"],
       ["Experience", "10+ years"],
-      ["Specialization", "Creative technology"],
-      ["Current focus", "Human-centered AI"]
+      ["Specialization", "Full-stack web development"],
+      ["Current focus", "Scalable product systems"]
     ]
   },
-  "marquee": "Design × Technology × AI × Motion × Storytelling ×",
+  "marquee": "REACT × NEXT.JS × NODE.JS × NESTJS × POSTGRESQL ×",
   "contact": {
     "kicker": "Start a conversation",
-    "lines": ["Have a project?", "Let's create", "something great."],
+    "lines": ["Need a web product?", "Let's build it", "to last."],
     "cta": "Start a project",
-    "email": "hello@lpk.studio"
+    "email": "ponlawat6001@gmail.com"
   },
   "footer": {
     "location": "Bangkok, Thailand",

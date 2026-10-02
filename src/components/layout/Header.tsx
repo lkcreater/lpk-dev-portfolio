@@ -5,11 +5,20 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import type { Dictionary, Locale } from "@/lib/i18n";
+import type { PortfolioProfile } from "@/data/projects";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const navKeys = ["work", "about", "services", "contact"] as const;
 
-export function Header({ locale, nav }: { locale: Locale; nav: Dictionary["nav"] }) {
+export function Header({
+  locale,
+  nav,
+  profile,
+}: {
+  locale: Locale;
+  nav: Dictionary["nav"];
+  profile: PortfolioProfile;
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -93,7 +102,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: Dictionary["nav"]
             </div>
             <div className="mobile-menu-meta">
               <span>Bangkok · TH</span>
-              <a href="mailto:hello@lpk.studio">hello@lpk.studio</a>
+              <a href={`mailto:${profile.email}`}>{profile.email}</a>
             </div>
           </motion.div>
         ) : null}

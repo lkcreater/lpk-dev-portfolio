@@ -1,0 +1,54 @@
+[
+  {
+    "slug": "tisco-finfreedom",
+    "title": "TISCO FinFreedom",
+    "category": "Financial Web Application",
+    "year": "Selected Work",
+    "url": null,
+    "tone": "silver",
+    "position": "68% center",
+    "description": {
+      "en": "A financial web application from Ponlawat’s professional full-stack portfolio.",
+      "th": "เว็บแอปพลิเคชันด้านการเงิน หนึ่งในผลงาน Full-Stack ระดับโปรดักชันของพลวัต"
+    }
+  },
+  {
+    "slug": "pamco",
+    "title": "PAMCO",
+    "category": "Corporate Platform",
+    "year": "Selected Work",
+    "url": "https://www.pamco.co.th",
+    "tone": "ember",
+    "position": "center",
+    "description": {
+      "en": "A production corporate platform delivered for Professional Alliance Management Co., Ltd.",
+      "th": "แพลตฟอร์มเว็บไซต์องค์กรสำหรับ Professional Alliance Management Co., Ltd."
+    }
+  },
+  {
+    "slug": "otp",
+    "title": "OTP Thailand",
+    "category": "Government Digital Platform",
+    "year": "Selected Work",
+    "url": "https://www.otp.go.th",
+    "tone": "blue",
+    "position": "26% center",
+    "description": {
+      "en": "The public digital platform for Thailand’s Office of Transport and Traffic Policy and Planning.",
+      "th": "แพลตฟอร์มดิจิทัลสาธารณะของสำนักงานนโยบายและแผนการขนส่งและจราจร"
+    }
+  },
+  {
+    "slug": "prathaprachan-magazine",
+    "title": "Prathaprachan Magazine",
+    "category": "Publishing Platform",
+    "year": "Selected Work",
+    "url": "https://www.prathaprachan-mag.com",
+    "tone": "paper",
+    "position": "78% center",
+    "description": {
+      "en": "A digital publishing experience for the Prathaprachan specialist magazine.",
+      "th": "ประสบการณ์สิ่งพิมพ์ดิจิทัลสำหรับนิตยสารเฉพาะทางพระท่าพระจันทร์"
+    }
+  }
+]

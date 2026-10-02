@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "LPK — นักสร้างสรรค์เทคโนโลยี",
-    "description": "นักสร้างสรรค์เทคโนโลยีอิสระ ผสานการออกแบบ ปัญญาประดิษฐ์ และการเคลื่อนไหวให้เป็นผลิตภัณฑ์ดิจิทัล"
+    "title": "พลวัต เคยสุวรรณ์ — Senior Full-Stack Developer",
+    "description": "Senior Full-Stack Developer ในกรุงเทพฯ ประสบการณ์กว่า 10 ปี เชี่ยวชาญเว็บ API การออกแบบระบบและฐานข้อมูล"
   },
   "nav": {
     "work": "ผลงาน",
@@ -12,61 +12,24 @@
     "close": "ปิด"
   },
   "hero": {
-    "eyebrow": "นักสร้างสรรค์เทคโนโลยีอิสระ — กรุงเทพฯ",
-    "lines": ["ออกแบบประสบการณ์", "ดิจิทัลที่เคลื่อนไหว", "และมีชีวิต"],
+    "eyebrow": "พลวัต เคยสุวรรณ์ — กรุงเทพฯ",
+    "lines": ["Senior Full-Stack", "พัฒนาและออกแบบ", "ระบบที่เติบโตได้"],
     "scroll": "เลื่อนเพื่อสำรวจ",
-    "availability": "เปิดรับโปรเจกต์ที่ใช่ · ไตรมาส 4 ปี 2026"
+    "availability": "Frontend · Backend · Architecture"
   },
   "intro": {
     "kicker": "มุมมอง",
-    "statement": "ผมออกแบบผลิตภัณฑ์ดิจิทัลที่เทคโนโลยี การเคลื่อนไหว และการเล่าเรื่องมาบรรจบกัน",
-    "meta": ["ประจำอยู่กรุงเทพฯ", "ทำงานได้ทั่วโลก", "ดิจิทัล / AI / โปรดักต์ / โมชัน"]
+    "statement": "ผมเปลี่ยน requirement ที่ซับซ้อนให้เป็นเว็บที่เชื่อถือได้ ตั้งแต่ interface ไปจนถึง infrastructure",
+    "meta": ["ประจำอยู่กรุงเทพฯ", "ประสบการณ์มากกว่า 10 ปี", "React / Next.js / Node.js / NestJS"]
   },
   "work": {
     "kicker": "ผลงานที่คัดสรร",
-    "count": "01 — 05",
-    "view": "ดูโปรเจกต์",
-    "projects": [
-      {
-        "slug": "nissan-social-command",
-        "title": "Nissan Social Command",
-        "category": "Social CRM / AI / Analytics",
-        "year": "2026",
-        "description": "ระบบอัจฉริยะที่เปลี่ยนสัญญาณทางสังคมนับล้านให้เป็นการตัดสินใจที่ชัดเจน"
-      },
-      {
-        "slug": "synthetic-horizons",
-        "title": "Synthetic Horizons",
-        "category": "Generative Art / Direction",
-        "year": "2026",
-        "description": "อัตลักษณ์ภาพที่มีชีวิต สร้างจากการเคลื่อนไหว บรรยากาศ และการรับรู้ของเครื่องจักร"
-      },
-      {
-        "slug": "minority-archive",
-        "title": "Minority Archive",
-        "category": "Culture / Interactive",
-        "year": "2025",
-        "description": "คลังดิจิทัลที่เปลี่ยนเรื่องเล่าที่ถูกมองข้ามให้เป็นประสบการณ์ที่สัมผัสและเติบโตได้"
-      },
-      {
-        "slug": "future-of-care",
-        "title": "Future of Care",
-        "category": "Product / Service Design",
-        "year": "2025",
-        "description": "เส้นทางบริการสุขภาพที่สงบและชัดเจนขึ้นในช่วงเวลาที่ซับซ้อน"
-      },
-      {
-        "slug": "form-of-intelligence",
-        "title": "Form of Intelligence",
-        "category": "AI / Spatial Experience",
-        "year": "2024",
-        "description": "งานจัดวางที่สำรวจบทสนทนาที่มองไม่เห็นระหว่างมนุษย์และเครื่องจักร"
-      }
-    ]
+    "count": "01 — 04",
+    "view": "ดูโปรเจกต์"
   },
   "showcase": {
-    "kicker": "ผลงานที่เคลื่อนไหว",
-    "label": "เฟรมที่คัดสรร"
+    "kicker": "สร้างเพื่อใช้งานจริง",
+    "label": "แพลตฟอร์มที่คัดสรร"
   },
   "caseStudy": {
     "kicker": "กรณีศึกษาเด่น",
@@ -101,14 +64,20 @@
   },
   "services": {
     "kicker": "ความเชี่ยวชาญ",
-    "intro": "จากโจทย์ที่ยังคลุมเครือ สู่ประสบการณ์ดิจิทัลที่มีชีวิต",
-    "items": ["ออกแบบผลิตภัณฑ์", "ประสบการณ์ AI", "พัฒนาเว็บไซต์", "ออกแบบการเคลื่อนไหว", "กลยุทธ์ดิจิทัล"],
+    "intro": "จาก requirement เริ่มต้น สู่ระบบที่พร้อมใช้งานจริง",
+    "items": [
+      "Frontend Engineering",
+      "Backend & REST APIs",
+      "System Architecture",
+      "Database Design",
+      "CI/CD & Testing"
+    ],
     "details": [
-      "ระบบ อินเทอร์เฟซ และต้นแบบที่เปลี่ยนกลยุทธ์ให้เป็นผลิตภัณฑ์ที่ใช้ได้จริง",
-      "แนวคิด AI ที่มีมนุษย์เป็นศูนย์กลาง เข้าใจง่าย รับผิดชอบ และช่วยผู้ใช้ได้จริง",
-      "ประสบการณ์เว็บที่รวดเร็ว เข้าถึงได้ และมีเอกลักษณ์ด้วยเทคโนโลยีสมัยใหม่",
-      "ระบบการเคลื่อนไหวที่สร้างลำดับชั้น จังหวะ และความรู้สึกให้กับผลิตภัณฑ์",
-      "เรื่องเล่าของผลิตภัณฑ์ แผนที่โอกาส และเส้นทางที่ชัดเจนจากไอเดียสู่การเปิดตัว"
+      "พัฒนา Product Interface ที่ responsive ด้วย React, Next.js, Angular, Vue.js และ TypeScript",
+      "สร้าง Service และ REST API ที่ดูแลต่อได้ด้วย Node.js, Express และ NestJS",
+      "ออกแบบระบบที่เชื่อม requirement ของธุรกิจ แอปพลิเคชัน และ infrastructure เข้าด้วยกัน",
+      "ออกแบบ relational data model ด้วย SQL, PostgreSQL และ ORM",
+      "วาง delivery pipeline ด้วย GitHub Actions พร้อม unit และ end-to-end testing"
     ]
   },
   "lab": {
@@ -123,21 +92,21 @@
   },
   "about": {
     "kicker": "เกี่ยวกับ",
-    "title": "ผมทำงานตรงรอยต่อระหว่างการออกแบบ เทคโนโลยี และปัญญาประดิษฐ์",
-    "body": "ผมเปลี่ยนระบบที่ซับซ้อนให้เป็นประสบการณ์ดิจิทัลที่เรียบง่ายและเป็นมนุษย์ เชื่อมกลยุทธ์ อินเทอร์เฟซ และการเคลื่อนไหวให้เป็นเรื่องเดียวกัน",
+    "title": "ผมใส่ใจทั้งระบบ ไม่ใช่เพียงสิ่งที่เห็นบนหน้าจอ",
+    "body": "ตลอดเวลากว่า 10 ปี ผมทำงานครอบคลุมทั้ง Frontend, Backend, Database และ Delivery Pipeline สนุกกับการเรียนรู้และเปลี่ยนโจทย์ยากให้เป็นผลิตภัณฑ์ที่ชัดเจนและเชื่อถือได้",
     "facts": [
       ["สถานที่", "กรุงเทพฯ ประเทศไทย"],
       ["ประสบการณ์", "มากกว่า 10 ปี"],
-      ["เชี่ยวชาญ", "Creative Technology"],
-      ["กำลังสนใจ", "AI ที่มีมนุษย์เป็นศูนย์กลาง"]
+      ["เชี่ยวชาญ", "Full-Stack Web Development"],
+      ["กำลังสนใจ", "ระบบผลิตภัณฑ์ที่ขยายต่อได้"]
     ]
   },
-  "marquee": "DESIGN × TECHNOLOGY × AI × MOTION × STORYTELLING ×",
+  "marquee": "REACT × NEXT.JS × NODE.JS × NESTJS × POSTGRESQL ×",
   "contact": {
     "kicker": "เริ่มบทสนทนา",
-    "lines": ["มีโปรเจกต์ใหม่?", "มาสร้างอะไรดี ๆ", "ไปด้วยกัน"],
+    "lines": ["มีเว็บที่อยากสร้าง?", "มาทำให้มันดี", "และเติบโตได้"],
     "cta": "เริ่มโปรเจกต์",
-    "email": "hello@lpk.studio"
+    "email": "ponlawat6001@gmail.com"
   },
   "footer": {
     "location": "กรุงเทพฯ ประเทศไทย",

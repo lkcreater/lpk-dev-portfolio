@@ -5,8 +5,9 @@ import { useRef } from "react";
 import type { Dictionary } from "@/lib/i18n";
 import { ImageReveal } from "@/components/motion/ImageReveal";
 import { gsap, useGSAP } from "@/lib/gsap";
+import type { PortfolioProfile } from "@/data/projects";
 
-export function About({ copy }: { copy: Dictionary["about"] }) {
+export function About({ copy, profile }: { copy: Dictionary["about"]; profile: PortfolioProfile }) {
   const root = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -46,6 +47,54 @@ export function About({ copy }: { copy: Dictionary["about"] }) {
             </div>
           ))}
         </dl>
+      </div>
+      <div className="career-heading">
+        <p className="section-kicker">
+          <span>07</span>
+          Experience
+        </p>
+        <h3>{profile.role}</h3>
+      </div>
+      <div className="career-list">
+        {profile.career.map((item, index) => (
+          <article key={`${item.company}-${item.period}`}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <time>{item.period}</time>
+            <div>
+              <h4>{item.role}</h4>
+              <p className="career-company">{item.company}</p>
+              <p>{item.description}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div className="skills-heading">
+        <p className="section-kicker">
+          <span>08</span>
+          Stack &amp; education
+        </p>
+      </div>
+      <div className="skills-content">
+        {profile.skillGroups.map((group) => (
+          <div className="skill-group" key={group.label}>
+            <h4>{group.label}</h4>
+            <p>{group.items.join(" · ")}</p>
+          </div>
+        ))}
+        <div className="education-card">
+          <time>{profile.education.period}</time>
+          <h4>{profile.education.degree}</h4>
+          <p>{profile.education.school}</p>
+          <span>{profile.education.detail}</span>
+        </div>
+        <div className="profile-links">
+          <a href={profile.linkedin} target="_blank" rel="noreferrer" data-cursor="OPEN">
+            LinkedIn ↗
+          </a>
+          <a href={profile.github} target="_blank" rel="noreferrer" data-cursor="OPEN">
+            GitHub ↗
+          </a>
+        </div>
       </div>
     </section>
   );

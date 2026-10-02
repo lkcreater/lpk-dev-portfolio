@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FadeUp } from "@/components/motion/FadeUp";
 import { ImageReveal } from "@/components/motion/ImageReveal";
-import { projectVisuals } from "@/data/projects";
+import { getProjects, projectVisuals } from "@/data/projects";
 import { getDictionary, isLocale, locales } from "@/lib/i18n";
 
 export function generateStaticParams() {
@@ -16,7 +16,7 @@ type ProjectPageProps = { params: Promise<{ locale: string; slug: string }> };
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { locale, slug } = await params;
   if (!isLocale(locale)) return {};
-  const project = getDictionary(locale).work.projects.find((item) => item.slug === slug);
+  const project = getProjects(locale).find((item) => item.slug === slug);
   return project ? { title: `${project.title} — LPK`, description: project.description } : {};
 }
 
@@ -24,12 +24,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const { locale, slug } = await params;
   if (!isLocale(locale)) notFound();
   const dictionary = getDictionary(locale);
-  const projectIndex = dictionary.work.projects.findIndex((item) => item.slug === slug);
+  const projects = getProjects(locale);
+  const projectIndex = projects.findIndex((item) => item.slug === slug);
   if (projectIndex < 0) notFound();
 
-  const project = dictionary.work.projects[projectIndex];
-  const visual = projectVisuals[projectIndex];
-  const nextProject = dictionary.work.projects[(projectIndex + 1) % dictionary.work.projects.length];
+  const project = projects[projectIndex];
+  const nextProject = projects[(projectIndex + 1) % projects.length];
   const detail = dictionary.projectDetail;
   const labels = [detail.overview, detail.problem, detail.process, detail.design, detail.result];
 
@@ -46,15 +46,26 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </div>
         <h1>{project.title}</h1>
         <p>{project.description}</p>
+        {project.url ? (
+          <a
+            className="project-site-link"
+            href={project.url}
+            target="_blank"
+            rel="noreferrer"
+            data-cursor="OPEN"
+          >
+            Visit live site ↗
+          </a>
+        ) : null}
       </header>
-      <ImageReveal className={`project-detail-image tone-${visual.tone}`}>
+      <ImageReveal className={`project-detail-image tone-${project.tone}`}>
         <Image
           src="/images/hero-sculpture.png"
           alt=""
           fill
           priority
           sizes="100vw"
-          style={{ objectPosition: visual.position }}
+          style={{ objectPosition: project.position }}
         />
         <div className="project-detail-sigil" aria-hidden="true">
           0{projectIndex + 1}

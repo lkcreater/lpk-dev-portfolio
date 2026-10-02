@@ -16,9 +16,10 @@ const notoThai = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://lpk.studio"),
-  title: "LPK — Creative Technologist",
-  description: "Creative technology, design, AI and motion from Bangkok.",
+  metadataBase: new URL("https://lpk-dev.netlify.app"),
+  title: "Ponlawat Koeisuwan — Senior Full-Stack Developer",
+  description:
+    "Senior full-stack developer in Bangkok with 10+ years of experience across frontend, backend, systems and databases.",
   openGraph: {
     type: "website",
     images: [{ url: "/images/hero-sculpture.png", width: 1536, height: 896 }],

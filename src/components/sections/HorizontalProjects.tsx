@@ -4,16 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import type { Dictionary, Locale } from "@/lib/i18n";
-import { projectVisuals } from "@/data/projects";
+import type { PortfolioProject } from "@/data/projects";
 import { gsap, useGSAP } from "@/lib/gsap";
 
 export function HorizontalProjects({
   copy,
-  work,
+  projects,
   locale,
 }: {
   copy: Dictionary["showcase"];
-  work: Dictionary["work"];
+  projects: PortfolioProject[];
   locale: Locale;
 }) {
   const root = useRef<HTMLElement>(null);
@@ -52,10 +52,10 @@ export function HorizontalProjects({
         <span>{copy.label}</span>
       </div>
       <div ref={track} className="horizontal-track">
-        {work.projects.slice(0, 3).map((project, index) => (
+        {projects.slice(0, 3).map((project, index) => (
           <Link
             href={`/${locale}/work/${project.slug}`}
-            className={`horizontal-card tone-${projectVisuals[index].tone}`}
+            className={`horizontal-card tone-${project.tone}`}
             data-cursor="VIEW"
             key={project.slug}
           >
@@ -64,7 +64,7 @@ export function HorizontalProjects({
               alt=""
               fill
               sizes="(max-width: 899px) 92vw, 70vw"
-              style={{ objectPosition: projectVisuals[index].position }}
+              style={{ objectPosition: project.position }}
             />
             <div className="horizontal-card-wash" />
             <span className="horizontal-number">0{index + 1}</span>

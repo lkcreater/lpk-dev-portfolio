@@ -1,0 +1,92 @@
+{
+  "identity": {
+    "name": "Ponlawat Koeisuwan",
+    "shortName": "LPK",
+    "location": "Bangkok, Thailand",
+    "experienceYears": "10+",
+    "email": "ponlawat6001@gmail.com",
+    "phone": "098-878-8599",
+    "website": "https://lpk-dev.netlify.app",
+    "github": "https://github.com/lkcreater",
+    "linkedin": "https://www.linkedin.com/in/pkoeisuwan/"
+  },
+  "heroStack": ["React", "Next.js", "Angular", "Node.js", "NestJS", "PostgreSQL"],
+  "skillGroups": [
+    {
+      "label": "Frontend",
+      "items": ["React", "Next.js", "Angular", "Vue.js", "Nuxt", "TypeScript", "SCSS"]
+    },
+    {
+      "label": "Backend",
+      "items": ["Node.js", "Express.js", "NestJS", "REST APIs", "PHP", "Yii"]
+    },
+    {
+      "label": "Systems",
+      "items": ["PostgreSQL", "SQL", "ORM", "Git", "GitHub Actions", "Jest", "Karma"]
+    }
+  ],
+  "locales": {
+    "en": {
+      "role": "Senior Full-Stack Developer",
+      "summary": "I design and build end-to-end web products — from system and database architecture to polished frontend experiences and production APIs.",
+      "experienceLabel": "Years building for the web",
+      "career": [
+        {
+          "period": "2021 — Present",
+          "company": "Paneet Interactive Co., Ltd.",
+          "role": "Senior Full-Stack Developer",
+          "description": "Developing web platforms with Angular, React and Next.js; building REST APIs with Node.js, Express and NestJS; designing systems and databases; and setting up CI/CD with GitHub Actions."
+        },
+        {
+          "period": "2018 — 2021",
+          "company": "Independent",
+          "role": "Freelance Web Developer",
+          "description": "Delivered tailored websites, backend REST APIs with Node.js and Express, and frontend experiences with Vue.js and Nuxt."
+        },
+        {
+          "period": "2015 — 2018",
+          "company": "Bangkok Web Solution Co., Ltd.",
+          "role": "PHP Web Developer",
+          "description": "Built web applications with Yii, PHP OOP, HTML, CSS, SCSS, jQuery and JavaScript."
+        }
+      ],
+      "education": {
+        "period": "2009 — 2012",
+        "degree": "B.Sc. Computer Science",
+        "school": "Chandrakasem Rajabhat University",
+        "detail": "GPA 3.16"
+      }
+    },
+    "th": {
+      "role": "Senior Full-Stack Developer",
+      "summary": "ผมออกแบบและพัฒนาเว็บแบบครบวงจร ตั้งแต่สถาปัตยกรรมระบบและฐานข้อมูล ไปจนถึง Frontend ที่ละเอียดและ API ที่พร้อมใช้งานจริง",
+      "experienceLabel": "ปีบนเส้นทางพัฒนาเว็บ",
+      "career": [
+        {
+          "period": "2021 — ปัจจุบัน",
+          "company": "Paneet Interactive Co., Ltd.",
+          "role": "Senior Full-Stack Developer",
+          "description": "พัฒนาเว็บด้วย Angular, React และ Next.js สร้าง REST API ด้วย Node.js, Express และ NestJS ออกแบบระบบและฐานข้อมูล รวมถึงวาง CI/CD ด้วย GitHub Actions"
+        },
+        {
+          "period": "2018 — 2021",
+          "company": "อิสระ",
+          "role": "Freelance Web Developer",
+          "description": "พัฒนาเว็บไซต์ตามความต้องการ สร้าง Backend REST API ด้วย Node.js และ Express พร้อมพัฒนา Frontend ด้วย Vue.js และ Nuxt"
+        },
+        {
+          "period": "2015 — 2018",
+          "company": "Bangkok Web Solution Co., Ltd.",
+          "role": "PHP Web Developer",
+          "description": "พัฒนา Web Application ด้วย Yii, PHP OOP, HTML, CSS, SCSS, jQuery และ JavaScript"
+        }
+      ],
+      "education": {
+        "period": "2009 — 2012",
+        "degree": "วิทยาศาสตรบัณฑิต สาขาวิทยาการคอมพิวเตอร์",
+        "school": "มหาวิทยาลัยราชภัฏจันทรเกษม",
+        "detail": "เกรดเฉลี่ย 3.16"
+      }
+    }
+  }
+}

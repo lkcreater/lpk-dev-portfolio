@@ -3,9 +3,10 @@
 import Image from "next/image";
 import { useRef } from "react";
 import type { Dictionary } from "@/lib/i18n";
+import type { PortfolioProfile } from "@/data/projects";
 import { gsap, useGSAP } from "@/lib/gsap";
 
-export function Hero({ copy }: { copy: Dictionary["hero"] }) {
+export function Hero({ copy, profile }: { copy: Dictionary["hero"]; profile: PortfolioProfile }) {
   const root = useRef<HTMLElement>(null);
   const visual = useRef<HTMLDivElement>(null);
 
@@ -13,7 +14,7 @@ export function Hero({ copy }: { copy: Dictionary["hero"] }) {
     () => {
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (reduce) {
-        gsap.set([".hero-line-inner", ".hero-fade"], { opacity: 1, y: 0 });
+        gsap.set([".hero-line-inner", ".hero-fade", ".hero-object"], { opacity: 1, y: 0 });
         return;
       }
 
@@ -29,6 +30,12 @@ export function Hero({ copy }: { copy: Dictionary["hero"] }) {
           { opacity: 0, y: 18 },
           { opacity: 1, y: 0, duration: 0.65, stagger: 0.07 },
           "-=0.45",
+        )
+        .fromTo(
+          ".hero-object",
+          { opacity: 0, y: 34, rotationX: -8 },
+          { opacity: 1, y: 0, rotationX: 0, duration: 1.15, stagger: 0.09 },
+          "-=0.85",
         );
 
       gsap.to(".hero-content", {
@@ -40,16 +47,17 @@ export function Hero({ copy }: { copy: Dictionary["hero"] }) {
       });
       gsap.to(visual.current, {
         yPercent: 14,
-        scale: 1.05,
+        scale: 0.94,
+        rotationZ: 2,
         ease: "none",
         scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: 1.1 },
       });
 
-      const xTo = gsap.quickTo(visual.current, "x", { duration: 1.1, ease: "power3.out" });
-      const yTo = gsap.quickTo(visual.current, "y", { duration: 1.1, ease: "power3.out" });
+      const rotateYTo = gsap.quickTo(visual.current, "rotationY", { duration: 1.1, ease: "power3.out" });
+      const rotateXTo = gsap.quickTo(visual.current, "rotationX", { duration: 1.1, ease: "power3.out" });
       const onPointerMove = (event: PointerEvent) => {
-        xTo((event.clientX / window.innerWidth - 0.5) * 18);
-        yTo((event.clientY / window.innerHeight - 0.5) * 12);
+        rotateYTo((event.clientX / window.innerWidth - 0.5) * 9);
+        rotateXTo((event.clientY / window.innerHeight - 0.5) * -7);
       };
       root.current?.addEventListener("pointermove", onPointerMove, { passive: true });
       return () => root.current?.removeEventListener("pointermove", onPointerMove);
@@ -59,9 +67,37 @@ export function Hero({ copy }: { copy: Dictionary["hero"] }) {
 
   return (
     <section ref={root} id="top" className="hero">
-      <div ref={visual} className="hero-visual" aria-hidden="true">
-        <Image src="/images/hero-sculpture.png" alt="" fill priority sizes="100vw" />
-        <div className="hero-glow" />
+      <div className="hero-perspective" aria-hidden="true">
+        <div ref={visual} className="hero-visual">
+          <div className="hero-orbit hero-object" />
+          <div className="hero-visual-frame hero-object">
+            <Image
+              src="/images/hero-sculpture.png"
+              alt=""
+              fill
+              priority
+              sizes="(max-width: 899px) 88vw, 56vw"
+            />
+            <span className="hero-frame-label">FULL-STACK / 10+ YEARS</span>
+          </div>
+          <div className="hero-code-card hero-object">
+            <span>01 / SYSTEM</span>
+            <code>
+              product
+              <br />
+              <i>→ interface</i>
+              <br />
+              <i>→ api</i>
+              <br />
+              <i>→ data</i>
+            </code>
+          </div>
+          <div className="hero-stat-card hero-object">
+            <b>{profile.experienceYears}</b>
+            <span>{profile.experienceLabel}</span>
+          </div>
+          <div className="hero-glow" />
+        </div>
       </div>
       <div className="hero-shade" aria-hidden="true" />
       <div className="hero-content page-grid">
@@ -80,6 +116,11 @@ export function Hero({ copy }: { copy: Dictionary["hero"] }) {
           </span>
           <span>{copy.availability}</span>
           <span className="hero-index">01 / 08</span>
+        </div>
+        <div className="hero-stack hero-fade" aria-label="Primary technology stack">
+          {profile.heroStack.map((technology) => (
+            <span key={technology}>{technology}</span>
+          ))}
         </div>
       </div>
     </section>

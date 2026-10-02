@@ -23,9 +23,16 @@
     "meta": ["Based in Bangkok", "10+ years of experience", "React / Next.js / Node.js / NestJS"]
   },
   "work": {
-    "kicker": "Selected work",
+    "kicker": "Systems I have built",
+    "title": "Experience, expressed through systems.",
+    "intro": "A decade of turning complex requirements into production-ready products across finance, public services, hospitality, marketing, commerce and developer tools.",
     "count": "01 — 09",
-    "view": "View project"
+    "view": "View project",
+    "systemsLabel": "Product systems",
+    "itemLabel": "Anonymized experience",
+    "builtLabel": "What I developed",
+    "stackLabel": "Selected technology stack",
+    "footer": "Built from interface to infrastructure"
   },
   "showcase": {
     "kicker": "Built for production",

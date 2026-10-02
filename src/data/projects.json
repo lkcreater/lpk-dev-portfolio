@@ -7,9 +7,10 @@
     "url": null,
     "tone": "silver",
     "position": "68% center",
+    "technologies": ["Full-Stack Development", "Web Application", "Database Design"],
     "description": {
-      "en": "A financial web application from Ponlawat’s professional full-stack portfolio.",
-      "th": "เว็บแอปพลิเคชันด้านการเงิน หนึ่งในผลงาน Full-Stack ระดับโปรดักชันของพลวัต"
+      "en": "Developed a production financial web application, connecting user-facing workflows with business logic, data handling and maintainable full-stack architecture.",
+      "th": "พัฒนาเว็บแอปพลิเคชันด้านการเงินระดับ production เชื่อม workflow ของผู้ใช้เข้ากับ business logic การจัดการข้อมูล และสถาปัตยกรรม Full-Stack ที่ดูแลต่อได้"
     }
   },
   {
@@ -20,9 +21,10 @@
     "url": "https://www.pamco.co.th",
     "tone": "ember",
     "position": "center",
+    "technologies": ["Corporate Website", "Frontend Engineering", "Backend API"],
     "description": {
-      "en": "A production corporate platform delivered for Professional Alliance Management Co., Ltd.",
-      "th": "แพลตฟอร์มเว็บไซต์องค์กรสำหรับ Professional Alliance Management Co., Ltd."
+      "en": "Delivered a production corporate platform with responsive interfaces, structured content management and backend services designed for reliable day-to-day operations.",
+      "th": "พัฒนาแพลตฟอร์มองค์กรพร้อมใช้งานจริง ครอบคลุม Responsive Interface การจัดการเนื้อหาอย่างเป็นระบบ และ Backend Service สำหรับงานประจำวัน"
     }
   },
   {
@@ -33,9 +35,10 @@
     "url": "https://www.otp.go.th",
     "tone": "blue",
     "position": "26% center",
+    "technologies": ["Public Platform", "Content Management", "Responsive UI"],
     "description": {
-      "en": "The public digital platform for Thailand’s Office of Transport and Traffic Policy and Planning.",
-      "th": "แพลตฟอร์มดิจิทัลสาธารณะของสำนักงานนโยบายและแผนการขนส่งและจราจร"
+      "en": "Built a large public-information platform that makes structured policy, transport and service content accessible through responsive interfaces and manageable publishing workflows.",
+      "th": "พัฒนาแพลตฟอร์มข้อมูลสาธารณะขนาดใหญ่ ให้ข้อมูลนโยบาย การขนส่ง และบริการเข้าถึงง่ายผ่าน Responsive Interface และ workflow การเผยแพร่ที่จัดการได้"
     }
   },
   {
@@ -46,9 +49,10 @@
     "url": "https://www.prathaprachan-mag.com",
     "tone": "paper",
     "position": "78% center",
+    "technologies": ["Digital Publishing", "Content Platform", "Responsive UI"],
     "description": {
-      "en": "A digital publishing experience for the Prathaprachan specialist magazine.",
-      "th": "ประสบการณ์สิ่งพิมพ์ดิจิทัลสำหรับนิตยสารเฉพาะทางพระท่าพระจันทร์"
+      "en": "Created a specialist digital-publishing platform with structured editorial content, searchable archives and a responsive reading experience across devices.",
+      "th": "พัฒนาแพลตฟอร์มสิ่งพิมพ์ดิจิทัลเฉพาะทาง รองรับเนื้อหากองบรรณาธิการ คลังข้อมูลที่ค้นหาได้ และประสบการณ์อ่านแบบ Responsive ทุกอุปกรณ์"
     }
   },
   {

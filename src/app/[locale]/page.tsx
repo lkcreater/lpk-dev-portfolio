@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { Hero } from "@/components/sections/Hero";
 import { Intro } from "@/components/sections/Intro";
 import { SelectedWork } from "@/components/sections/SelectedWork";
-import { HorizontalProjects } from "@/components/sections/HorizontalProjects";
 import { Services } from "@/components/sections/Services";
 import { About } from "@/components/sections/About";
 import { Marquee } from "@/components/sections/Marquee";
@@ -21,8 +20,7 @@ export default async function PortfolioPage({ params }: { params: Promise<{ loca
     <>
       <Hero copy={dictionary.hero} profile={profile} />
       <Intro copy={dictionary.intro} />
-      <SelectedWork copy={dictionary.work} projects={projects} locale={locale} />
-      <HorizontalProjects copy={dictionary.showcase} projects={projects} locale={locale} />
+      <SelectedWork copy={dictionary.work} projects={projects} />
       <Services copy={dictionary.services} />
       <About copy={dictionary.about} profile={profile} />
       <Marquee text={dictionary.marquee} />

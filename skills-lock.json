@@ -19,6 +19,12 @@
       "skillPath": "skills/resume-ats-optimizer/SKILL.md",
       "computedHash": "2e3782b6176807b6d714213a14258bd86ca988d442757674eb86181d81465abd"
     },
+    "svg-animations": {
+      "source": "supermemoryai/skills",
+      "sourceType": "github",
+      "skillPath": "svg-animations/SKILL.md",
+      "computedHash": "9be4b3e0afe9d3cbb1bcf238f8504f9a23552f742350fbef9483070112ac1977"
+    },
     "vercel-react-best-practices": {
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",

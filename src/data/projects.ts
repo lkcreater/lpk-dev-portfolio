@@ -15,6 +15,7 @@ export type PortfolioProject = {
   year: string;
   url: string | null;
   tone: string;
+  visual: string;
   position: string;
   description: string;
   details: string[];
@@ -40,6 +41,7 @@ export function getProjects(locale: Locale): PortfolioProject[] {
     year: project.year,
     url: project.url,
     tone: project.tone,
+    visual: project.visual,
     position: project.position,
     description: project.description[locale],
     details: "details" in project && project.details ? project.details[locale] : [],

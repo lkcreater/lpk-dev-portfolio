@@ -793,82 +793,188 @@ img {
   right: 3%;
   width: min(48%, 38rem);
 }
-.experience-fragment {
-  position: absolute;
-  inset: 0;
-  opacity: 1;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-  will-change: transform, opacity, filter;
-  transition: filter 0.7s ease;
-}
-.experience-card:hover .experience-fragment:not(.fragment-1) {
-  --dof: 1.8px;
-  filter: blur(var(--dof));
-}
-.experience-fragment i {
-  position: absolute;
+.experience-svg {
   display: block;
-  border: 1px solid color-mix(in srgb, var(--accent-card) 70%, white);
-  box-shadow:
-    inset 0 0 2rem color-mix(in srgb, var(--accent-card) 14%, transparent),
-    0 1.5rem 4rem rgba(0, 0, 0, 0.3);
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  color: var(--accent-card);
+  filter: drop-shadow(0 1.8rem 2rem rgba(0, 0, 0, 0.28));
+  transform-origin: center;
+  will-change: transform, opacity;
 }
-.fragment-1 i {
-  top: 18%;
-  left: 18%;
-  width: 54%;
-  aspect-ratio: 1.25;
-  background: linear-gradient(145deg, color-mix(in srgb, var(--accent-card) 18%, #161715), #0a0b0a);
-  transform: translateZ(75px) rotateX(58deg) rotateZ(-12deg);
+.model-surface,
+.model-panel,
+.model-line,
+.model-grid,
+.model-accent,
+.model-node,
+.model-hotspot {
+  vector-effect: non-scaling-stroke;
 }
-.fragment-2 i {
-  top: 13%;
-  right: 10%;
-  width: 42%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  transform: translateZ(115px) rotateX(68deg);
+.model-surface {
+  fill: var(--model-gradient);
+  stroke: color-mix(in srgb, currentColor 66%, white);
+  stroke-width: 1.2;
 }
-.fragment-3 i {
-  top: 39%;
-  left: 7%;
-  width: 78%;
-  height: 1px;
-  border: 0;
-  background: linear-gradient(90deg, transparent, var(--accent-card), transparent);
-  box-shadow: 0 0 1.5rem var(--accent-card);
-  transform: translateZ(145px) rotateZ(18deg);
+.model-panel {
+  fill: color-mix(in srgb, currentColor 11%, #10110f);
+  stroke: color-mix(in srgb, currentColor 70%, white);
+  stroke-width: 1;
 }
-.fragment-4 i {
-  right: 18%;
-  bottom: 18%;
-  width: 19%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fff, var(--accent-card) 25%, #111 72%);
-  transform: translateZ(180px);
+.model-line,
+.model-grid,
+.model-accent {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
-.fragment-5 i {
-  bottom: 13%;
-  left: 15%;
-  width: 46%;
-  aspect-ratio: 1.8;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
-  background-size: 1rem 1rem;
-  transform: translateZ(35px) rotateX(64deg) rotateZ(12deg);
+.model-line {
+  stroke: rgba(255, 255, 255, 0.42);
+  stroke-width: 1.2;
 }
-.experience-model-core {
-  position: absolute;
-  z-index: 4;
-  top: 46%;
-  left: 50%;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 0.54rem;
-  letter-spacing: 0.18em;
-  transform: translate3d(-50%, -50%, 210px);
+.model-grid {
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 0.8;
+}
+.model-accent {
+  stroke: currentColor;
+  stroke-width: 2;
+  filter: var(--model-glow);
+}
+.model-solid {
+  fill: currentColor;
+  opacity: 0.68;
+}
+.model-node {
+  fill: #121310;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+.model-hotspot {
+  fill: color-mix(in srgb, currentColor 34%, #121310);
+  stroke: color-mix(in srgb, currentColor 72%, white);
+  stroke-width: 1.4;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: modelPulse 2.8s ease-in-out infinite;
+}
+.svg-draw {
+  stroke-dasharray: 12 10;
+  animation: modelDash 5.5s linear infinite;
+}
+.svg-float,
+.svg-pulse,
+.svg-orbit,
+.svg-pages,
+.svg-notifications > *,
+.svg-bars > *,
+.page-back,
+.page-mid,
+.page-front {
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+.svg-float {
+  animation: modelFloat 5.2s ease-in-out infinite;
+}
+.svg-pulse {
+  animation: modelBreath 3.8s ease-in-out infinite;
+}
+.svg-orbit {
+  animation: modelOrbit 18s linear infinite;
+}
+.svg-nodes > :nth-child(2),
+.delay-1 {
+  animation-delay: -0.7s;
+}
+.svg-nodes > :nth-child(3),
+.delay-2 {
+  animation-delay: -1.4s;
+}
+.svg-nodes > :nth-child(4),
+.delay-3 {
+  animation-delay: -2.1s;
+}
+.svg-nodes > * {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: modelNode 3.2s ease-in-out infinite;
+}
+.svg-bars > :nth-child(1) {
+  animation: modelBar 3.4s ease-in-out infinite;
+}
+.svg-bars > :nth-child(2) {
+  animation: modelBar 3.4s -0.7s ease-in-out infinite;
+}
+.svg-bars > :nth-child(3) {
+  animation: modelBar 3.4s -1.4s ease-in-out infinite;
+}
+.page-back {
+  animation: modelPage 5s -1.2s ease-in-out infinite;
+}
+.page-mid {
+  animation: modelPage 5s -0.6s ease-in-out infinite;
+}
+.page-front {
+  animation: modelPage 5s ease-in-out infinite;
+}
+.svg-notifications .note-1 {
+  animation: modelNotice 4s ease-in-out infinite;
+}
+.svg-notifications .note-2 {
+  animation: modelNotice 4s -2s ease-in-out infinite;
+}
+@keyframes modelDash {
+  to {
+    stroke-dashoffset: -88;
+  }
+}
+@keyframes modelFloat {
+  50% {
+    transform: translateY(-7px);
+  }
+}
+@keyframes modelBreath {
+  50% {
+    opacity: 0.72;
+    transform: scale(1.035);
+  }
+}
+@keyframes modelOrbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes modelNode {
+  50% {
+    opacity: 0.52;
+    transform: scale(0.86);
+  }
+}
+@keyframes modelPulse {
+  50% {
+    opacity: 0.62;
+    transform: scale(1.22);
+  }
+}
+@keyframes modelBar {
+  50% {
+    opacity: 0.35;
+    transform: translateY(8px);
+  }
+}
+@keyframes modelPage {
+  50% {
+    transform: translate(-5px, -7px);
+  }
+}
+@keyframes modelNotice {
+  50% {
+    opacity: 0.48;
+    transform: translateY(-9px);
+  }
 }
 .experience-card-copy {
   position: relative;

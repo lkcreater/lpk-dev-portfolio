@@ -4,9 +4,7 @@ import { useRef } from "react";
 import type { Dictionary } from "@/lib/i18n";
 import type { PortfolioProject } from "@/data/projects";
 import { gsap, useGSAP } from "@/lib/gsap";
-
-const FRAGMENT_COUNT = 5;
-const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+import { ExperienceModel } from "@/components/sections/ExperienceModel";
 
 export function SelectedWork({ copy, projects }: { copy: Dictionary["work"]; projects: PortfolioProject[] }) {
   const root = useRef<HTMLElement>(null);
@@ -19,7 +17,6 @@ export function SelectedWork({ copy, projects }: { copy: Dictionary["work"]; pro
         const cards = gsap.utils.toArray<HTMLElement>(".experience-card");
 
         cards.forEach((card) => {
-          const fragments = Array.from(card.querySelectorAll<HTMLElement>(".experience-fragment"));
           const timeline = gsap.timeline({
             scrollTrigger: {
               trigger: card,
@@ -34,31 +31,12 @@ export function SelectedWork({ copy, projects }: { copy: Dictionary["work"]; pro
             { y: 0, rotationX: 0, duration: 0.9, ease: "power4.out" },
           );
 
-          fragments.forEach((fragment, index) => {
-            const angle = index * GOLDEN_ANGLE;
-            const depth = 170 - index * 72;
-            gsap.set(fragment, {
-              opacity: 0,
-              x: Math.cos(angle) * 90,
-              y: Math.sin(angle) * 72,
-              z: depth,
-              rotationX: Math.sin(angle) * 48,
-              rotationY: Math.cos(angle) * 52,
-            });
-            timeline.set(fragment, { opacity: 1 }, index * 0.045).to(
-              fragment,
-              {
-                x: 0,
-                y: 0,
-                z: 0,
-                rotationX: 0,
-                rotationY: 0,
-                duration: 0.85,
-                ease: "power3.out",
-              },
-              index * 0.045,
-            );
-          });
+          timeline.fromTo(
+            card.querySelector(".experience-svg"),
+            { scale: 0.9, rotation: -2, opacity: 0 },
+            { scale: 1, rotation: 0, opacity: 1, duration: 1.05, ease: "power3.out" },
+            0.08,
+          );
         });
 
         gsap.to(".experience-orbit", {
@@ -111,14 +89,7 @@ export function SelectedWork({ copy, projects }: { copy: Dictionary["work"]; pro
               <span>{copy.itemLabel}</span>
             </div>
 
-            <div className="experience-model" aria-hidden="true">
-              {Array.from({ length: FRAGMENT_COUNT }, (_, fragmentIndex) => (
-                <div className={`experience-fragment fragment-${fragmentIndex + 1}`} key={fragmentIndex}>
-                  <i />
-                </div>
-              ))}
-              <span className="experience-model-core">FULL / STACK</span>
-            </div>
+            <ExperienceModel id={project.slug} label={project.category} type={project.visual} />
 
             <div className="experience-card-copy">
               <p className="experience-card-label">{copy.builtLabel}</p>

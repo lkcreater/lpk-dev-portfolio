@@ -6,6 +6,7 @@
     "year": "Selected Work",
     "url": null,
     "tone": "silver",
+    "visual": "finance",
     "position": "68% center",
     "technologies": ["Full-Stack Development", "Web Application", "Database Design"],
     "description": {
@@ -20,6 +21,7 @@
     "year": "Selected Work",
     "url": "https://www.pamco.co.th",
     "tone": "ember",
+    "visual": "corporate",
     "position": "center",
     "technologies": ["Corporate Website", "Frontend Engineering", "Backend API"],
     "description": {
@@ -34,6 +36,7 @@
     "year": "Selected Work",
     "url": "https://www.otp.go.th",
     "tone": "blue",
+    "visual": "public",
     "position": "26% center",
     "technologies": ["Public Platform", "Content Management", "Responsive UI"],
     "description": {
@@ -48,6 +51,7 @@
     "year": "Selected Work",
     "url": "https://www.prathaprachan-mag.com",
     "tone": "paper",
+    "visual": "publishing",
     "position": "78% center",
     "technologies": ["Digital Publishing", "Content Platform", "Responsive UI"],
     "description": {
@@ -62,6 +66,7 @@
     "year": "2026",
     "url": null,
     "tone": "paper",
+    "visual": "learning",
     "position": "42% center",
     "technologies": ["React", "Vite", "NestJS", "TypeORM", "PostgreSQL", "AI Voice", "Playwright"],
     "description": {
@@ -92,6 +97,7 @@
     "year": "2026",
     "url": null,
     "tone": "silver",
+    "visual": "campaign",
     "position": "62% center",
     "technologies": ["Next.js", "React", "NestJS", "MongoDB", "Redis", "AI SDK", "JWT", "Terraform"],
     "description": {
@@ -122,6 +128,7 @@
     "year": "2026",
     "url": null,
     "tone": "blue",
+    "visual": "engagement",
     "position": "28% center",
     "technologies": [
       "Next.js",
@@ -162,6 +169,7 @@
     "year": "2026",
     "url": null,
     "tone": "mono",
+    "visual": "developer",
     "position": "72% center",
     "technologies": ["Electron", "React", "TypeScript", "IPC", "Claude Code Hooks", "Node.js"],
     "description": {
@@ -192,6 +200,7 @@
     "year": "2026",
     "url": null,
     "tone": "blue",
+    "visual": "ai-platform",
     "position": "54% center",
     "technologies": [
       "React",

@@ -1,0 +1,151 @@
+export const metadata = {
+  title: "models.dev — an open-source AI model database you can use straight from code",
+  description:
+    "What models.dev is: specs, pricing and capabilities of AI models from 200+ providers, free through api.json — with code to estimate request cost and jq queries to find the right model.",
+  date: "2026-10-03T13:00",
+  tags: ["AI Model", "Open Source", "Developer Tools"],
+  readingMinutes: 5,
+};
+
+When you build an LLM-powered app, basic questions — "what is this model's context window?", "does it support tool calling?", "what does input cost per million tokens?" — usually mean opening each lab's docs one by one, and the answers change faster than you can track. **[models.dev](https://models.dev/)** solves this with an open-source, community-maintained database of AI models that you can pull straight into your code.
+
+## What is models.dev?
+
+models.dev is an open-source database of AI model specifications, pricing and capabilities, maintained by SST — the team behind [opencode](https://opencode.ai), which uses the data internally. Everything lives on [GitHub](https://github.com/sst/models.dev). The starting point was simple: there was no single database with information about all the available AI models.
+
+At the time of writing, `api.json` lists 226 providers and roughly 8,400 model entries (counted per provider, so a model served by several providers appears several times). It covers both the labs that build models — OpenAI, Anthropic, Google, Meta, Mistral, DeepSeek, xAI and more — and the API providers that serve them.
+
+## What the website offers
+
+- **Models** — every model with context, output limit, input/output pricing and capabilities such as reasoning, tool calling, structured output and attachments.
+- **Providers** — which API providers serve which models.
+- **Labs** — the organisations that build the models.
+- **Quick search** with `Ctrl K`.
+- **Extra details** — release date, last update and whether a model has open weights (with a Hugging Face link when it does).
+
+## What each model entry contains
+
+Real data for Claude Sonnet 5.5 from `api.json`:
+
+```json
+{
+  "name": "Claude Sonnet 5.5",
+  "reasoning": true,
+  "tool_call": true,
+  "knowledge": "2026-06",
+  "limit": { "context": 1000000, "output": 128000 },
+  "cost": { "input": 2, "output": 10, "cache_read": 0.2, "cache_write": 2.5 }
+}
+```
+
+The fields you will use most:
+
+- `cost` — USD per million tokens, split into `input`, `output`, `cache_read` and `cache_write`.
+- `limit` — maximum `context` and `output`.
+- `modalities` — accepted input and output types such as `text`, `image` and `pdf`.
+- `reasoning`, `tool_call`, `structured_output`, `attachment`, `temperature` — which capabilities are supported.
+- `knowledge` — the training data cutoff month.
+- `release_date`, `last_updated`, `open_weights`.
+
+Provider entries are just as useful: `env` names the API key environment variable and `npm` names the Vercel AI SDK package to use.
+
+```json
+{
+  "id": "anthropic",
+  "env": ["ANTHROPIC_API_KEY"],
+  "npm": "@ai-sdk/anthropic",
+  "doc": "https://docs.anthropic.com/en/docs/about-claude/models"
+}
+```
+
+## Using the API
+
+All data is free to fetch — no API key needed.
+
+```bash
+# The whole database, grouped by provider
+curl https://models.dev/api.json
+
+# Provider logos
+https://models.dev/logos/anthropic.svg
+```
+
+Look up one model with `jq`:
+
+```bash
+curl -s https://models.dev/api.json \
+  | jq '.anthropic.models["claude-sonnet-5-5"] | {name, limit, cost}'
+```
+
+Find models with tool calling and at least a 1M-token context, cheapest first:
+
+```bash
+curl -s https://models.dev/api.json | jq '
+  [.[] | .id as $provider | .models[]
+    | select(.tool_call and .limit.context >= 1000000 and .cost.input > 0)
+    | {provider: $provider, id, input: .cost.input, output: .cost.output}]
+  | sort_by(.input) | .[:10]'
+```
+
+## Example: estimating the cost of a request
+
+If your system uses several models, `api.json` lets you estimate cost before choosing a model, or show users what a request will cost.
+
+```ts
+const catalog = await fetch("https://models.dev/api.json").then((res) => res.json());
+
+function estimateCost(provider: string, modelId: string, inputTokens: number, outputTokens: number) {
+  const model = catalog[provider]?.models[modelId];
+  if (!model?.cost) throw new Error(`No pricing for ${provider}/${modelId}`);
+  // cost is USD per 1M tokens
+  return (inputTokens * model.cost.input + outputTokens * model.cost.output) / 1_000_000;
+}
+
+estimateCost("anthropic", "claude-sonnet-5-5", 20_000, 2_000); // 0.06 USD
+```
+
+In production, cache the file — fetch it once a day, say — because it is several megabytes and the data does not change by the minute.
+
+## Contributing
+
+All data is stored as TOML files in the repository, and anyone can open a pull request:
+
+- `providers/<provider-id>/provider.toml` — provider details such as `name`, `npm`, `env` and `doc`
+- `providers/<provider-id>/models/<model-id>.toml` — specs and pricing for each model the provider serves
+- `providers/<provider-id>/logo.svg` — the logo
+
+Fork the repository, add or edit the TOML files and open a pull request; GitHub Actions validates the data automatically.
+
+## Using it alongside LLM Stats
+
+models.dev and [LLM Stats](/en/knowledge/llm-stats) answer different questions:
+
+- **models.dev** answers _what a model is_ — specs, pricing and capabilities. Factual data you can use in code, free and open for anyone to edit.
+- **LLM Stats** answers _how good a model is_ — benchmark scores, rankings and measured speed.
+
+Use LLM Stats to shortlist models that are good enough for the job, then use models.dev to check specs, pricing and how to connect before you ship.
+
+## Why it is useful
+
+- **Free and open** — no sign-up or API key, and every line of data is auditable.
+- **Broad coverage** — labs and 200+ API providers.
+- **Ready for code** — clean JSON that even names the AI SDK package and environment variable you need.
+- **Community-maintained** — new models arrive quickly through pull requests.
+- **Battle-tested** — opencode is built on top of it.
+
+## What to watch out for
+
+- **Data can lag** — it is community-maintained, so prices or limits may trail a lab's latest announcement. Check the official pricing page before money decisions.
+- **No quality signal** — there are no benchmark scores; pair it with another source.
+- **Large file** — `api.json` is several megabytes; do not fetch it on every request.
+- **IDs differ by provider** — the same model can have different IDs across providers, so always reference the provider too.
+
+## Summary
+
+models.dev is the AI model spec sheet developers have been waiting for: open, free and in JSON you can use immediately. It helps when choosing models, estimating costs and building systems that support many models. Pair it with a benchmark source such as LLM Stats to see the full picture — specs, price and skill.
+
+### References
+
+- [models.dev](https://models.dev/)
+- [sst/models.dev on GitHub](https://github.com/sst/models.dev)
+- [opencode](https://opencode.ai)

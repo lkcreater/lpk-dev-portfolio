@@ -1,0 +1,242 @@
+export const metadata = {
+  title: "AI SDK — the provider-agnostic TypeScript toolkit for LLM apps and agents",
+  description:
+    "A tour of Vercel's AI SDK: generateText, streaming, structured output, tool calling, agents and a Next.js chatbot — with code examples type-checked against the latest version.",
+  date: "2026-10-03T14:00",
+  tags: ["AI SDK", "TypeScript", "Next.js"],
+  readingMinutes: 8,
+};
+
+If you have called LLMs directly through each lab's SDK, you know the pain: message formats, streaming, tool calls and errors all differ. Switching models or supporting several providers means rewriting most of the code. **[AI SDK](https://ai-sdk.dev/docs)** from Vercel solves this with one API that works across providers.
+
+## What is the AI SDK?
+
+The AI SDK is a TypeScript toolkit for building AI-powered applications and agents. It works with React, Next.js, Vue, Svelte, Node.js and more, and has these main parts:
+
+- **AI SDK Core** — a unified API for generating text, structured data, tool calls and agents.
+- **AI SDK UI** — framework-agnostic hooks such as `useChat` for building chat and generative UIs quickly.
+- **Providers** — packages for each provider, such as `@ai-sdk/anthropic`, `@ai-sdk/openai` and `@ai-sdk/google`, plus community and OpenAI-compatible providers.
+
+The clearest win: **switching models is a one-line change**; nothing else has to move.
+
+The examples in this article were type-checked against `ai` version 7.0.127.
+
+## Two ways to pick a model
+
+```ts
+import { generateText } from "ai";
+import { anthropic } from "@ai-sdk/anthropic";
+
+// 1) A "creator/model" string is routed through Vercel AI Gateway (uses AI_GATEWAY_API_KEY)
+await generateText({ model: "anthropic/claude-sonnet-5.5", prompt: "Hello" });
+
+// 2) A provider package talks to the provider directly (uses ANTHROPIC_API_KEY)
+await generateText({ model: anthropic("claude-sonnet-5-5"), prompt: "Hello" });
+```
+
+The first is convenient — one key for many labs. The second is better when you want a direct connection or provider-specific features.
+
+## Generating text: generateText
+
+```ts
+import { generateText } from "ai";
+
+const { text, usage } = await generateText({
+  model: "anthropic/claude-sonnet-5.5",
+  instructions: "You are a concise technical writer.",
+  prompt: "Explain what an API rate limit is in two sentences.",
+});
+```
+
+The result includes more than text — `usage` (token counts), `finishReason`, `steps` and `toolCalls`. It suits background work such as summarising, translating or drafting emails.
+
+## Streaming: streamText
+
+When a user is waiting for an answer, as in a chatbot, stream the text as it arrives instead of waiting for the whole response.
+
+```ts
+import { streamText } from "ai";
+
+const result = streamText({
+  model: "anthropic/claude-sonnet-5.5",
+  prompt: "Write a haiku about TypeScript.",
+});
+
+for await (const chunk of result.textStream) {
+  process.stdout.write(chunk);
+}
+```
+
+Callbacks such as `onError` and `onEnd` let you log errors or save chat history and token usage once the stream finishes.
+
+## Structured data: Output.object
+
+When you need data your code can use rather than free text, define a Zod schema and get back a correctly typed object.
+
+```ts
+import { generateText, Output } from "ai";
+import { z } from "zod";
+
+const { output } = await generateText({
+  model: "anthropic/claude-sonnet-5.5",
+  output: Output.object({
+    schema: z.object({
+      title: z.string(),
+      tags: z.array(z.string()).max(5),
+      sentiment: z.enum(["positive", "neutral", "negative"]),
+    }),
+  }),
+  prompt: "Analyse this review: The checkout was fast but delivery took two weeks.",
+});
+
+output.sentiment; // "positive" | "neutral" | "negative"
+```
+
+Besides `Output.object()` there are `Output.array()`, `Output.choice()` for picking from fixed options, and `Output.json()`. With `streamText` you get a `partialOutputStream` that fills the object in as it streams.
+
+## Tool calling and agents
+
+Let the model call your functions — query a database, hit an external API. Declare tools with `tool()` and let `ToolLoopAgent` run the "think → call tool → read result → think again" loop for you.
+
+```ts
+import { ToolLoopAgent, tool, isStepCount } from "ai";
+import { z } from "zod";
+
+const getOrderStatus = tool({
+  description: "Look up the delivery status of an order",
+  inputSchema: z.object({ orderId: z.string() }),
+  execute: async ({ orderId }) => ({ orderId, status: "shipped", eta: "2026-10-06" }),
+});
+
+const supportAgent = new ToolLoopAgent({
+  model: "anthropic/claude-sonnet-5.5",
+  instructions: "You are a support agent for an online shop. Use tools to answer.",
+  tools: { getOrderStatus },
+  stopWhen: isStepCount(5),
+});
+
+const result = await supportAgent.generate({ prompt: "Where is order A1024?" });
+console.log(result.text, result.steps.length);
+```
+
+`stopWhen` decides when the loop ends (the default is at most 20 steps). A tool's `description` and `inputSchema` matter a lot: the model uses them to decide which tool to call and with what arguments.
+
+## A full chatbot in Next.js
+
+On the server, a route handler receives messages and streams the answer back.
+
+```ts
+// app/api/chat/route.ts
+import {
+  convertToModelMessages,
+  createUIMessageStreamResponse,
+  streamText,
+  toUIMessageStream,
+  type UIMessage,
+} from "ai";
+
+export async function POST(req: Request) {
+  const { messages }: { messages: UIMessage[] } = await req.json();
+
+  const result = streamText({
+    model: "anthropic/claude-sonnet-5.5",
+    instructions: "You are a helpful assistant.",
+    messages: await convertToModelMessages(messages),
+  });
+
+  return createUIMessageStreamResponse({ stream: toUIMessageStream({ stream: result.stream }) });
+}
+```
+
+On the client, `useChat` handles message state, sending and loading status.
+
+```tsx
+"use client";
+
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
+import { useState } from "react";
+
+export default function Chat() {
+  const { messages, sendMessage, status } = useChat({
+    transport: new DefaultChatTransport({ api: "/api/chat" }),
+  });
+  const [input, setInput] = useState("");
+
+  return (
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        sendMessage({ text: input });
+        setInput("");
+      }}
+    >
+      {messages.map((message) => (
+        <p key={message.id}>
+          <b>{message.role === "user" ? "You" : "AI"}:</b>{" "}
+          {message.parts.map((part, index) => (part.type === "text" ? <span key={index}>{part.text}</span> : null))}
+        </p>
+      ))}
+      <input value={input} onChange={(event) => setInput(event.target.value)} disabled={status !== "ready"} />
+    </form>
+  );
+}
+```
+
+Each message is stored as `parts`, so one message can render text, tool results and reasoning. If you already have an agent, the server can simply return `createAgentUIStreamResponse({ agent, uiMessages: messages })`.
+
+## Connecting MCP servers
+
+The AI SDK can load tools from an MCP server for the model to use, through `@ai-sdk/mcp`.
+
+```ts
+import { createMCPClient } from "@ai-sdk/mcp";
+import { generateText } from "ai";
+
+const mcpClient = await createMCPClient({
+  transport: { type: "http", url: "https://your-server.com/mcp" },
+});
+
+try {
+  const tools = await mcpClient.tools();
+  const { text } = await generateText({ model: "anthropic/claude-sonnet-5.5", tools, prompt: "..." });
+} finally {
+  await mcpClient.close();
+}
+```
+
+## Lessons from production
+
+The AI platform I build today runs the AI SDK on NestJS at its core, calling models from several providers through one API for content planning, chatbots and ad creative. The benefits have been clear:
+
+- **Easy model routing per task** — strong models for hard thinking, fast cheap models for volume, with no change to the surrounding code.
+- **Easy cross-provider fallback** — every provider shares one interface, so you can switch when one has problems.
+- **Structured output removes parsing code** — you get validated objects instead of regexes that dig JSON out of text.
+- **Cost tracking** — record `usage` on every request and price it with data from [models.dev](/en/knowledge/models-dev).
+
+## Why it is worth using
+
+- **Provider-agnostic** — switch models or support several providers with one codebase.
+- **Type-safe** — TypeScript and Zod from tool inputs to final output.
+- **Backend to UI** — Core for the server and hooks for the page, designed to fit together.
+- **Agents built in** — no hand-written tool-call loop.
+- **Docs ready for AI** — `https://ai-sdk.dev/llms.txt` gives coding agents the whole documentation in one file.
+
+## What to watch out for
+
+- **APIs move fast between major versions** — function and option names can change with a new major. Examples from old blog posts or from an AI assistant may not work with the current version; read the docs for your version and the migration guide before upgrading.
+- **Capabilities still vary by provider** — one API does not mean every model supports tool calling, images or structured output. Check the model's specs first.
+- **Model strings use AI Gateway** — set `AI_GATEWAY_API_KEY` (or deploy on Vercel). If you would rather not go through the Gateway, use a provider package directly.
+- **Cap agent loops** — set `stopWhen` to fit the task so an agent does not keep calling tools and burning tokens.
+
+## Summary
+
+The AI SDK turns building AI apps in TypeScript into a product problem rather than an integration problem. From a single model call to a streaming chatbot to an agent that calls its own tools, everything follows one pattern and models stay swappable. Pair it with [LLM Stats](/en/knowledge/llm-stats) to choose models and models.dev to check specs and pricing, and you get an AI system that is flexible and keeps costs under control.
+
+### References
+
+- [AI SDK Documentation](https://ai-sdk.dev/docs)
+- [Generating text](https://ai-sdk.dev/docs/ai-sdk-core/generating-text) and [Structured data](https://ai-sdk.dev/docs/ai-sdk-core/generating-structured-data)
+- [Agents](https://ai-sdk.dev/docs/agents/overview)
+- [Chatbot (AI SDK UI)](https://ai-sdk.dev/docs/ai-sdk-ui/chatbot)
+- [MCP tools](https://ai-sdk.dev/docs/ai-sdk-core/mcp-tools)

@@ -1,0 +1,288 @@
+{
+  "en": {
+    "name": "Ponlawat Koeisuwan",
+    "headline": "Senior Full-Stack Developer · AI Product Engineer",
+    "summary": "Senior Full-Stack Developer with 10+ years of experience delivering production web platforms end to end — from system analysis and database design to TypeScript frontends, REST APIs and CI/CD. Currently building an AI-powered SaaS platform for SMEs, designing AI workflows across multiple model providers and integrating social and messaging platforms. Known for turning complex requirements into reliable, maintainable products.",
+    "stats": [
+      {
+        "value": "10+",
+        "label": "Years in web development"
+      },
+      {
+        "value": "9",
+        "label": "Platforms built"
+      },
+      {
+        "value": "6",
+        "label": "Industries: finance, public sector, publishing, hospitality, marketing, security"
+      }
+    ],
+    "labels": {
+      "summary": "Professional Summary",
+      "skills": "Skills",
+      "experience": "Professional Experience",
+      "projects": "Selected Projects",
+      "education": "Education",
+      "links": "Links"
+    },
+    "skills": [
+      {
+        "label": "Frontend",
+        "items": "TypeScript, React, Next.js, Angular, Vue.js, Nuxt, SCSS, Tailwind CSS, GSAP"
+      },
+      {
+        "label": "Backend",
+        "items": "Node.js, NestJS, Express.js, REST APIs, Webhooks, PHP (Yii)"
+      },
+      {
+        "label": "Data",
+        "items": "PostgreSQL, SQL, Database Design, Drizzle ORM, TypeORM, Supabase, Redis"
+      },
+      {
+        "label": "AI",
+        "items": "Vercel AI SDK, OpenAI, Anthropic, Google Gemini, AI Workflows, Chatbots, MCP"
+      },
+      {
+        "label": "Integrations",
+        "items": "Meta Graph API, WhatsApp Business, LINE Messaging API & LIFF, TikTok, YouTube, Salesforce, OAuth"
+      },
+      {
+        "label": "DevOps & QA",
+        "items": "GitHub Actions, CI/CD, Google Cloud Run, Docker, Jest, Karma, Playwright"
+      }
+    ],
+    "experience": [
+      {
+        "role": "Senior Full-Stack Developer",
+        "company": "Mekha",
+        "period": "11/2025 — Present",
+        "bullets": [
+          "Build a multi-tenant AI business platform for SMEs end to end with NestJS, React, TypeScript, Drizzle ORM and PostgreSQL (Supabase), deployed to Google Cloud Run through GitHub Actions.",
+          "Design AI workflows with the Vercel AI SDK across multiple model providers for content planning, multi-channel chatbots and image and video ad generation.",
+          "Integrate Facebook, Instagram, Meta Ads, WhatsApp Business, LINE, TikTok and YouTube with OAuth, webhooks and encrypted credential storage, and prepare platform app-review submissions.",
+          "Develop content-performance analytics and lead and order tracking that connect social content to customer conversations and sales."
+        ]
+      },
+      {
+        "role": "Senior Full-Stack Developer",
+        "company": "Paneet Interactive Co., Ltd.",
+        "period": "2021 — 2025",
+        "bullets": [
+          "Developed web platforms and applications with Angular, React and Next.js, from requirements to production.",
+          "Built REST APIs with Node.js, Express and NestJS.",
+          "Led system analysis and relational database design for new projects.",
+          "Set up CI/CD pipelines on GitHub Actions with automated testing in Jest and Karma."
+        ]
+      },
+      {
+        "role": "Freelance Web Developer",
+        "company": "Independent",
+        "period": "2018 — 2021",
+        "bullets": [
+          "Delivered tailored websites and web applications for clients from requirements to launch.",
+          "Built backend REST APIs with Node.js and Express and frontends with Vue.js and Nuxt."
+        ]
+      },
+      {
+        "role": "PHP Web Developer",
+        "company": "Bangkok Web Solution Co., Ltd.",
+        "period": "2015 — 2018",
+        "bullets": [
+          "Developed web applications with Yii 1, Yii 2 and object-oriented PHP in an MVC architecture.",
+          "Built responsive interfaces with HTML, CSS, SCSS, jQuery and JavaScript."
+        ]
+      }
+    ],
+    "projects": [
+      {
+        "name": "TISCO FinFreedom",
+        "type": "Financial web application",
+        "detail": "Production full-stack application connecting user workflows with business logic and data handling."
+      },
+      {
+        "name": "OTP Thailand (otp.go.th)",
+        "type": "Government digital platform",
+        "detail": "Large public-information platform with structured content and manageable publishing workflows."
+      },
+      {
+        "name": "PAMCO (pamco.co.th)",
+        "type": "Corporate platform",
+        "detail": "Responsive corporate site with structured content management and backend services."
+      },
+      {
+        "name": "Prathaprachan Magazine",
+        "type": "Publishing platform",
+        "detail": "Digital-publishing platform with editorial content and searchable archives."
+      },
+      {
+        "name": "Hospitality learning platform",
+        "type": "React · NestJS · PostgreSQL · AI voice",
+        "detail": "Gamified staff training with quizzes, voice missions, 360° simulations and a mission CMS."
+      },
+      {
+        "name": "Influencer campaign platform",
+        "type": "Next.js · NestJS · MongoDB · AI SDK",
+        "detail": "Product site, operations CMS and campaign API with KOL discovery and AI-assisted briefs."
+      },
+      {
+        "name": "Customer engagement platform",
+        "type": "Next.js · Express · LINE LIFF · Salesforce",
+        "detail": "Bilingual lead operations with LINE journeys, surveys, segmentation and automation."
+      },
+      {
+        "name": "Coding-agent desktop companion",
+        "type": "Electron · React · TypeScript",
+        "detail": "Brings coding-agent status, approvals and questions into the MacBook notch."
+      }
+    ],
+    "education": {
+      "degree": "B.Sc. Computer Science",
+      "school": "Chandrakasem Rajabhat University",
+      "period": "2009 — 2012",
+      "detail": "GPA 3.16"
+    }
+  },
+  "th": {
+    "name": "พลวัฒน์ เกยสุวรรณ์",
+    "headline": "Senior Full-Stack Developer · AI Product Engineer",
+    "summary": "Senior Full-Stack Developer ประสบการณ์กว่า 10 ปี พัฒนาแพลตฟอร์มเว็บระดับ production แบบครบวงจร ตั้งแต่วิเคราะห์ระบบ ออกแบบฐานข้อมูล ไปจนถึง Frontend ด้วย TypeScript, REST API และ CI/CD ปัจจุบันพัฒนาแพลตฟอร์ม SaaS ที่ขับเคลื่อนด้วย AI สำหรับ SME ออกแบบ AI workflow ที่ใช้โมเดลจากหลายผู้ให้บริการ และเชื่อมต่อแพลตฟอร์มโซเชียลและแชต ถนัดเปลี่ยนโจทย์ที่ซับซ้อนให้เป็นผลิตภัณฑ์ที่เชื่อถือได้และดูแลต่อได้",
+    "stats": [
+      {
+        "value": "10+",
+        "label": "ปีในสายงานพัฒนาเว็บ"
+      },
+      {
+        "value": "9",
+        "label": "แพลตฟอร์มที่พัฒนา"
+      },
+      {
+        "value": "6",
+        "label": "อุตสาหกรรม: การเงิน ภาครัฐ สิ่งพิมพ์ โรงแรม การตลาด ความปลอดภัย"
+      }
+    ],
+    "labels": {
+      "summary": "สรุปประวัติ",
+      "skills": "ทักษะ",
+      "experience": "ประสบการณ์ทำงาน",
+      "projects": "ผลงานที่คัดสรร",
+      "education": "การศึกษา",
+      "links": "ลิงก์"
+    },
+    "skills": [
+      {
+        "label": "Frontend",
+        "items": "TypeScript, React, Next.js, Angular, Vue.js, Nuxt, SCSS, Tailwind CSS, GSAP"
+      },
+      {
+        "label": "Backend",
+        "items": "Node.js, NestJS, Express.js, REST APIs, Webhooks, PHP (Yii)"
+      },
+      {
+        "label": "Data",
+        "items": "PostgreSQL, SQL, Database Design, Drizzle ORM, TypeORM, Supabase, Redis"
+      },
+      {
+        "label": "AI",
+        "items": "Vercel AI SDK, OpenAI, Anthropic, Google Gemini, AI Workflows, Chatbots, MCP"
+      },
+      {
+        "label": "Integrations",
+        "items": "Meta Graph API, WhatsApp Business, LINE Messaging API & LIFF, TikTok, YouTube, Salesforce, OAuth"
+      },
+      {
+        "label": "DevOps & QA",
+        "items": "GitHub Actions, CI/CD, Google Cloud Run, Docker, Jest, Karma, Playwright"
+      }
+    ],
+    "experience": [
+      {
+        "role": "Senior Full-Stack Developer",
+        "company": "Mekha",
+        "period": "11/2025 — ปัจจุบัน",
+        "bullets": [
+          "พัฒนาแพลตฟอร์ม AI สำหรับธุรกิจ SME แบบ multi-tenant ครบวงจร ด้วย NestJS, React, TypeScript, Drizzle ORM และ PostgreSQL (Supabase) deploy บน Google Cloud Run ผ่าน GitHub Actions",
+          "ออกแบบ AI workflow ด้วย Vercel AI SDK ที่ใช้โมเดลจากหลายผู้ให้บริการ สำหรับวางแผนคอนเทนต์ แชตบอตหลายช่องทาง และสร้างภาพและวิดีโอโฆษณา",
+          "เชื่อมต่อ Facebook, Instagram, Meta Ads, WhatsApp Business, LINE, TikTok และ YouTube ด้วย OAuth, webhook และการเก็บข้อมูลรับรองแบบเข้ารหัส พร้อมเตรียมเอกสารยื่น app review",
+          "พัฒนาระบบวัดผลคอนเทนต์ และติดตามลีดกับออเดอร์ ที่เชื่อมคอนเทนต์บนโซเชียลเข้ากับบทสนทนาและยอดขาย"
+        ]
+      },
+      {
+        "role": "Senior Full-Stack Developer",
+        "company": "Paneet Interactive Co., Ltd.",
+        "period": "2021 — 2025",
+        "bullets": [
+          "พัฒนาแพลตฟอร์มและเว็บแอปพลิเคชันด้วย Angular, React และ Next.js ตั้งแต่ requirement จนถึง production",
+          "สร้าง REST API ด้วย Node.js, Express และ NestJS",
+          "รับผิดชอบการวิเคราะห์ระบบและออกแบบฐานข้อมูลเชิงสัมพันธ์ของโปรเจกต์ใหม่",
+          "วาง CI/CD pipeline บน GitHub Actions พร้อม automated test ด้วย Jest และ Karma"
+        ]
+      },
+      {
+        "role": "Freelance Web Developer",
+        "company": "อิสระ",
+        "period": "2018 — 2021",
+        "bullets": [
+          "พัฒนาเว็บไซต์และเว็บแอปพลิเคชันตามความต้องการของลูกค้า ตั้งแต่เก็บ requirement จนถึงเปิดใช้งาน",
+          "สร้าง Backend REST API ด้วย Node.js และ Express และพัฒนา Frontend ด้วย Vue.js และ Nuxt"
+        ]
+      },
+      {
+        "role": "PHP Web Developer",
+        "company": "Bangkok Web Solution Co., Ltd.",
+        "period": "2015 — 2018",
+        "bullets": [
+          "พัฒนาเว็บแอปพลิเคชันด้วย Yii 1, Yii 2 และ PHP เชิงวัตถุ (OOP) บนสถาปัตยกรรม MVC",
+          "พัฒนาหน้าเว็บแบบ responsive ด้วย HTML, CSS, SCSS, jQuery และ JavaScript"
+        ]
+      }
+    ],
+    "projects": [
+      {
+        "name": "TISCO FinFreedom",
+        "type": "เว็บแอปพลิเคชันด้านการเงิน",
+        "detail": "แอปพลิเคชัน Full-Stack ระดับ production เชื่อม workflow ของผู้ใช้กับ business logic และการจัดการข้อมูล"
+      },
+      {
+        "name": "OTP Thailand (otp.go.th)",
+        "type": "แพลตฟอร์มดิจิทัลภาครัฐ",
+        "detail": "แพลตฟอร์มข้อมูลสาธารณะขนาดใหญ่ พร้อมเนื้อหาที่มีโครงสร้างและ workflow การเผยแพร่"
+      },
+      {
+        "name": "PAMCO (pamco.co.th)",
+        "type": "แพลตฟอร์มองค์กร",
+        "detail": "เว็บไซต์องค์กรแบบ responsive พร้อมระบบจัดการเนื้อหาและ backend service"
+      },
+      {
+        "name": "Prathaprachan Magazine",
+        "type": "แพลตฟอร์มสิ่งพิมพ์ดิจิทัล",
+        "detail": "แพลตฟอร์มนิตยสารออนไลน์ พร้อมเนื้อหากองบรรณาธิการและคลังข้อมูลที่ค้นหาได้"
+      },
+      {
+        "name": "แพลตฟอร์มฝึกอบรมบุคลากรโรงแรม",
+        "type": "React · NestJS · PostgreSQL · AI voice",
+        "detail": "ระบบฝึกอบรมแบบเกมมิฟิเคชัน มีแบบทดสอบ ภารกิจเสียง สถานการณ์จำลอง 360° และ CMS"
+      },
+      {
+        "name": "แพลตฟอร์มแคมเปญอินฟลูเอนเซอร์",
+        "type": "Next.js · NestJS · MongoDB · AI SDK",
+        "detail": "เว็บไซต์ผลิตภัณฑ์ ระบบหลังบ้าน และ API แคมเปญ พร้อมค้นหา KOL และสร้าง brief ด้วย AI"
+      },
+      {
+        "name": "แพลตฟอร์ม customer engagement",
+        "type": "Next.js · Express · LINE LIFF · Salesforce",
+        "detail": "ระบบบริหารลีด 2 ภาษา เชื่อม LINE journey แบบสำรวจ segmentation และ automation"
+      },
+      {
+        "name": "Desktop companion สำหรับ coding agent",
+        "type": "Electron · React · TypeScript",
+        "detail": "แสดงสถานะ coding agent คำขออนุมัติ และคำถาม บริเวณ MacBook notch"
+      }
+    ],
+    "education": {
+      "degree": "วิทยาศาสตรบัณฑิต สาขาวิทยาการคอมพิวเตอร์",
+      "school": "มหาวิทยาลัยราชภัฏจันทรเกษม",
+      "period": "2552 — 2555",
+      "detail": "เกรดเฉลี่ย 3.16"
+    }
+  }
+}

@@ -1,0 +1,231 @@
+export const metadata = {
+  title: "Claude Code Subagents — a team of AI agents from research to audit",
+  description:
+    "What subagents are in Claude Code, how to configure them, and an example four-agent team — research, plan, implement and audit — that loops until the work passes.",
+  date: "2026-10-03T11:00",
+  tags: ["Claude Code", "AI Agent", "Workflow"],
+  readingMinutes: 8,
+};
+
+The bigger the task you give an AI coding agent, the longer the conversation gets. Search results, test logs and every file it read pile up in one context until the model starts losing track of what matters. **Subagents** in Claude Code solve this by handing work to specialised agents that run in their own context and return only a summary.
+
+This article summarises the [Claude Code subagents documentation](https://code.claude.com/docs/en/sub-agents) and ends with a four-agent team I use in real work.
+
+## What is a subagent?
+
+A subagent is a specialised AI assistant with its own system prompt, tools and model. When Claude meets a task that matches a subagent's `description`, it delegates the task to that subagent in a separate context. Long searches, file reads and test runs never clutter the main conversation.
+
+The main benefits, according to the docs:
+
+- **Preserve context** — exploration and verbose logs stay in the subagent; only the summary comes back.
+- **Enforce constraints** — limit which tools each agent can use, for example a read-only reviewer.
+- **Reuse** — create once and use in every project, or commit it for the whole team.
+- **Specialise** — a focused system prompt gives more consistent results.
+- **Control cost** — route simple work to faster, cheaper models and keep the strongest model for hard thinking.
+
+## Where agent files live
+
+A subagent is a Markdown file with YAML frontmatter. In priority order:
+
+1. Organisation-wide managed settings
+2. The `--agents` flag when launching Claude Code (current session only)
+3. `.claude/agents/` in the project — ideal for codebase-specific agents you commit for the team
+4. `~/.claude/agents/` — available in all your projects
+5. A plugin's `agents/` directory
+
+When names clash, the higher-priority file wins.
+
+## File format
+
+```md
+---
+name: code-reviewer
+description: Reviews code for quality and best practices
+tools: Read, Glob, Grep
+model: sonnet
+---
+
+You are a code reviewer. When invoked, analyze the code and provide
+specific, actionable feedback on quality, security, and best practices.
+```
+
+Only `name` and `description` are required. The fields you will use most:
+
+- `description` — the most important one: Claude uses it to decide when to delegate, so say clearly _when_ to use the agent.
+- `tools` — allowed tools; all tools are inherited if omitted. `disallowedTools` removes specific ones.
+- `model` — an alias such as `sonnet`, `opus`, `haiku` or `inherit`, or a full model ID like `claude-opus-5-5`.
+- `permissionMode` — for example `plan` for read-only work or `acceptEdits` to edit without asking each time.
+- `effort` — thinking effort from `low` to `max`.
+- `skills` — Agent Skills preloaded into the agent's context.
+- `memory` — let the agent keep learnings across sessions (`user`, `project` or `local`).
+- `isolation: worktree` — run the agent in its own git worktree.
+- `maxTurns`, `hooks`, `mcpServers`, `color` and more.
+
+## Creating and invoking
+
+The easiest way is to ask Claude to create one, or write the file yourself in `.claude/agents/`.
+
+```text
+Create a code-reviewer subagent in .claude/agents/ that reviews changed files
+for bugs and security issues. Make it read-only and have it use Opus.
+```
+
+Three ways to invoke it:
+
+- **Automatically** — Claude reads each `description` and picks the right agent.
+- **By name** — "Use the test-runner subagent to fix failing tests".
+- **@-mention** — guarantees that agent runs, e.g. `@agent-code-reviewer look at my changes`.
+
+To run a whole session as one agent, use `claude --agent code-reviewer`.
+
+## Things worth knowing
+
+- **Isolated context** — a subagent starts fresh with its own system prompt, the task message, `CLAUDE.md` and git status, but **not the main conversation history**. Write delegation messages that stand on their own.
+- **Built-in agents** — `Explore` for read-only code search, `Plan` for research in plan mode and `general-purpose` for multi-step work are available out of the box.
+- **Background work** — subagents can run alongside the main conversation; press `Ctrl+B` to background a running task.
+- **Resuming** — continue a previous subagent instead of starting over; it keeps its full history, which is perfect for fix loops.
+- **Chaining** — ask Claude to use subagents in sequence; each result feeds the next.
+- **Nesting** — by default subagents can spawn others up to 3 levels deep, with up to 20 running at once.
+
+## Example: a four-agent team from research to audit
+
+The idea: use **Sonnet** for work that reads and writes a lot but follows a clear plan, and **Opus** for work that needs judgement — deciding and catching mistakes.
+
+1. **researcher** (Sonnet) maps the codebase and code style
+2. **planner** (Opus) clarifies, plans and proposes ideas
+3. **implementer** (Sonnet) builds the plan
+4. **auditor** (Opus) checks the work against the plan; if it finds bugs they go back to the implementer, looping until the work passes
+
+### 1. researcher
+
+```md
+---
+name: researcher
+description: Researches the codebase before any change. Use first on every new feature or refactor to map relevant files, conventions and code style.
+tools: Read, Grep, Glob, Bash
+model: sonnet
+permissionMode: plan
+color: blue
+---
+
+You map the codebase for a requested change. Do not edit files.
+
+Report, in this order:
+1. Files and modules the change will touch, with paths and line numbers.
+2. Existing helpers, components and patterns that should be reused.
+3. Code style: naming, file layout, comment density, formatting, test style.
+4. Commands to verify the work (typecheck, lint, test, build).
+5. Risks and unknowns.
+
+Keep the report factual and under 400 words.
+```
+
+### 2. planner
+
+```md
+---
+name: planner
+description: Turns a request plus the researcher's report into a clear plan. Use after researcher and before any implementation.
+tools: Read, Grep, Glob
+model: opus
+permissionMode: plan
+effort: high
+color: purple
+---
+
+You are a senior engineer planning a change. Do not edit files.
+
+1. List questions that must be answered before building. Propose a sensible default for each.
+2. Suggest up to three ideas that would make the result better, with trade-offs.
+3. Write the plan: numbered steps, exact files to change, and what each change does.
+4. Write acceptance criteria the auditor can check one by one.
+
+Prefer the smallest change that meets the goal. Reuse what the researcher found.
+```
+
+### 3. implementer
+
+```md
+---
+name: implementer
+description: Implements an approved plan exactly. Use only after the plan is confirmed, and again to fix issues reported by auditor.
+tools: Read, Edit, Write, Bash, Grep, Glob
+model: sonnet
+permissionMode: acceptEdits
+color: green
+---
+
+You implement the approved plan. Follow the code style from the research report.
+
+- Change only what the plan or the audit report asks for.
+- Do not add dependencies or abstractions the plan did not mention.
+- Run every verification command from the plan and fix failures.
+- Do not commit.
+
+Finish with: files changed, what you did per plan step, and the exact output of each check.
+```
+
+### 4. auditor
+
+```md
+---
+name: auditor
+description: Audits an implementation against its plan and acceptance criteria. Use after implementer finishes.
+tools: Read, Grep, Glob, Bash
+model: opus
+permissionMode: plan
+effort: high
+color: red
+---
+
+You audit a finished change. Do not edit files.
+
+1. Read the diff (`git diff`) and the plan.
+2. Check every acceptance criterion: PASS or FAIL with evidence.
+3. Look for bugs, regressions, edge cases, accessibility and security issues.
+4. Run the verification commands yourself.
+
+End with exactly one verdict:
+- `VERDICT: PASS` with a short summary, or
+- `VERDICT: FAIL` with a numbered list of issues, each with file, line, problem and the expected fix.
+```
+
+### Running the team
+
+With all four files in `.claude/agents/`, give Claude this in the main conversation:
+
+```text
+Build a knowledge page that lists MDX articles.
+
+Pipeline:
+1. Use the researcher subagent to map the codebase and code style.
+2. Use the planner subagent to clarify, plan and propose ideas.
+   Show me the plan and wait for my confirmation.
+3. After I confirm, use the implementer subagent to build it.
+4. Use the auditor subagent to audit the result.
+   If the verdict is FAIL, send the issue list back to the same implementer
+   to fix, then audit again. Repeat until PASS, then summarize.
+```
+
+The main conversation acts as the coordinator: it passes each agent's output to the next and stops for your confirmation before any code is written. In the fix loop it resumes the same implementer, so the agent still remembers what it built.
+
+### Why this split works
+
+- **The reviewer is not the author** — the auditor looks with fresh context and catches what the implementer missed.
+- **The right model for each job** — Sonnet for heavy reading and writing, Opus for planning and review: quality without overspending.
+- **Permissions match responsibilities** — only the implementer can edit files; everyone else is read-only.
+- **A clear definition of done** — the planner's acceptance criteria make the audit objective.
+
+This website was built in a similar way. In one audit round the auditor opened the real page and found that the last chapter of an animation disappeared before it could be read, and that the header covered the year rail — problems that typecheck and build alone would never reveal.
+
+## Tips
+
+- Write `description` to say clearly _when_ to use the agent — Claude uses it to choose.
+- Grant the fewest permissions the job needs: start read-only and add more later.
+- Ask agents for a fixed output format such as `VERDICT: PASS` so loops are easy to drive.
+- Commit `.claude/agents/` so the whole team shares one workflow.
+- Combine with [Agent Skills](/en/knowledge/skills-sh) (the `skills` field) to give each agent domain knowledge.
+
+### References
+
+- [Claude Code: Create custom subagents](https://code.claude.com/docs/en/sub-agents)

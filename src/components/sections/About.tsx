@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import { useRef } from "react";
-import type { Dictionary } from "@/lib/i18n";
+import type { Dictionary, Locale } from "@/lib/i18n";
+import { ResumeDownload } from "@/components/sections/ResumeDownload";
 import { ImageReveal } from "@/components/motion/ImageReveal";
 import { gsap, useGSAP } from "@/lib/gsap";
 
-export function About({ copy }: { copy: Dictionary["about"] }) {
+export function About({ copy, locale }: { copy: Dictionary["about"]; locale: Locale }) {
   const root = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -83,11 +84,7 @@ export function About({ copy }: { copy: Dictionary["about"] }) {
             </div>
           ))}
         </dl>
-        <a className="about-resume" href="/resume-ponlawat.pdf" download data-cursor="OPEN">
-          <span>{copy.resume}</span>
-          <small>{copy.resumeMeta}</small>
-          <b aria-hidden="true">↓</b>
-        </a>
+        <ResumeDownload copy={copy} locale={locale} />
       </div>
       <div className="about-principles">
         <p className="section-kicker light">{copy.principlesLabel}</p>

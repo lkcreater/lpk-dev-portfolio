@@ -1,0 +1,98 @@
+export const metadata = {
+  title: "LLM Stats — a benchmark hub for choosing the right AI model for the job and the budget",
+  description:
+    "What llm-stats.com offers — benchmark scores, pricing, speed and context windows in one place — how to use it to pick a model for a real project, and what to watch out for when reading the numbers.",
+  date: "2026-10-03T12:00",
+  tags: ["AI Model", "Benchmark", "Developer Tools"],
+  readingMinutes: 6,
+};
+
+A new AI model ships every week, and every lab says theirs is the best. The question developers actually need to answer is not "which model is best?" but "which model fits this task, this budget and the latency my users will accept?" **[LLM Stats](https://llm-stats.com/)** brings that data together in one place, so you can compare quickly instead of reading model cards lab by lab.
+
+## What is LLM Stats?
+
+LLM Stats calls itself "The AI Benchmarking Hub". It is an independent platform that ranks and compares hundreds of language models from every major lab — OpenAI, Anthropic, Google, Meta, DeepSeek, Qwen, Mistral, xAI and more — covering both proprietary and open-weights models.
+
+The founders explain why they built it: most benchmarks are chosen by the people selling the models, so results tend to be cherry-picked. LLM Stats gathers results from many sources and labels clearly which scores are lab-reported and which are independently verified.
+
+## What data it has
+
+- **Benchmark scores** such as GPQA Diamond, MMLU-Pro, SWE-Bench Verified, LiveCodeBench, AIME, MATH, HumanEval and MMMU, each with its own explainer page.
+- **Pricing** per million tokens for each provider, pulled from official price lists and cross-checked against real billing.
+- **Speed** in tokens per second, measured from live API calls.
+- **Context window** — the maximum input each model accepts.
+- **License and provider**, with a clear split between proprietary and open-weights models.
+- **LLM Stats Score** — a composite that summarises many benchmarks, broken into six categories: Reasoning, Coding, Agent, Math, Long Context and Vision.
+
+## Tools you will use most
+
+- **Main leaderboard** — filter by price, speed, parameter count, license and time window (all, 90 days, 30 days).
+- **Task leaderboards** — Best AI for Coding, Writing, Math, Research, Long Context, Tool Calling and Reasoning, plus profession-specific ones such as web development, UI design, finance and law.
+- **Open LLM Leaderboard** — open-weights models only, useful when you need to self-host.
+- **Compare** — put several models side by side across every dimension.
+- **Pricing comparison** — price against performance.
+- **Arena** — head-to-head rankings such as the coding arena.
+- **AI News** and a weekly newsletter summarising new models and benchmark results.
+- **Quick search** with `⌘K` for models and labs.
+
+## How the LLM Stats Score works
+
+The [methodology page](https://llm-stats.com/methodology/llm-stats-score) is refreshingly direct:
+
+- **Normalise before combining** — 80 on one benchmark does not mean the same as 80 on another, so models are compared within each benchmark first, then combined.
+- **Missing is not failing** — a model without results on some benchmarks is not scored zero; its score simply carries more uncertainty.
+- **Sources are labelled** — lab-reported values are labelled and linked to their source, and independently verified results are marked separately.
+
+The site is also clear about the limits: the score only reflects capabilities in the evaluation set and is **not a task-specific deployment recommendation**.
+
+## Data API and MCP for developers
+
+If you want the data inside your own system — a model-selection dashboard, or an AI agent that checks pricing before choosing a model — there is a Data API:
+
+```bash
+curl -H "Authorization: Bearer $API_KEY" \
+  "https://api.zeroeval.com/stats/v1/models?organization=anthropic&limit=2"
+```
+
+Key endpoints include `/stats/v1/models` (catalogue, pricing and category scores), `/stats/v1/models/{id}` (every benchmark score for one model), `/stats/v1/benchmarks`, `/stats/v1/rankings` and `/stats/v1/updates` for recently added models.
+
+At the time of writing (October 2026) the free tier gives 250 data responses per day, with paid tiers for heavier or commercial use. There is also an MCP server for agents such as Claude Code, Cursor and Windsurf, so an agent can look up model data on its own while it works.
+
+## Using it to choose a model for a real project
+
+The steps I follow:
+
+1. **Start from the leaderboard that matches the task.** Building a coding agent? Look at Best AI for Coding or Tool Calling, not the overall score.
+2. **Filter by real constraints** — budget per million tokens, the minimum speed your users accept and the context you need. Filter to open-weights if you must self-host.
+3. **Shortlist two or three models in Compare** and see which is best value on the dimensions that matter to you.
+4. **Open the source of each score** and check whether it is lab-reported or verified.
+5. **Test on your own work.** Prepare 10–20 prompts from real tasks and measure the results yourself before deciding.
+
+The same thinking applies when splitting work across a team of agents: use a fast, cost-effective model for heavy reading and writing that follows a clear plan, and a strong reasoning model for planning and review (see the example in the [Claude Code Subagents article](/en/knowledge/claude-code-subagents)).
+
+## Why it is useful
+
+- **Everything in one place** — scores, pricing, speed and context on one page instead of a dozen tabs.
+- **Continuously updated** — new models and benchmark results land quickly.
+- **Transparent sourcing** — lab-reported and verified scores are separated, and the methodology is public.
+- **Task-based views** — not just an overall ranking, but leaderboards per task and profession.
+- **Built to integrate** — an API and MCP server let you use the data in your own tools and agents.
+
+## What to watch out for
+
+- **Benchmarks are not your task.** A high score on a standard test does not guarantee good results on your specific work. Always test yourself.
+- **Lab-reported scores** depend on each lab's evaluation choices. Check the source label every time.
+- **The data moves fast.** Prices and rankings change weekly; numbers in this article (including API plan limits) may already be out of date.
+- **Composite scores hide detail.** Two models with similar overall scores can be strong in different areas, so read the category scores too.
+- **There is a commercial side.** The team earns from the API and benchmarking services. The data is very useful, but combine it with other sources.
+
+## Summary
+
+LLM Stats is a great starting point for choosing an AI model: it narrows hundreds of options to a handful in minutes, with scores, pricing and speed side by side. The final decision should still come from testing on your own work. Use the numbers to shortlist, not to decide.
+
+### References
+
+- [LLM Stats](https://llm-stats.com/)
+- [LLM Stats Score methodology](https://llm-stats.com/methodology/llm-stats-score)
+- [LLM Stats Data API & MCP](https://llm-stats.com/developer)
+- [About LLM Stats](https://llm-stats.com/about-us)

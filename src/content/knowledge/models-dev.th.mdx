@@ -1,0 +1,151 @@
+export const metadata = {
+  title: "models.dev — ฐานข้อมูลโมเดล AI แบบ open source ที่ดึงไปใช้ในโค้ดได้ทันที",
+  description:
+    "รู้จัก models.dev ฐานข้อมูลสเปก ราคา และความสามารถของโมเดล AI จากผู้ให้บริการกว่า 200 ราย ใช้ผ่าน api.json ได้ฟรี พร้อมตัวอย่างโค้ดคำนวณค่าใช้จ่ายและค้นหาโมเดลด้วย jq",
+  date: "2026-10-03T13:00",
+  tags: ["AI Model", "Open Source", "Developer Tools"],
+  readingMinutes: 6,
+};
+
+เวลาสร้างแอปที่ใช้ LLM คำถามพื้นฐานอย่าง "โมเดลนี้ context เท่าไหร่", "รองรับ tool calling ไหม" หรือ "ค่า input ต่อล้าน token เท่าไหร่" มักต้องเปิดหน้า docs ของแต่ละค่ายทีละหน้า แล้วข้อมูลก็เปลี่ยนบ่อยจนตามไม่ทัน **[models.dev](https://models.dev/)** แก้ปัญหานี้ด้วยฐานข้อมูลโมเดล AI แบบ open source ที่ทุกคนช่วยกันดูแล และดึงไปใช้ในโค้ดได้ทันที
+
+## models.dev คืออะไร
+
+models.dev คือฐานข้อมูลสเปก ราคา และความสามารถของโมเดล AI แบบ open source ดูแลโดยทีม SST ผู้สร้าง [opencode](https://opencode.ai) ซึ่งใช้ข้อมูลชุดนี้อยู่ภายใน ซอร์สทั้งหมดอยู่บน [GitHub](https://github.com/sst/models.dev) จุดตั้งต้นของโปรเจกต์คือ ยังไม่มีฐานข้อมูลกลางที่รวมข้อมูลของโมเดล AI ทั้งหมดไว้ในที่เดียว
+
+ณ วันที่เขียน ใน `api.json` มีผู้ให้บริการ 226 ราย รวมรายการโมเดลราว 8,400 รายการ (นับแยกตามผู้ให้บริการ โมเดลเดียวกันที่ให้บริการหลายเจ้าจะนับหลายรายการ) ครอบคลุมทั้งค่ายที่พัฒนาโมเดลเอง เช่น OpenAI, Anthropic, Google, Meta, Mistral, DeepSeek และ xAI รวมถึงผู้ให้บริการ API ที่นำโมเดลเหล่านี้มาให้บริการต่อ
+
+## เว็บไซต์มีอะไรให้ใช้
+
+- **Models** รายชื่อโมเดลทั้งหมด พร้อม context, output limit, ราคา input/output และความสามารถอย่าง reasoning, tool calling, structured output และการรับไฟล์แนบ
+- **Providers** รายชื่อผู้ให้บริการ API ว่าเจ้าไหนให้บริการโมเดลอะไรบ้าง
+- **Labs** ค่ายที่พัฒนาโมเดล
+- **ค้นหาเร็ว** ด้วย `Ctrl K`
+- **ข้อมูลประกอบ** วันที่ปล่อย วันที่อัปเดตล่าสุด และโมเดลเป็น open weights หรือไม่ (ถ้าเป็น open weights มีลิงก์ไป Hugging Face)
+
+## ข้อมูลของแต่ละโมเดล
+
+ตัวอย่างข้อมูลจริงของ Claude Sonnet 5.5 ใน `api.json`
+
+```json
+{
+  "name": "Claude Sonnet 5.5",
+  "reasoning": true,
+  "tool_call": true,
+  "knowledge": "2026-06",
+  "limit": { "context": 1000000, "output": 128000 },
+  "cost": { "input": 2, "output": 10, "cache_read": 0.2, "cache_write": 2.5 }
+}
+```
+
+ฟิลด์ที่ใช้บ่อย
+
+- `cost` ราคาเป็น USD ต่อ 1 ล้าน token แยก `input`, `output`, `cache_read` และ `cache_write`
+- `limit` ขนาด `context` และ `output` สูงสุด
+- `modalities` ชนิดข้อมูลที่รับเข้าและส่งออก เช่น `text`, `image`, `pdf`
+- `reasoning`, `tool_call`, `structured_output`, `attachment`, `temperature` บอกว่าโมเดลรองรับความสามารถไหนบ้าง
+- `knowledge` เดือนที่ข้อมูลฝึกสิ้นสุด (knowledge cutoff)
+- `release_date`, `last_updated`, `open_weights`
+
+ส่วนข้อมูลของผู้ให้บริการก็มีประโยชน์มาก เช่น `env` บอกชื่อ environment variable ของ API key และ `npm` บอกแพ็กเกจของ Vercel AI SDK ที่ต้องใช้
+
+```json
+{
+  "id": "anthropic",
+  "env": ["ANTHROPIC_API_KEY"],
+  "npm": "@ai-sdk/anthropic",
+  "doc": "https://docs.anthropic.com/en/docs/about-claude/models"
+}
+```
+
+## ใช้งานผ่าน API
+
+ข้อมูลทั้งหมดดึงได้ฟรี ไม่ต้องมี API key
+
+```bash
+# ฐานข้อมูลทั้งหมด จัดกลุ่มตามผู้ให้บริการ
+curl https://models.dev/api.json
+
+# โลโก้ของผู้ให้บริการ
+https://models.dev/logos/anthropic.svg
+```
+
+ดูสเปกของโมเดลเดียวด้วย `jq`
+
+```bash
+curl -s https://models.dev/api.json \
+  | jq '.anthropic.models["claude-sonnet-5-5"] | {name, limit, cost}'
+```
+
+หาโมเดลที่รองรับ tool calling และ context ตั้งแต่ 1 ล้าน token ขึ้นไป เรียงจากถูกไปแพง
+
+```bash
+curl -s https://models.dev/api.json | jq '
+  [.[] | .id as $provider | .models[]
+    | select(.tool_call and .limit.context >= 1000000 and .cost.input > 0)
+    | {provider: $provider, id, input: .cost.input, output: .cost.output}]
+  | sort_by(.input) | .[:10]'
+```
+
+## ตัวอย่าง: คำนวณค่าใช้จ่ายต่อ request
+
+ถ้าระบบของคุณเรียกใช้หลายโมเดล ใช้ `api.json` ประเมินต้นทุนก่อนเลือกโมเดล หรือแสดงค่าใช้จ่ายให้ผู้ใช้เห็นได้
+
+```ts
+const catalog = await fetch("https://models.dev/api.json").then((res) => res.json());
+
+function estimateCost(provider: string, modelId: string, inputTokens: number, outputTokens: number) {
+  const model = catalog[provider]?.models[modelId];
+  if (!model?.cost) throw new Error(`No pricing for ${provider}/${modelId}`);
+  // cost เป็น USD ต่อ 1 ล้าน token
+  return (inputTokens * model.cost.input + outputTokens * model.cost.output) / 1_000_000;
+}
+
+estimateCost("anthropic", "claude-sonnet-5-5", 20_000, 2_000); // 0.06 USD
+```
+
+ใน production ควร cache ไฟล์นี้ไว้ เช่น ดึงวันละครั้ง เพราะไฟล์มีขนาดหลาย MB และข้อมูลไม่ได้เปลี่ยนทุกนาที
+
+## ร่วมเพิ่มหรือแก้ข้อมูล
+
+ข้อมูลทั้งหมดเป็นไฟล์ TOML ใน repository ใครก็ส่ง pull request แก้ไขได้
+
+- `providers/<provider-id>/provider.toml` ข้อมูลผู้ให้บริการ เช่น `name`, `npm`, `env`, `doc`
+- `providers/<provider-id>/models/<model-id>.toml` สเปกและราคาของโมเดลที่ผู้ให้บริการนั้นให้บริการ
+- `providers/<provider-id>/logo.svg` โลโก้
+
+ขั้นตอนคือ fork repository, เพิ่มหรือแก้ไฟล์ TOML, เปิด pull request แล้ว GitHub Actions จะตรวจรูปแบบข้อมูลให้อัตโนมัติ
+
+## ใช้คู่กับ LLM Stats ยังไง
+
+models.dev กับ [LLM Stats](/th/knowledge/llm-stats) ตอบคนละคำถาม
+
+- **models.dev** ตอบว่าโมเดลนี้ "คืออะไร" ทั้งสเปก ราคา และความสามารถ เป็นข้อมูลข้อเท็จจริงที่ดึงไปใช้ในโค้ดได้ ฟรี และเปิดให้ทุกคนแก้ไข
+- **LLM Stats** ตอบว่าโมเดลนี้ "เก่งแค่ไหน" ทั้งคะแนน benchmark อันดับ และความเร็วที่วัดจริง
+
+ใช้ LLM Stats คัดโมเดลที่เก่งพอสำหรับงาน แล้วใช้ models.dev เช็กสเปก ราคา และวิธีเชื่อมต่อ ก่อนนำไปใช้จริง
+
+## ข้อดี
+
+- **ฟรีและเปิด** ดึงข้อมูลได้โดยไม่ต้องสมัครหรือใช้ API key ซอร์สตรวจสอบได้ทั้งหมด
+- **ครอบคลุม** มีทั้งค่ายโมเดลและผู้ให้บริการ API กว่า 200 ราย
+- **พร้อมใช้ในโค้ด** เป็น JSON โครงสร้างชัดเจน และบอกชื่อแพ็กเกจ AI SDK กับ environment variable ที่ต้องใช้
+- **ชุมชนช่วยกันดูแล** โมเดลใหม่ถูกเพิ่มผ่าน pull request ได้เร็ว
+- **ใช้งานจริงอยู่แล้ว** opencode ใช้ข้อมูลชุดนี้เป็นฐาน
+
+## สิ่งที่ควรระวัง
+
+- **ข้อมูลอาจคลาดเคลื่อน** ข้อมูลถูกดูแลโดยชุมชน ราคาหรือ limit อาจยังไม่อัปเดตตามประกาศล่าสุดของค่าย ก่อนตัดสินใจเรื่องเงินควรเช็กกับหน้าราคาทางการอีกครั้ง
+- **ไม่ได้บอกว่าเก่งแค่ไหน** ไม่มีคะแนน benchmark ต้องใช้แหล่งอื่นประกอบ
+- **ไฟล์ใหญ่** `api.json` มีขนาดหลาย MB ไม่ควรดึงใหม่ทุก request
+- **ชื่อ ID ไม่เหมือนกันทุกเจ้า** โมเดลเดียวกันอาจมี ID ต่างกันในแต่ละผู้ให้บริการ ต้องอ้างอิงคู่กับ provider เสมอ
+
+## สรุป
+
+models.dev คือ "ตารางสเปก" ของโมเดล AI ที่นักพัฒนารอมานาน ข้อมูลเปิด ฟรี อยู่ในรูป JSON ที่ดึงไปใช้ได้ทันที เหมาะทั้งตอนเลือกโมเดล ประเมินต้นทุน และทำระบบที่ต้องรองรับหลายโมเดล ใช้คู่กับแหล่งข้อมูล benchmark อย่าง LLM Stats จะได้ภาพครบทั้งสเปก ราคา และฝีมือ
+
+### อ้างอิง
+
+- [models.dev](https://models.dev/)
+- [sst/models.dev บน GitHub](https://github.com/sst/models.dev)
+- [opencode](https://opencode.ai)

@@ -370,7 +370,17 @@
       }
     ],
     "resume": "Download resume",
-    "resumeMeta": "PDF · 1 page"
+    "resumeMeta": "PDF · 2 pages · English",
+    "resumeGate": {
+      "title": "Confirm to download",
+      "body": "Please enter the owner's date of birth to download the resume.",
+      "day": "Day",
+      "month": "Month",
+      "year": "Year",
+      "confirm": "Download",
+      "cancel": "Cancel",
+      "error": "The date doesn't match. Please try again."
+    }
   },
   "knowledge": {
     "kicker": "Knowledge",

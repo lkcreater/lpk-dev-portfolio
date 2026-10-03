@@ -1,4 +1,5 @@
 import type { MDXComponents } from "mdx/types";
+import Link from "next/link";
 
 const components: MDXComponents = {
   a: ({ href = "", children }) =>
@@ -7,7 +8,7 @@ const components: MDXComponents = {
         {children}
       </a>
     ) : (
-      <a href={href}>{children}</a>
+      <Link href={href}>{children}</Link>
     ),
 };
 

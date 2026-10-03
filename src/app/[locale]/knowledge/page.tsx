@@ -36,7 +36,7 @@ export default async function KnowledgePage({ params }: KnowledgePageProps) {
               <span className="knowledge-index">{String(index + 1).padStart(2, "0")}</span>
               <div>
                 <p className="knowledge-meta">
-                  <time dateTime={post.date}>{post.date}</time>
+                  <time dateTime={post.date}>{post.date.slice(0, 10)}</time>
                   <span>
                     {post.readingMinutes} {copy.minutes}
                   </span>

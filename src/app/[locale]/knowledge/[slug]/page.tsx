@@ -32,7 +32,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           ← {copy.back}
         </Link>
         <p className="knowledge-meta">
-          <time dateTime={meta.date}>{meta.date}</time>
+          <time dateTime={meta.date}>{meta.date.slice(0, 10)}</time>
           <span>
             {meta.readingMinutes} {copy.minutes}
           </span>

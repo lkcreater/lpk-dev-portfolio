@@ -1,0 +1,104 @@
+export const metadata = {
+  title: "AI Hero — แหล่งเรียน AI Engineering สำหรับนักพัฒนา TypeScript ตั้งแต่พื้นฐานถึง workflow จริง",
+  description:
+    "รู้จัก aihero.dev ของ Matt Pocock มีบทเรียนฟรีเรื่อง LLM, AI SDK, MCP, evals และการเขียนโค้ดกับ Claude Code พร้อมชุด skill ที่ติดตั้งใช้ได้ทันที และเส้นทางเรียนที่แนะนำ",
+  date: "2026-10-03T15:00",
+  tags: ["AI Engineering", "Learning", "Claude Code"],
+  readingMinutes: 7,
+};
+
+ความรู้เรื่อง AI สำหรับนักพัฒนามีเยอะมาก แต่ส่วนใหญ่กระจัดกระจาย บ้างเน้นทฤษฎี machine learning จนเกินจำเป็น บ้างเป็นแค่เดโมที่เอาไปใช้จริงไม่ได้ **[AI Hero](https://www.aihero.dev/)** เป็นหนึ่งในแหล่งที่ผมแนะนำมากที่สุดสำหรับนักพัฒนาเว็บที่อยากสร้างแอปด้วย AI อย่างจริงจัง เพราะสอนจากมุมของวิศวกรซอฟต์แวร์ ไม่ใช่นักวิจัย
+
+## AI Hero คืออะไร
+
+AI Hero เป็นเว็บของ Matt Pocock ผู้สร้าง Total TypeScript เว็บนิยามตัวเองว่าสอนวิศวกรให้สร้างงานด้วย AI ผ่านคอร์ส cohort, event และบทเรียนฟรี เนื้อหาส่วนใหญ่ใช้ TypeScript และเน้นสิ่งที่นำไปใช้ในงานจริงได้ทันที
+
+แนวคิดหลักของเว็บคือ AI Engineer ไม่จำเป็นต้องเข้าใจ linear algebra หรือสร้าง foundation model เอง แต่ต้องมีพื้นฐาน software engineering ที่แข็ง แล้วเรียนรู้วิธีนำโมเดลมาใช้ให้ได้ผล
+
+## มีเนื้อหาอะไรบ้าง
+
+### 1. พื้นฐาน LLM และ AI Engineering
+
+ชุด **LLM Fundamentals** และ **The AI Engineer Roadmap** อธิบายเรื่องที่ต้องรู้ก่อนลงมือ เช่น LLM คืออะไร, token, context window, tool, agent และ AI Engineer ต่างจาก ML Engineer อย่างไร มีบทความอย่าง **5 Questions To Ask Before Choosing An LLM** และ **17 Techniques For Improving Your LLM-Powered App** ที่ใช้ได้จริงตอนออกแบบระบบ
+
+### 2. Vercel AI SDK Tutorial
+
+บทเรียนฟรีที่ไล่ตั้งแต่สร้างข้อความ, streaming, structured output, tool calling, embeddings, ใช้โมเดล local ไปจนถึงสลับโมเดลแบบ hot-swap และสร้าง agent ตัวแรก เหมาะอ่านคู่กับ[บทความ AI SDK](/th/knowledge/ai-sdk) แต่ควรเช็กชื่อ API กับเอกสารเวอร์ชันปัจจุบันเสมอ เพราะบทความเก่าบางส่วนเขียนไว้ตั้งแต่ AI SDK เวอร์ชันก่อน ๆ
+
+### 3. Model Context Protocol (MCP)
+
+ชุด **Model Context Protocol Tutorial** อธิบายว่า MCP ทำงานยังไง สร้าง MCP server จากไฟล์ TypeScript ไฟล์เดียว และ publish ขึ้น npm รวมถึงข้อควรระวังอย่าง **Logging: A Huge MCP Footgun** และ **The Problem With MCP: Stateful Servers**
+
+### 4. Evals
+
+หัวข้อที่นักพัฒนามักมองข้าม **Your App Is Only As Good As Its Evals** และ **The Three Types Of Evals** อธิบายว่าทำไมแอป AI ต้องมีชุดทดสอบคุณภาพ และแนะนำ Evalite เครื่องมือเขียน eval ด้วย TypeScript
+
+### 5. เขียนโค้ดกับ AI (Claude Code)
+
+ส่วนที่ผมอ่านบ่อยที่สุด มีทั้งเรื่อง plan mode, hooks ที่กันไม่ให้ agent รันคำสั่ง git อันตราย, **A Complete Guide To AGENTS.md**, **How To Make Codebases AI Agents Love**, **Essential AI Coding Feedback Loops For TypeScript Projects**, แนวคิด **Tracer Bullets** สำหรับคุมคุณภาพงานจาก AI และ **Real-world feature build with Claude Code: every step explained** ที่พาดูการสร้างฟีเจอร์จริงทีละขั้น
+
+### 6. Skills สำหรับวิศวกรตัวจริง
+
+ชุด **AI Skills for Real Engineers** คือ Agent Skills ที่ Matt ใช้เอง ครอบคลุมตั้งแต่ตั้งคำถามให้ชัดก่อนลงมือ (`/grill-me`, `/grill-with-docs`) เขียน spec และแตกงาน (`/to-spec`, `/to-tickets`) ไปจนถึง TDD, code review, วิเคราะห์ bug และออกแบบ codebase ติดตั้งได้ผ่าน [skills.sh](/th/knowledge/skills-sh)
+
+```bash
+npx skills@latest add mattpocock/skills
+```
+
+หรือติดตั้งเป็น plugin ของ Claude Code ที่อัปเดตอัตโนมัติ
+
+```bash
+claude plugins install mattpocock-skills
+```
+
+### 7. AI Coding Dictionary
+
+อภิธานศัพท์ของคำที่ใช้กันในวงการ AI coding เช่น attention budget, compaction, cache tokens, AFK และ agent mode เหมาะเวลาอ่านบทความแล้วเจอคำที่ไม่คุ้น
+
+## จุดที่ดีสำหรับคนที่ใช้ AI agent
+
+AI Hero ออกแบบมาให้ agent อ่านได้ด้วย เกือบทุกหน้ามีเวอร์ชัน Markdown โดยเติม `.md` ท้าย URL มี `llms.txt` และมี API ค้นหาเนื้อหาสาธารณะ จึงส่งบทความให้ Claude Code อ่านเป็น context ได้ง่าย
+
+```bash
+curl https://www.aihero.dev/what-is-the-context-window.md
+curl "https://www.aihero.dev/api/search?q=evals"
+```
+
+## ประสบการณ์ใช้งานจริง
+
+ผมติดตั้ง skill จากชุดนี้ไว้ใช้กับ Claude Code หลายตัว เช่น `/grill-me` ให้ agent ซักถามจนโจทย์ชัดก่อนเริ่ม, `/research` ให้ค้นข้อมูลจากแหล่งที่น่าเชื่อถือ, `/diagnosing-bugs` สำหรับไล่หา bug ยาก ๆ และ `/code-review` ตรวจงานก่อน merge สิ่งที่ได้ชัดที่สุดคือ agent ทำงานเป็นขั้นตอนเดิมทุกครั้ง ไม่ข้ามการวางแผนหรือการตรวจ ซึ่งเข้ากันดีกับการแบ่งงานให้[ทีม subagent](/th/knowledge/claude-code-subagents)
+
+## เส้นทางเรียนที่แนะนำ
+
+1. **เริ่มจากพื้นฐาน** อ่าน LLM Fundamentals และ What Is An AI Engineer? ให้เข้าใจภาพรวม
+2. **ลงมือด้วย AI SDK** ทำตาม Vercel AI SDK Tutorial แล้วลองสร้างแอปเล็ก ๆ ของตัวเอง
+3. **เพิ่ม tool และ MCP** เมื่อแอปต้องเชื่อมกับข้อมูลหรือระบบภายนอก
+4. **วัดผลด้วย evals** ก่อนนำขึ้น production
+5. **ปรับ workflow การเขียนโค้ด** อ่านบทความ Claude Code ติดตั้ง skills แล้วค่อย ๆ ปรับให้เข้ากับทีม
+
+## ข้อดี
+
+- **สอนจากมุมวิศวกร** เน้นสิ่งที่ใช้สร้างผลิตภัณฑ์ได้จริง ไม่จมกับทฤษฎี
+- **เนื้อหาฟรีจำนวนมาก** บทความและบทเรียนส่วนใหญ่อ่านได้โดยไม่ต้องจ่าย
+- **ครบทั้งสร้างแอปและเขียนโค้ดกับ AI** ตั้งแต่ AI SDK, MCP, evals ไปจนถึง workflow ของ Claude Code
+- **นำไปใช้ได้ทันที** มีชุด skill ให้ติดตั้งแทนการอ่านแล้วต้องจำเอง
+- **เป็นมิตรกับ agent** มี Markdown, `llms.txt` และ API ให้ใช้
+
+## สิ่งที่ควรระวัง
+
+- **เนื้อหาเป็นภาษาอังกฤษ** และใช้ศัพท์เฉพาะเยอะ ใช้ AI Coding Dictionary ช่วยได้
+- **บางบทความเก่ากว่าเครื่องมือ** AI SDK และ Claude Code เปลี่ยนเร็ว ตัวอย่างโค้ดในบทความเก่าอาจต้องปรับตามเวอร์ชันปัจจุบัน
+- **เป็นมุมมองของผู้เขียนคนเดียว** หลายเรื่องเป็นความเห็นและวิธีทำงานส่วนตัว เช่น แนะนำว่าไม่ควรรัน `/init` ควรลองแล้วเลือกสิ่งที่เหมาะกับทีม
+- **มีส่วนที่เสียเงิน** คอร์สเต็มและ cohort เป็นแบบเสียเงิน ควรเริ่มจากเนื้อหาฟรีก่อน
+
+## สรุป
+
+AI Hero เหมาะกับนักพัฒนาที่เขียนโค้ดเป็นอยู่แล้ว และอยากก้าวไปเป็น AI Engineer โดยไม่ต้องเริ่มจากทฤษฎีหนัก ๆ เนื้อหาฟรีครอบคลุมตั้งแต่พื้นฐาน LLM การสร้างแอปด้วย AI SDK ไปจนถึงวิธีทำงานร่วมกับ coding agent และชุด skill ที่ติดตั้งแล้วเห็นผลทันที
+
+### อ้างอิง
+
+- [AI Hero](https://www.aihero.dev/)
+- [AI Skills for Real Engineers](https://www.aihero.dev/skills) และ [mattpocock/skills บน GitHub](https://github.com/mattpocock/skills)
+- [Vercel AI SDK Tutorial](https://www.aihero.dev/vercel-ai-sdk-tutorial)
+- [Model Context Protocol Tutorial](https://www.aihero.dev/model-context-protocol-tutorial)
+- [AI Coding Dictionary](https://www.aihero.dev/ai-coding-dictionary)

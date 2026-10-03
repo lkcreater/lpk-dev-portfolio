@@ -22,7 +22,7 @@ export default async function PortfolioPage({ params }: { params: Promise<{ loca
       <Intro copy={dictionary.intro} profile={profile} />
       <SelectedWork copy={dictionary.work} projects={projects} />
       <Services copy={dictionary.services} />
-      <About copy={dictionary.about} />
+      <About copy={dictionary.about} locale={locale} />
       <Marquee text={dictionary.marquee} />
       <Contact copy={dictionary.contact} profile={profile} />
     </>

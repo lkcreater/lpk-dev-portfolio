@@ -13,19 +13,24 @@
     "resume": "node scripts/build-resume.mjs"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^4.0.83",
     "@fontsource-variable/noto-sans-thai": "^5.3.0",
     "@gsap/react": "^2.1.2",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^16.3.8",
     "@types/mdx": "^2.0.14",
+    "ai": "^7.0.127",
     "geist": "^1.7.2",
     "gsap": "^3.15.0",
+    "jose": "^6.2.12",
     "lenis": "^1.3.26",
     "motion": "^13.5.0",
     "next": "16.3.8",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

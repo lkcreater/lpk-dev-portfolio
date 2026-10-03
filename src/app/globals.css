@@ -2312,6 +2312,378 @@ img {
   }
 }
 
+/* Playground */
+.playground {
+  min-height: 100vh;
+  align-content: start;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(232, 93, 42, 0.12), transparent 30rem),
+    linear-gradient(160deg, #151513 0%, #0d0e0d 55%, #131210 100%);
+  color: #eeeae1;
+}
+.playground-head {
+  grid-column: 1 / -1;
+  padding-top: clamp(3rem, 6vw, 5rem);
+}
+.playground-head .project-back {
+  display: inline-block;
+  margin-bottom: 3rem;
+}
+.playground-head h1 {
+  max-width: 18ch;
+  margin: 1.6rem 0 1.2rem;
+  font-size: clamp(2.6rem, 6vw, 6rem);
+  font-weight: 440;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+.playground-head > p:last-child {
+  max-width: 40rem;
+  margin: 0;
+  color: rgba(238, 234, 225, 0.66);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1.65;
+}
+.playground-login {
+  grid-column: 1 / 7;
+  margin-top: clamp(3rem, 6vw, 5rem);
+  padding: clamp(1.6rem, 3vw, 2.6rem);
+  border: 1px solid rgba(238, 234, 225, 0.12);
+  background: rgba(255, 255, 255, 0.025);
+}
+.playground-login h2 {
+  margin: 0 0 0.8rem;
+  font-size: clamp(1.5rem, 2.4vw, 2.2rem);
+  font-weight: 460;
+  letter-spacing: -0.03em;
+}
+.playground-login > p {
+  margin: 0;
+  color: rgba(238, 234, 225, 0.66);
+  line-height: 1.6;
+}
+.line-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 1.8rem;
+  padding: 0.9rem 1.5rem;
+  border-radius: 999px;
+  background: #06c755;
+  color: #fff;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+.line-login:hover {
+  background: #05b34c;
+}
+.line-login svg {
+  width: 1.3rem;
+  fill: currentColor;
+}
+.playground-note {
+  margin: 1.2rem 0 0;
+  color: rgba(238, 234, 225, 0.42);
+  font-size: 0.76rem;
+}
+.playground-error {
+  margin: 1rem 0 0;
+  color: #ff8a5c;
+  font-size: 0.86rem;
+}
+.playground-user {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding: 0.9rem 0;
+  border-top: 1px solid rgba(238, 234, 225, 0.12);
+  border-bottom: 1px solid rgba(238, 234, 225, 0.12);
+}
+.playground-user img {
+  border-radius: 50%;
+}
+.playground-user p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+.playground-user p span {
+  color: rgba(238, 234, 225, 0.5);
+}
+.playground-user form {
+  margin-left: auto;
+}
+.playground-user button {
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(238, 234, 225, 0.2);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+.playground-label {
+  grid-column: 1 / -1;
+  margin: 2.5rem 0 1rem;
+  color: rgba(238, 234, 225, 0.5);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.playground-tools {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.6rem);
+}
+.playground-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.6rem;
+  border: 1px solid rgba(238, 234, 225, 0.12);
+  background: rgba(255, 255, 255, 0.025);
+  transition:
+    border-color 0.4s,
+    transform 0.5s cubic-bezier(0.22, 0.75, 0.25, 1);
+}
+.playground-card:hover {
+  border-color: var(--signal);
+  transform: translateY(-4px);
+}
+.playground-card-index {
+  color: var(--signal);
+  font-size: 0.7rem;
+}
+.playground-card-art {
+  width: 100%;
+  height: auto;
+  margin: 1.4rem 0;
+  padding: 1rem;
+  border: 1px solid rgba(238, 234, 225, 0.08);
+  background: #0f0f0e;
+  fill: none;
+  stroke: rgba(238, 234, 225, 0.5);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.playground-card-art .draw {
+  stroke: var(--signal);
+  stroke-dasharray: 4 5;
+  animation: svFlow 1.6s linear infinite;
+}
+.playground-card-art .pulse {
+  fill: rgba(232, 93, 42, 0.25);
+  stroke: var(--signal);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wfBreath 2.6s ease-in-out infinite;
+}
+.playground-card h2 {
+  margin: 0 0 0.6rem;
+  font-size: 1.4rem;
+  font-weight: 480;
+  letter-spacing: -0.03em;
+}
+.playground-card p {
+  margin: 0;
+  color: rgba(238, 234, 225, 0.62);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.playground-card ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1.2rem 0;
+  padding: 0;
+  list-style: none;
+}
+.playground-card li {
+  padding: 0.28rem 0.6rem;
+  border: 1px solid rgba(238, 234, 225, 0.16);
+  color: rgba(238, 234, 225, 0.75);
+  font-size: 0.64rem;
+}
+.playground-card-cta {
+  margin-top: auto;
+  color: var(--signal);
+  font-size: 0.8rem;
+}
+.svg-tool {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+}
+.svg-tool-label {
+  display: block;
+  margin-bottom: 0.6rem;
+  color: rgba(238, 234, 225, 0.5);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.svg-tool-form {
+  display: grid;
+  align-content: start;
+  gap: 1.4rem;
+}
+.svg-tool-drop {
+  position: relative;
+  display: grid;
+  cursor: pointer;
+}
+.svg-tool-drop input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.svg-tool-drop:focus-within .svg-tool-placeholder,
+.svg-tool-drop:focus-within img {
+  outline: 1px solid var(--signal);
+}
+.svg-tool-placeholder,
+.svg-tool-drop img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 1px dashed rgba(238, 234, 225, 0.25);
+  background: rgba(255, 255, 255, 0.025);
+}
+.svg-tool-placeholder {
+  display: grid;
+  place-items: center;
+  color: rgba(238, 234, 225, 0.6);
+  font-size: 0.9rem;
+  transition: border-color 0.3s;
+}
+.svg-tool-drop:hover .svg-tool-placeholder {
+  border-color: var(--signal);
+}
+.svg-tool-drop img {
+  object-fit: contain;
+}
+.svg-tool-drop small,
+.svg-tool-brief small {
+  margin-top: 0.5rem;
+  color: rgba(238, 234, 225, 0.42);
+  font-size: 0.72rem;
+}
+.svg-tool-brief {
+  display: grid;
+}
+.svg-tool-brief textarea {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(238, 234, 225, 0.2);
+  background: rgba(255, 255, 255, 0.03);
+  color: #eeeae1;
+  font: inherit;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+}
+.svg-tool-brief textarea:focus {
+  border-color: var(--signal);
+}
+.svg-tool-submit,
+.svg-tool-download {
+  justify-self: start;
+  padding: 0.95rem 1.6rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--signal);
+  color: #151411;
+  font-weight: 600;
+  cursor: pointer;
+}
+.svg-tool-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+.playground-usage {
+  margin: 0 0 1rem;
+  color: rgba(238, 234, 225, 0.6);
+  font-size: 0.76rem;
+}
+.svg-tool-actions .playground-usage {
+  margin: 0;
+}
+.playground-usage.is-empty {
+  color: #ff8a5c;
+}
+.svg-tool-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.svg-tool-stage {
+  position: relative;
+  display: grid;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid rgba(238, 234, 225, 0.12);
+  background: #0f0f0e;
+}
+.svg-tool-stage iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+.svg-tool-empty {
+  place-self: center;
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid rgba(238, 234, 225, 0.2);
+  border-radius: 50%;
+}
+.svg-tool-stage.is-loading .svg-tool-empty {
+  border-color: transparent;
+  border-top-color: var(--signal);
+  animation: wfSpin 0.9s linear infinite;
+}
+.svg-tool-result h2 {
+  margin: 1.4rem 0 0.6rem;
+  font-size: 1.5rem;
+  font-weight: 460;
+  letter-spacing: -0.03em;
+}
+.svg-tool-analysis {
+  margin: 0 0 1.4rem;
+  color: rgba(238, 234, 225, 0.68);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+.svg-tool-analysis span {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--signal);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+@media (max-width: 1199px) {
+  .playground-tools {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 899px) {
+  .playground-login,
+  .svg-tool {
+    grid-column: 1 / -1;
+  }
+  .playground-tools,
+  .svg-tool {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* Lab */
 .lab {
   background: #dcd8cf;

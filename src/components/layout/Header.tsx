@@ -9,10 +9,10 @@ import type { Dictionary, Locale } from "@/lib/i18n";
 import type { PortfolioProfile } from "@/data/projects";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
-// Page sections in scroll order, plus the knowledge pages.
-const navKeys = ["knowledge", "services", "about", "contact"] as const;
+// Standalone pages first, then page sections in scroll order.
+const navKeys = ["knowledge", "playground", "services", "about", "contact"] as const;
 const navHref = (locale: Locale, key: (typeof navKeys)[number]) =>
-  key === "knowledge" ? `/${locale}/knowledge` : `/${locale}#${key}`;
+  key === "knowledge" || key === "playground" ? `/${locale}/${key}` : `/${locale}#${key}`;
 
 export function Header({
   locale,
@@ -28,7 +28,8 @@ export function Header({
   const [scrolled, setScrolled] = useState(false);
   const previousScroll = useRef(0);
   const pathname = usePathname();
-  const interiorPage = pathname.includes("/work/") || pathname.includes("/knowledge");
+  const interiorPage =
+    pathname.includes("/work/") || pathname.includes("/knowledge") || pathname.includes("/playground");
 
   useEffect(() => {
     document.documentElement.lang = locale;

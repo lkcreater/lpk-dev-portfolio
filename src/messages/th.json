@@ -5,6 +5,7 @@
   },
   "nav": {
     "knowledge": "คลังความรู้",
+    "playground": "Playground",
     "about": "เกี่ยวกับ",
     "services": "ความเชี่ยวชาญ",
     "contact": "ติดต่อ",
@@ -390,6 +391,60 @@
     "back": "บทความทั้งหมด",
     "minutes": "นาทีในการอ่าน",
     "empty": "ยังไม่มีบทความ"
+  },
+  "playground": {
+    "kicker": "Playground",
+    "title": "ลองเล่นเครื่องมือ AI ที่ผมสร้าง",
+    "intro": "เครื่องมือ AI ขนาดเล็กที่ใช้งานได้จริง สร้างด้วย AI SDK เข้าสู่ระบบด้วย LINE เพื่อลองใช้งาน",
+    "login": {
+      "title": "เข้าสู่ระบบเพื่อใช้งาน",
+      "body": "Playground เรียกใช้โมเดล AI จริง จึงต้องเข้าสู่ระบบด้วย LINE ก่อน",
+      "button": "เข้าสู่ระบบด้วย LINE",
+      "failed": "เข้าสู่ระบบด้วย LINE ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
+      "note": "ใช้เฉพาะชื่อที่แสดงและรูปโปรไฟล์ LINE ของคุณเท่านั้น"
+    },
+    "signedInAs": "เข้าสู่ระบบในชื่อ",
+    "logout": "ออกจากระบบ",
+    "usage": "เหลือ {remaining}/{limit} ครั้งวันนี้",
+    "toolsLabel": "เครื่องมือ",
+    "open": "เปิดเครื่องมือ",
+    "tools": [
+      {
+        "slug": "svg-animation",
+        "title": "Generate SVG Animation",
+        "description": "อัปโหลดรูปตัวอย่าง อธิบายการเคลื่อนไหวที่ต้องการ แล้วรับไฟล์ HTML ที่มี SVG animation พร้อมใช้งาน",
+        "tags": [
+          "Image → SVG",
+          "AI SDK",
+          "GPT-6.1 Sol"
+        ]
+      }
+    ],
+    "svg": {
+      "back": "เครื่องมือทั้งหมด",
+      "title": "Generate SVG Animation",
+      "intro": "AI จะวิเคราะห์รูปของคุณ ทำตามแนวทางของ skill svg-animations แล้วสร้าง SVG animation แบบไฟล์เดียวจบให้ดาวน์โหลด",
+      "imageLabel": "รูปตัวอย่าง",
+      "imageHint": "JPG, JPEG หรือ PNG · ไม่เกิน 2 MB",
+      "chooseImage": "เลือกรูป",
+      "briefLabel": "Brief",
+      "briefPlaceholder": "เช่น ทำโลโก้นี้ให้เคลื่อนไหวแบบวนลูป ให้เส้นขอบค่อย ๆ วาดขึ้นก่อน แล้วสีค่อย ๆ ปรากฏ ปิดท้ายด้วยแสงเรืองเบา ๆ",
+      "generate": "สร้าง animation",
+      "generating": "กำลังวิเคราะห์รูปและสร้าง animation…",
+      "resultLabel": "ผลลัพธ์",
+      "analysisLabel": "สิ่งที่ AI ทำ",
+      "download": "ดาวน์โหลด HTML",
+      "privacy": "รูปของคุณถูกส่งไปให้โมเดล AI เพื่อสร้าง animation เท่านั้น และไม่ถูกจัดเก็บ",
+      "errors": {
+        "type": "กรุณาเลือกรูป JPG หรือ PNG",
+        "size": "รูปต้องมีขนาดไม่เกิน 2 MB",
+        "brief": "กรุณาเขียน brief (ไม่เกิน 2,000 ตัวอักษร)",
+        "failed": "สร้างไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
+        "limit": "คุณใช้ครบ {limit} ครั้งของวันนี้แล้ว กลับมาใหม่พรุ่งนี้นะครับ",
+        "unavailable": "เครื่องมือยังใช้งานไม่ได้ในขณะนี้ กรุณาลองใหม่ภายหลัง",
+        "unauthorized": "เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่"
+      }
+    }
   },
   "marquee": "REACT × NEXT.JS × NODE.JS × NESTJS × POSTGRESQL ×",
   "contact": {

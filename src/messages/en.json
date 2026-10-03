@@ -5,6 +5,7 @@
   },
   "nav": {
     "knowledge": "Knowledge",
+    "playground": "Playground",
     "about": "About",
     "services": "Expertise",
     "contact": "Contact",
@@ -390,6 +391,60 @@
     "back": "All articles",
     "minutes": "min read",
     "empty": "No articles yet."
+  },
+  "playground": {
+    "kicker": "Playground",
+    "title": "Try the AI tools I build.",
+    "intro": "Small, working AI tools built with the AI SDK. Sign in with LINE to try them.",
+    "login": {
+      "title": "Sign in to continue",
+      "body": "The playground runs real AI models, so it needs a quick sign-in with LINE first.",
+      "button": "Log in with LINE",
+      "failed": "LINE login didn't complete. Please try again.",
+      "note": "Only your LINE display name and profile picture are used."
+    },
+    "signedInAs": "Signed in as",
+    "logout": "Log out",
+    "usage": "{remaining} of {limit} runs left today",
+    "toolsLabel": "Tools",
+    "open": "Open tool",
+    "tools": [
+      {
+        "slug": "svg-animation",
+        "title": "Generate SVG Animation",
+        "description": "Upload a reference image, describe the motion you want, and get a ready-to-use animated SVG as an HTML file.",
+        "tags": [
+          "Image → SVG",
+          "AI SDK",
+          "GPT-6.1 Sol"
+        ]
+      }
+    ],
+    "svg": {
+      "back": "All tools",
+      "title": "Generate SVG Animation",
+      "intro": "The AI studies your image, follows the svg-animations skill, and builds a self-contained animated SVG you can download.",
+      "imageLabel": "Reference image",
+      "imageHint": "JPG, JPEG or PNG · up to 2 MB",
+      "chooseImage": "Choose image",
+      "briefLabel": "Brief",
+      "briefPlaceholder": "e.g. Turn this logo into a looping animation: draw the outline first, fade in the colours, then a subtle glow.",
+      "generate": "Generate animation",
+      "generating": "Analysing the image and animating…",
+      "resultLabel": "Result",
+      "analysisLabel": "What the AI did",
+      "download": "Download HTML",
+      "privacy": "Your image is sent to the AI model only to create the animation and is not stored.",
+      "errors": {
+        "type": "Please choose a JPG or PNG image.",
+        "size": "The image must be 2 MB or smaller.",
+        "brief": "Please write a brief (up to 2,000 characters).",
+        "failed": "Generation failed. Please try again.",
+        "limit": "You have used today's {limit} runs. Please come back tomorrow.",
+        "unavailable": "The tool is unavailable right now. Please try again later.",
+        "unauthorized": "Your session has expired. Please sign in again."
+      }
+    }
   },
   "marquee": "REACT × NEXT.JS × NODE.JS × NESTJS × POSTGRESQL ×",
   "contact": {

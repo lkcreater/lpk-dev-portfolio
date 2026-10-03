@@ -418,6 +418,16 @@
           "AI SDK",
           "GPT-6.1 Sol"
         ]
+      },
+      {
+        "slug": "hotel-chat",
+        "title": "Role Play Chat Bot",
+        "description": "Chat with Mint, the AI reservations officer of LPK Hotel. She stays on topic, handles objections and tries to close the booking.",
+        "tags": [
+          "Role play",
+          "Streaming chat",
+          "GPT-5.6 Luna"
+        ]
       }
     ],
     "svg": {
@@ -442,6 +452,50 @@
         "failed": "Generation failed. Please try again.",
         "limit": "You have used today's {limit} runs. Please come back tomorrow.",
         "unavailable": "The tool is unavailable right now. Please try again later.",
+        "unauthorized": "Your session has expired. Please sign in again."
+      }
+    },
+    "hotel": {
+      "back": "All tools",
+      "title": "Role Play Chat Bot",
+      "intro": "Mint is an AI reservations officer at the fictional LPK Hotel. Try asking about rooms, hesitate on the price, or go off topic — then see if she can close the booking.",
+      "promptLabel": "Role-play prompt",
+      "promptNote": "Read-only. Generated from the hotel data and sent to the model as its instructions.",
+      "hotelLabel": "Hotel",
+      "staffLabel": "Staff",
+      "roomsLabel": "Rooms & rates",
+      "offersLabel": "Offer ladder",
+      "systemPromptLabel": "Full system prompt",
+      "chat": {
+        "status": "Online",
+        "placeholder": "Type a message",
+        "send": "Send",
+        "greeting": "Hello and welcome to LPK Hotel Bangkok! I'm Mint from reservations 😊 Are you planning a stay with us? Let me know your dates and I'll find the best room for you.",
+        "read": "Read",
+        "typing": "Mint is typing…",
+        "reset": "New chat"
+      },
+      "booking": {
+        "title": "Booking request",
+        "room": "Room",
+        "name": "Full name",
+        "phone": "Phone",
+        "checkIn": "Check-in",
+        "nights": "Nights",
+        "guests": "Guests",
+        "offer": "Offer",
+        "submit": "Confirm booking",
+        "submitting": "Confirming…",
+        "confirmed": "Booking confirmed",
+        "bookingNo": "Booking no.",
+        "total": "Room total",
+        "totalNote": "before offers · demo only, nothing is charged",
+        "invalid": "Please check the details and try again."
+      },
+      "errors": {
+        "limit": "You have used today's {limit} messages. Please come back tomorrow.",
+        "unavailable": "The chat is unavailable right now. Please try again later.",
+        "failed": "The message could not be sent. Please try again.",
         "unauthorized": "Your session has expired. Please sign in again."
       }
     }

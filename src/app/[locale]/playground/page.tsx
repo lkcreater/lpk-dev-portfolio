@@ -62,10 +62,20 @@ export default async function PlaygroundPage({ params, searchParams }: Playgroun
               >
                 <span className="playground-card-index">{String(index + 1).padStart(2, "0")}</span>
                 <svg className="playground-card-art" viewBox="0 0 120 80" aria-hidden="true">
-                  <rect x="8" y="10" width="44" height="60" rx="4" />
-                  <path className="draw" d="M62 40h18m-6-6 6 6-6 6" />
-                  <circle className="pulse" cx="100" cy="40" r="14" />
-                  <path className="draw" d="M18 56 30 38l9 11 7-8" />
+                  {tool.slug === "hotel-chat" ? (
+                    <>
+                      <rect x="10" y="10" width="62" height="22" rx="11" />
+                      <rect className="pulse" x="48" y="40" width="62" height="22" rx="11" />
+                      <path className="draw" d="M20 21h40M58 51h40" />
+                    </>
+                  ) : (
+                    <>
+                      <rect x="8" y="10" width="44" height="60" rx="4" />
+                      <path className="draw" d="M62 40h18m-6-6 6 6-6 6" />
+                      <circle className="pulse" cx="100" cy="40" r="14" />
+                      <path className="draw" d="M18 56 30 38l9 11 7-8" />
+                    </>
+                  )}
                 </svg>
                 <h2>{tool.title}</h2>
                 <p>{tool.description}</p>

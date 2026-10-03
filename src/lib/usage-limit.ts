@@ -1,15 +1,19 @@
 import "server-only";
 
 // Daily quota per LINE user per playground tool, reset at midnight Bangkok time.
-export const DAILY_LIMIT = 2;
+// svg-animation counts generations; hotel-chat counts guest messages.
+const DAILY_LIMITS: Record<string, number> = { "svg-animation": 2, "hotel-chat": 20 };
+const limitFor = (tool: string) => DAILY_LIMITS[tool] ?? 2;
 const TTL_SECONDS = 60 * 60 * 48;
 
 // Upstash Redis REST (Vercel Marketplace sets the KV_* names, Upstash sets the UPSTASH_* names).
 const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
 const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
 
-// ponytail: in-memory fallback for local dev only; resets on restart and is per-instance.
-const memory = new Map<string, number>();
+// ponytail: in-memory fallback for local dev only; resets on server restart.
+// Kept on globalThis because Next bundles this module separately into each page and route
+// handler; a module-level Map would give the page and the API different counters.
+const memory = ((globalThis as { __lpkUsage?: Map<string, number> }).__lpkUsage ??= new Map());
 
 export type Usage = { used: number; limit: number; remaining: number };
 
@@ -39,14 +43,14 @@ function key(tool: string, userId: string) {
   return `playground:${tool}:${userId}:${day}`;
 }
 
-const toUsage = (used: number): Usage => ({
+const toUsage = (tool: string, used: number): Usage => ({
   used,
-  limit: DAILY_LIMIT,
-  remaining: Math.max(0, DAILY_LIMIT - used),
+  limit: limitFor(tool),
+  remaining: Math.max(0, limitFor(tool) - used),
 });
 
 export async function getUsage(tool: string, userId: string) {
-  return toUsage(await redis(["GET", key(tool, userId)]));
+  return toUsage(tool, await redis(["GET", key(tool, userId)]));
 }
 
 // Reserves one run. Returns null when today's quota is already used up.
@@ -54,11 +58,11 @@ export async function consumeUsage(tool: string, userId: string) {
   const usageKey = key(tool, userId);
   const used = await redis(["INCR", usageKey]);
   if (used === 1 && REDIS_URL) await redis(["EXPIRE", usageKey, TTL_SECONDS]);
-  if (used > DAILY_LIMIT) {
+  if (used > limitFor(tool)) {
     await redis(["DECR", usageKey]);
     return null;
   }
-  return toUsage(used);
+  return toUsage(tool, used);
 }
 
 // Gives a run back when generation fails, so errors don't cost the user their quota.

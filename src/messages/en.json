@@ -401,7 +401,15 @@
       "body": "The playground runs real AI models, so it needs a quick sign-in with LINE first.",
       "button": "Log in with LINE",
       "failed": "LINE login didn't complete. Please try again.",
-      "note": "Only your LINE display name and profile picture are used."
+      "note": "Only your LINE display name and profile picture are used.",
+      "dev": {
+        "badge": "DEV MODE",
+        "title": "Sign in with a mock LINE session",
+        "body": "DEV_MODE is on, so LINE Login is skipped. Confirm to create a local test session. This never works in production.",
+        "name": "Display name",
+        "confirm": "Create mock session",
+        "cancel": "Cancel"
+      }
     },
     "signedInAs": "Signed in as",
     "logout": "Log out",
@@ -427,6 +435,16 @@
           "Role play",
           "Streaming chat",
           "GPT-5.6 Luna"
+        ]
+      },
+      {
+        "slug": "sale-campaign",
+        "title": "Generate Sale Campaign",
+        "description": "Pick a goal and an occasion, upload a product photo, and get a sale poster plus a matching social caption.",
+        "tags": [
+          "Image → Poster",
+          "Caption",
+          "GPT Image 2.5"
         ]
       }
     ],
@@ -496,6 +514,44 @@
         "limit": "You have used today's {limit} messages. Please come back tomorrow.",
         "unavailable": "The chat is unavailable right now. Please try again later.",
         "failed": "The message could not be sent. Please try again.",
+        "unauthorized": "Your session has expired. Please sign in again."
+      }
+    },
+    "campaign": {
+      "back": "All tools",
+      "title": "Generate Sale Campaign",
+      "intro": "The AI analyses your product, writes a caption for the goal and occasion, then designs a sale poster with your real product in it.",
+      "goalLabel": "Campaign goal",
+      "themeLabel": "Theme / occasion",
+      "imageLabel": "Product photo",
+      "imageHint": "JPG, JPEG or PNG · up to 2 MB",
+      "chooseImage": "Choose product photo",
+      "nameLabel": "Product name",
+      "namePlaceholder": "e.g. Cold brew coffee 250 ml",
+      "descriptionLabel": "Product details (optional)",
+      "descriptionPlaceholder": "Key features, ingredients, size…",
+      "priceLabel": "Price in THB (optional)",
+      "pricePlaceholder": "e.g. 159",
+      "generate": "Generate campaign",
+      "generating": "Generating…",
+      "steps": {
+        "analyze": "Analysing product",
+        "plan": "Writing caption & poster brief",
+        "render": "Designing artwork"
+      },
+      "resultLabel": "Result",
+      "captionLabel": "Caption",
+      "copy": "Copy caption",
+      "copied": "Copied",
+      "download": "Download PNG",
+      "privacy": "Your photo is sent to the AI models only to create the campaign and is not stored.",
+      "errors": {
+        "type": "Please choose a JPG or PNG image.",
+        "size": "The image must be 2 MB or smaller.",
+        "input": "Please choose a goal and theme and enter the product name (price must be a number).",
+        "failed": "Generation failed. Please try again — this run was not counted.",
+        "limit": "You have used today's {limit} runs. Please come back tomorrow.",
+        "unavailable": "The tool is unavailable right now. Please try again later.",
         "unauthorized": "Your session has expired. Please sign in again."
       }
     }

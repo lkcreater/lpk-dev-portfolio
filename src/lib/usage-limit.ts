@@ -3,7 +3,7 @@ import { createClient } from "redis";
 
 // Daily quota per LINE user per playground tool, reset at midnight Bangkok time.
 // svg-animation counts generations; hotel-chat counts guest messages.
-const DAILY_LIMITS: Record<string, number> = { "svg-animation": 2, "hotel-chat": 20 };
+const DAILY_LIMITS: Record<string, number> = { "svg-animation": 2, "hotel-chat": 20, "sale-campaign": 2 };
 const limitFor = (tool: string) => DAILY_LIMITS[tool] ?? 2;
 const TTL_SECONDS = 60 * 60 * 48;
 

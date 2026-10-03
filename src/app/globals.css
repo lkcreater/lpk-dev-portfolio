@@ -2381,6 +2381,44 @@ img {
   width: 1.3rem;
   fill: currentColor;
 }
+.dev-badge {
+  display: inline-block;
+  margin-left: 0.8rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px dashed #ffb347;
+  color: #ffb347;
+  font-family: ui-monospace, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  vertical-align: middle;
+}
+button.line-login {
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+.dev-login-field {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 1.4rem;
+}
+.dev-login-field span {
+  color: rgba(238, 234, 225, 0.5);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.dev-login-field input {
+  padding: 0.8rem 0.9rem;
+  border: 1px solid rgba(238, 234, 225, 0.2);
+  background: rgba(255, 255, 255, 0.03);
+  color: #eeeae1;
+  font: inherit;
+  outline: none;
+}
+.dev-login-field input:focus {
+  border-color: var(--signal);
+}
 .playground-note {
   margin: 1.2rem 0 0;
   color: rgba(238, 234, 225, 0.42);
@@ -3052,6 +3090,148 @@ img {
     order: -1;
     height: 70vh;
   }
+}
+
+/* Playground — sale campaign */
+.campaign-field {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.campaign-field select,
+.campaign-field input,
+.campaign-field textarea {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid rgba(238, 234, 225, 0.2);
+  background: rgba(255, 255, 255, 0.03);
+  color: #eeeae1;
+  font: inherit;
+  font-size: 0.92rem;
+  outline: none;
+}
+.campaign-field select:focus,
+.campaign-field input:focus,
+.campaign-field textarea:focus {
+  border-color: var(--signal);
+}
+.campaign-field select option,
+.campaign-field select optgroup {
+  background: #151513;
+  color: #eeeae1;
+}
+.campaign-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.campaign-chips label {
+  padding: 0.5rem 0.95rem;
+  border: 1px solid rgba(238, 234, 225, 0.2);
+  border-radius: 999px;
+  color: rgba(238, 234, 225, 0.75);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition:
+    border-color 0.3s,
+    background 0.3s,
+    color 0.3s;
+}
+.campaign-chips label.is-active {
+  border-color: var(--signal);
+  background: rgba(232, 93, 42, 0.14);
+  color: #fff;
+}
+.campaign-chips label:focus-within {
+  outline: 1px solid var(--signal);
+}
+.campaign-chips input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.campaign-product {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(238, 234, 225, 0.12);
+  background: rgba(255, 255, 255, 0.02);
+}
+.campaign-steps {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+.campaign-steps li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: rgba(238, 234, 225, 0.4);
+  font-size: 0.88rem;
+}
+.campaign-steps span {
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  border: 1px solid rgba(238, 234, 225, 0.2);
+  border-radius: 50%;
+  font-size: 0.68rem;
+}
+.campaign-steps li.is-active {
+  color: #eeeae1;
+}
+.campaign-steps li.is-active span {
+  border-color: var(--signal);
+  animation: wfBreath 1.6s ease-in-out infinite;
+}
+.campaign-steps li.is-done {
+  color: rgba(238, 234, 225, 0.7);
+}
+.campaign-steps li.is-done span {
+  border-color: var(--signal);
+  background: var(--signal);
+  color: #151411;
+}
+.campaign-stage {
+  aspect-ratio: 2 / 3;
+  max-height: 46rem;
+}
+.campaign-stage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.campaign-caption {
+  margin: 1.4rem 0;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(238, 234, 225, 0.12);
+  background: rgba(255, 255, 255, 0.025);
+}
+.campaign-caption p {
+  margin: 0;
+  color: rgba(238, 234, 225, 0.85);
+  font-size: 0.92rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+.campaign-caption .svg-tool-label {
+  margin-bottom: 0.5rem;
+}
+.campaign-hashtags {
+  margin-top: 0.8rem !important;
+  color: var(--signal) !important;
+}
+.campaign-copy {
+  padding: 0.95rem 1.4rem;
+  border: 1px solid rgba(238, 234, 225, 0.25);
+  border-radius: 999px;
+  background: transparent;
+  color: #eeeae1;
+  cursor: pointer;
 }
 
 /* Lab */

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDictionary, isLocale } from "@/lib/i18n";
+import { DevLoginButton } from "@/components/playground/DevLoginButton";
+import { isDevMode } from "@/lib/dev-mode";
 import { getSession } from "@/lib/session";
 import { getUsage } from "@/lib/usage-limit";
 
@@ -62,7 +64,15 @@ export default async function PlaygroundPage({ params, searchParams }: Playgroun
               >
                 <span className="playground-card-index">{String(index + 1).padStart(2, "0")}</span>
                 <svg className="playground-card-art" viewBox="0 0 120 80" aria-hidden="true">
-                  {tool.slug === "hotel-chat" ? (
+                  {tool.slug === "sale-campaign" ? (
+                    <>
+                      <rect x="8" y="12" width="34" height="56" rx="4" />
+                      <path className="draw" d="M48 40h14m-5-5 5 5-5 5" />
+                      <rect x="68" y="8" width="44" height="64" rx="4" />
+                      <rect className="pulse" x="76" y="18" width="28" height="10" rx="5" />
+                      <path className="draw" d="M76 40h28M76 50h20M76 60h24" />
+                    </>
+                  ) : tool.slug === "hotel-chat" ? (
                     <>
                       <rect x="10" y="10" width="62" height="22" rx="11" />
                       <rect className="pulse" x="48" y="40" width="62" height="22" rx="11" />
@@ -105,13 +115,22 @@ export default async function PlaygroundPage({ params, searchParams }: Playgroun
               {copy.login.failed}
             </p>
           ) : null}
-          {/* A plain link: the route handler starts the OAuth redirect. */}
-          <a className="line-login" href={`/api/auth/line?locale=${locale}`}>
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5 1.1-.5 5.9-3.5 8-6C21.4 14.2 22 12.7 22 11c0-4.4-4.5-8-10-8Z" />
-            </svg>
-            {copy.login.button}
-          </a>
+          {isDevMode() ? (
+            <DevLoginButton copy={copy.login.dev} locale={locale}>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5 1.1-.5 5.9-3.5 8-6C21.4 14.2 22 12.7 22 11c0-4.4-4.5-8-10-8Z" />
+              </svg>
+              {copy.login.button}
+            </DevLoginButton>
+          ) : (
+            // A plain link: the route handler starts the OAuth redirect.
+            <a className="line-login" href={`/api/auth/line?locale=${locale}`}>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5 1.1-.5 5.9-3.5 8-6C21.4 14.2 22 12.7 22 11c0-4.4-4.5-8-10-8Z" />
+              </svg>
+              {copy.login.button}
+            </a>
+          )}
           <p className="playground-note">{copy.login.note}</p>
         </div>
       )}

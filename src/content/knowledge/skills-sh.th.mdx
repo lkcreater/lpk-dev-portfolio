@@ -1,0 +1,116 @@
+export const metadata = {
+  title: "skills.sh — คลัง Agent Skills ที่ทำให้ AI coding agent เก่งเฉพาะทางขึ้น",
+  description:
+    "รู้จัก skills.sh ไดเรกทอรีของ Agent Skills จาก Vercel ว่าคืออะไร ใช้ทำอะไรได้ ติดตั้งยังไง ข้อดี และสิ่งที่ควรระวังก่อนใช้งานจริง",
+  date: "2026-10-03",
+  tags: ["AI Agent", "Developer Tools", "Claude Code"],
+  readingMinutes: 7,
+};
+
+ถ้าคุณใช้ AI coding agent อย่าง Claude Code, Cursor หรือ GitHub Copilot ทุกวัน คงเคยเจอปัญหาเดิม ๆ คือต้องอธิบายวิธีทำงานแบบเดิมซ้ำทุกครั้ง เช่น "ใช้ GSAP แบบนี้นะ", "เขียน SVG animation ให้ได้มาตรฐานแบบนี้" หรือ "ตรวจ resume ตามเกณฑ์ ATS แบบนี้" **Agent Skills** ถูกออกแบบมาเพื่อแก้ปัญหานี้ และ **[skills.sh](https://www.skills.sh/)** คือที่รวบรวม skill เหล่านั้นไว้ให้ค้นหาและติดตั้งได้ในคำสั่งเดียว
+
+## skills.sh คืออะไร
+
+skills.sh คือไดเรกทอรีและ leaderboard ของ Agent Skills แบบ open source ดูแลโดย Vercel (ซอร์สโค้ดของ CLI อยู่ที่ [vercel-labs/skills](https://github.com/vercel-labs/skills)) ทำหน้าที่คล้าย "npm สำหรับความรู้ของ AI agent" คือเป็นที่ค้นหา จัดอันดับ และติดตั้ง skill ที่นักพัฒนาทั่วโลกเขียนแชร์ไว้บน GitHub
+
+**Skill** คือโฟลเดอร์ที่มีไฟล์ `SKILL.md` เป็นหลัก ด้านบนมี frontmatter บอก `name` และ `description` ส่วนเนื้อหาคือขั้นตอน แนวปฏิบัติ หรือตัวอย่างโค้ดเฉพาะทาง และอาจมีไฟล์อ้างอิงหรือสคริปต์ประกอบ agent จะใช้ `description` ตัดสินว่าเมื่อไหร่ควรหยิบ skill นี้มาใช้ แล้วค่อยอ่านรายละเอียดเมื่องานเกี่ยวข้องจริง context จึงไม่ถูกใช้ไปกับความรู้ที่ไม่จำเป็น
+
+```md
+---
+name: svg-animations
+description: Create beautiful, performant SVG animations and illustrations...
+---
+
+This skill guides creation of handcrafted SVG animations...
+```
+
+## เว็บไซต์ทำอะไรได้บ้าง
+
+- **ค้นหาและเรียกดู skill** ตามหัวข้อ เช่น React, Next.js, design, mobile, database, testing และ marketing
+- **Leaderboard** จัดอันดับตามจำนวนการติดตั้งจริง ทั้งแบบสะสมและแบบกำลังมาแรง ช่วยกรอง skill ที่คนใช้จริงออกจาก skill ที่ไม่มีใครดูแล
+- **หน้ารายละเอียดของแต่ละ skill** มีคำสั่งติดตั้งพร้อมใช้ ลิงก์ไป repository และช่องทางแจ้งปัญหากับผู้ดูแล
+- **Skill Packs** รวม skill หลายตัว ทั้งสาธารณะและส่วนตัว ให้ทีมติดตั้งพร้อมกันได้ด้วย URL เดียว
+- **Security audit** ตรวจหาเนื้อหาที่เป็นอันตรายเป็นระยะ และมีป้ายกำกับ skill ที่เป็น official
+
+## รองรับ agent ไหนบ้าง
+
+skill หนึ่งตัวใช้ได้กับ agent หลายตัว ตามเอกสารของ skills.sh รองรับ Claude Code, Cursor, Codex, GitHub Copilot, Windsurf, Gemini, Cline, AMP, Antigravity, OpenClaw และอื่น ๆ อีกมาก CLI จะวางไฟล์ไว้ในโฟลเดอร์ที่แต่ละ agent อ่าน เช่น `.claude/skills` ให้อัตโนมัติ
+
+## เริ่มใช้งานด้วย CLI
+
+ไม่ต้องติดตั้งอะไรเพิ่ม ใช้ผ่าน `npx` ได้ทันที
+
+```bash
+# ติดตั้ง skill จาก GitHub repository (เลือก skill และ agent แบบ interactive)
+npx skills add vercel-labs/agent-skills
+
+# ระบุ skill ที่ต้องการตรง ๆ แล้วข้ามการยืนยัน (เพิ่ม -a เพื่อเลือก agent)
+npx skills add vercel-labs/agent-skills -s vercel-react-best-practices -y
+
+# ดูว่าใน repository มี skill อะไรบ้างโดยยังไม่ติดตั้ง
+npx skills add vercel-labs/agent-skills --list
+```
+
+คำสั่งที่ใช้บ่อย
+
+- `npx skills find [query]` ค้นหา skill แบบ interactive จาก terminal
+- `npx skills list` ดู skill ที่ติดตั้งในโปรเจกต์ (เพิ่ม `-g` เพื่อดูระดับ global)
+- `npx skills update` อัปเดต skill เป็นเวอร์ชันล่าสุด
+- `npx skills remove` ถอน skill ออก
+- `npx skills use <package>@<skill>` สร้าง prompt จาก skill เพื่อลองใช้ครั้งเดียวโดยไม่ต้องติดตั้ง
+- `npx skills init [name]` สร้างโครง `SKILL.md` สำหรับเขียน skill ของตัวเอง
+- `npx skills experimental_install` ติดตั้ง skill ทั้งหมดกลับมาจาก `skills-lock.json`
+
+ค่าเริ่มต้นคือติดตั้งระดับโปรเจกต์ ถ้าอยากให้ใช้ได้ทุกโปรเจกต์ให้เพิ่ม `-g`
+
+## ตัวอย่างจริงจากเว็บไซต์นี้
+
+พอร์ตโฟลิโอที่คุณกำลังอ่านอยู่ก็สร้างโดยมี skill จาก skills.sh ช่วย ได้แก่ `gsap-react` สำหรับ animation ด้วย GSAP, `svg-animations` สำหรับภาพประกอบ SVG, `vercel-react-best-practices` สำหรับแนวทาง React/Next.js และ `resume-ats-optimizer` สำหรับตรวจ resume
+
+หลังติดตั้ง CLI จะทำ 3 อย่าง
+
+1. เก็บไฟล์ skill ไว้ที่ `.agents/skills/`
+2. สร้าง symlink ไปที่ `.claude/skills/` เพื่อให้ Claude Code มองเห็น (ถ้าไม่อยากใช้ symlink ให้เพิ่ม `--copy`)
+3. บันทึกที่มาและ hash ของแต่ละ skill ลง `skills-lock.json`
+
+```json
+{
+  "version": 1,
+  "skills": {
+    "gsap-react": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-react/SKILL.md",
+      "computedHash": "7d3b5282..."
+    }
+  }
+}
+```
+
+lock file นี้ commit เข้า git ได้ คนในทีมที่ clone โปรเจกต์ไปจะได้ skill ชุดเดียวกัน และรู้ว่าแต่ละตัวมาจากไหน
+
+## ข้อดี
+
+- **เขียนครั้งเดียว ใช้ได้หลาย agent** ไม่ต้องดูแล prompt แยกสำหรับแต่ละเครื่องมือ
+- **ความรู้เฉพาะทางจากผู้เชี่ยวชาญตัวจริง** เช่น skill ของ GSAP จากทีม GreenSock เอง หรือแนวทาง React จาก Vercel
+- **ทีมทำงานเป็นมาตรฐานเดียวกัน** เพราะ skill และ lock file อยู่ใน repository เดียวกับโค้ด
+- **ประหยัด context** agent อ่านรายละเอียดเฉพาะเมื่องานเกี่ยวข้อง
+- **เริ่มต้นง่าย** skill เป็นแค่ Markdown ใครก็เขียนและแชร์ได้ผ่าน GitHub
+- **เลือกจากการใช้งานจริง** leaderboard ช่วยให้เห็นว่า skill ไหนคนใช้เยอะและยังมีคนดูแล
+
+## สิ่งที่ควรระวัง
+
+- **ความปลอดภัย** skill คือคำสั่งที่ agent จะทำตาม และอาจมีสคริปต์ประกอบ skills.sh มี audit ก็จริง แต่ระบุไว้เองว่ารับประกันคุณภาพหรือความปลอดภัยของทุก skill ไม่ได้ ควรอ่าน `SKILL.md` และไฟล์ประกอบก่อนติดตั้ง โดยเฉพาะ skill ที่ไม่ใช่ official
+- **Telemetry** CLI ส่งข้อมูลการติดตั้งแบบไม่ระบุตัวตนเพื่อใช้จัดอันดับ ถ้าไม่ต้องการให้ตั้งค่า `DISABLE_TELEMETRY=1`
+- **คุณภาพไม่เท่ากัน** skill ที่ติดตั้งเยอะไม่ได้แปลว่าเหมาะกับโปรเจกต์เราเสมอ ควรลองด้วย `skills use` หรือ `--list` ก่อน
+- **อย่าติดตั้งมากเกินไป** skill ที่ description คล้ายกันอาจทำให้ agent เลือกผิดตัว ติดตั้งเฉพาะที่ใช้จริง
+
+## สรุป
+
+skills.sh เปลี่ยน "วิธีทำงานที่ดี" ให้เป็นแพ็กเกจที่ติดตั้ง แชร์ และอัปเดตได้เหมือน dependency ทั่วไป สำหรับนักพัฒนาที่ใช้ AI agent ทุกวัน นี่คือวิธีที่เร็วที่สุดในการทำให้ agent เข้าใจงานเฉพาะทางของเรา และทำให้ทั้งทีมได้ผลลัพธ์ที่สม่ำเสมอ เริ่มจาก skill ยอดนิยมใน stack ที่ใช้อยู่ อ่านก่อนติดตั้ง แล้วค่อยเขียน skill ของทีมเองเมื่อเจอรูปแบบงานที่ทำซ้ำบ่อย
+
+### อ้างอิง
+
+- [skills.sh](https://www.skills.sh/)
+- [เอกสาร skills.sh](https://www.skills.sh/docs) และ [FAQ](https://www.skills.sh/docs/faq)
+- [vercel-labs/skills บน GitHub](https://github.com/vercel-labs/skills)

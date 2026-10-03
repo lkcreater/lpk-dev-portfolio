@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
@@ -8,7 +9,10 @@ import type { Dictionary, Locale } from "@/lib/i18n";
 import type { PortfolioProfile } from "@/data/projects";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
-const navKeys = ["work", "services", "about", "contact"] as const;
+// Page sections in scroll order, plus the knowledge pages.
+const navKeys = ["knowledge", "services", "about", "contact"] as const;
+const navHref = (locale: Locale, key: (typeof navKeys)[number]) =>
+  key === "knowledge" ? `/${locale}/knowledge` : `/${locale}#${key}`;
 
 export function Header({
   locale,
@@ -24,7 +28,7 @@ export function Header({
   const [scrolled, setScrolled] = useState(false);
   const previousScroll = useRef(0);
   const pathname = usePathname();
-  const interiorPage = pathname.includes("/work/");
+  const interiorPage = pathname.includes("/work/") || pathname.includes("/knowledge");
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -51,11 +55,26 @@ export function Header({
         className={`site-header${scrolled || interiorPage ? " is-scrolled" : ""}${hidden && !menuOpen ? " is-hidden" : ""}`}
       >
         <Link href={`/${locale}`} className="wordmark" data-cursor="OPEN" aria-label="LPK home">
-          LPK<sup>®</sup>
+          {/* Gradient logo on the dark page, solid cut-out once the header turns light. */}
+          <Image
+            src="/images/brand/lpk-logo-gradient.png"
+            alt=""
+            fill
+            sizes="96px"
+            className="wordmark-dark"
+            priority
+          />
+          <Image
+            src="/images/brand/lpk-logo-cutout.png"
+            alt=""
+            fill
+            sizes="96px"
+            className="wordmark-light"
+          />
         </Link>
         <nav className="desktop-nav" aria-label="Primary navigation">
           {navKeys.map((key) => (
-            <Link key={key} href={`/${locale}#${key}`} data-cursor="OPEN">
+            <Link key={key} href={navHref(locale, key)} data-cursor="OPEN">
               {nav[key]}
             </Link>
           ))}
@@ -93,7 +112,7 @@ export function Header({
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.16 + index * 0.07, duration: 0.55 }}
                 >
-                  <Link href={`/${locale}#${key}`} onClick={() => setMenuOpen(false)}>
+                  <Link href={navHref(locale, key)} onClick={() => setMenuOpen(false)}>
                     <sup>0{index + 1}</sup>
                     {nav[key]}
                   </Link>

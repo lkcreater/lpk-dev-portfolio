@@ -4,9 +4,9 @@
     "description": "Senior Full-Stack Developer ในกรุงเทพฯ ประสบการณ์กว่า 10 ปี เชี่ยวชาญเว็บ API การออกแบบระบบและฐานข้อมูล"
   },
   "nav": {
-    "work": "ผลงาน",
+    "knowledge": "คลังความรู้",
     "about": "เกี่ยวกับ",
-    "services": "บริการ",
+    "services": "ความเชี่ยวชาญ",
     "contact": "ติดต่อ",
     "menu": "เมนู",
     "close": "ปิด"
@@ -208,20 +208,102 @@
   },
   "services": {
     "kicker": "ความเชี่ยวชาญ",
-    "intro": "จาก requirement เริ่มต้น สู่ระบบที่พร้อมใช้งานจริง",
+    "intro": "จาก requirement เริ่มต้น สู่ระบบที่พร้อมใช้งานจริง — 6 ด้านที่ผมทำงานอยู่ทุกวัน",
+    "stackLabel": "เครื่องมือ",
     "items": [
-      "Frontend Engineering",
-      "Backend & REST APIs",
-      "System Architecture",
-      "Database Design",
-      "CI/CD & Testing"
-    ],
-    "details": [
-      "พัฒนา Product Interface ที่ responsive ด้วย React, Next.js, Angular, Vue.js และ TypeScript",
-      "สร้าง Service และ REST API ที่ดูแลต่อได้ด้วย Node.js, Express และ NestJS",
-      "ออกแบบระบบที่เชื่อม requirement ของธุรกิจ แอปพลิเคชัน และ infrastructure เข้าด้วยกัน",
-      "ออกแบบ relational data model ด้วย SQL, PostgreSQL และ ORM",
-      "วาง delivery pipeline ด้วย GitHub Actions พร้อม unit และ end-to-end testing"
+      {
+        "title": "Frontend Engineering",
+        "summary": "Interface ของผลิตภัณฑ์ที่ responsive เร็ว และดูแลต่อได้ง่าย",
+        "points": [
+          "สร้าง component system ด้วย React, Next.js, Angular และ Vue",
+          "Layout ที่ responsive มี motion และรองรับ accessibility พื้นฐาน",
+          "จัดการ state และ API contract แบบมี type ด้วย TypeScript"
+        ],
+        "stack": [
+          "React",
+          "Next.js",
+          "Angular",
+          "Vue.js / Nuxt",
+          "TypeScript",
+          "SCSS / Tailwind"
+        ]
+      },
+      {
+        "title": "Backend & REST APIs",
+        "summary": "Service และ API ที่อ่านง่าย ทดสอบได้ และต่อยอดได้",
+        "points": [
+          "พัฒนา REST API ด้วย Node.js, Express และ NestJS",
+          "ระบบยืนยันตัวตน validation และ webhook จากระบบภายนอก",
+          "แบ่งโมดูลชัดเจน พร้อมเอกสาร endpoint"
+        ],
+        "stack": [
+          "Node.js",
+          "NestJS",
+          "Express",
+          "REST APIs",
+          "PHP / Yii"
+        ]
+      },
+      {
+        "title": "System Architecture",
+        "summary": "เปลี่ยน requirement ของธุรกิจให้เป็นระบบที่เติบโตได้",
+        "points": [
+          "วิเคราะห์ระบบและวางแผนเทคนิคจาก requirement",
+          "ออกแบบขอบเขต service การเชื่อมต่อ และ data flow",
+          "Deploy บน Google Cloud Run และ Supabase"
+        ],
+        "stack": [
+          "System analysis",
+          "Google Cloud Run",
+          "Supabase",
+          "Docker"
+        ]
+      },
+      {
+        "title": "Database Design",
+        "summary": "Data model เชิงสัมพันธ์ที่ทำให้ข้อมูลในระบบถูกต้อง",
+        "points": [
+          "ออกแบบ schema และ normalization บน PostgreSQL",
+          "Migration และ query แบบ type-safe ด้วย ORM เช่น Drizzle",
+          "รักษาความถูกต้องด้วย constraint และเข้ารหัสข้อมูลรับรอง"
+        ],
+        "stack": [
+          "PostgreSQL",
+          "SQL",
+          "Drizzle ORM",
+          "Supabase"
+        ]
+      },
+      {
+        "title": "AI & Platform Integrations",
+        "summary": "นำ AI และแพลตฟอร์มโซเชียลมาใช้ใน workflow ของธุรกิจจริง",
+        "points": [
+          "สร้าง AI workflow ด้วย Vercel AI SDK รองรับหลายผู้ให้บริการโมเดล",
+          "แชตบอตบน LINE, Messenger, Instagram และ WhatsApp",
+          "เชื่อมต่อ OAuth และผ่าน app review ของ Meta, TikTok และ YouTube"
+        ],
+        "stack": [
+          "Vercel AI SDK",
+          "OpenAI · Anthropic · Google",
+          "Meta Graph API",
+          "LINE Messaging API"
+        ]
+      },
+      {
+        "title": "CI/CD & Testing",
+        "summary": "ส่งมอบทีละน้อย ปลอดภัย และสม่ำเสมอ",
+        "points": [
+          "Pipeline และ deploy อัตโนมัติด้วย GitHub Actions",
+          "Unit และ end-to-end test ด้วย Jest, Karma และ Playwright",
+          "ทำงานแบบ trunk-based พร้อม code review"
+        ],
+        "stack": [
+          "GitHub Actions",
+          "Jest",
+          "Karma",
+          "Playwright"
+        ]
+      }
     ]
   },
   "lab": {
@@ -289,6 +371,15 @@
     ],
     "resume": "ดาวน์โหลด Resume",
     "resumeMeta": "PDF · 1 หน้า (ภาษาอังกฤษ)"
+  },
+  "knowledge": {
+    "kicker": "คลังความรู้",
+    "title": "บันทึกเรื่องเครื่องมือ AI และการสร้างเว็บ",
+    "intro": "บทความสั้น ๆ ที่ใช้ได้จริง เกี่ยวกับเครื่องมือและเทคนิคที่ผมใช้ในงานจริง",
+    "read": "อ่านบทความ",
+    "back": "บทความทั้งหมด",
+    "minutes": "นาทีในการอ่าน",
+    "empty": "ยังไม่มีบทความ"
   },
   "marquee": "REACT × NEXT.JS × NODE.JS × NESTJS × POSTGRESQL ×",
   "contact": {

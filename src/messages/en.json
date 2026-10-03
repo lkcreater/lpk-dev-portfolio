@@ -4,9 +4,9 @@
     "description": "Senior full-stack developer in Bangkok with 10+ years of experience building web products, APIs, systems and databases."
   },
   "nav": {
-    "work": "Work",
+    "knowledge": "Knowledge",
     "about": "About",
-    "services": "Services",
+    "services": "Expertise",
     "contact": "Contact",
     "menu": "Menu",
     "close": "Close"
@@ -208,20 +208,102 @@
   },
   "services": {
     "kicker": "Expertise",
-    "intro": "From a rough requirement to a system ready for production.",
+    "intro": "From a rough requirement to a system ready for production — six areas I work across every day.",
+    "stackLabel": "Tools",
     "items": [
-      "Frontend Engineering",
-      "Backend & REST APIs",
-      "System Architecture",
-      "Database Design",
-      "CI/CD & Testing"
-    ],
-    "details": [
-      "Responsive product interfaces built with React, Next.js, Angular, Vue.js and TypeScript.",
-      "Maintainable services and REST APIs built with Node.js, Express and NestJS.",
-      "Practical technical decisions that connect product requirements, applications and infrastructure.",
-      "Relational data models using SQL, PostgreSQL and modern ORM workflows.",
-      "Reliable delivery pipelines with GitHub Actions plus unit and end-to-end testing."
+      {
+        "title": "Frontend Engineering",
+        "summary": "Responsive product interfaces that stay fast and easy to maintain.",
+        "points": [
+          "Component systems with React, Next.js, Angular and Vue",
+          "Responsive layouts, motion and accessibility basics",
+          "Typed state and API contracts with TypeScript"
+        ],
+        "stack": [
+          "React",
+          "Next.js",
+          "Angular",
+          "Vue.js / Nuxt",
+          "TypeScript",
+          "SCSS / Tailwind"
+        ]
+      },
+      {
+        "title": "Backend & REST APIs",
+        "summary": "Services and APIs built to be read, tested and extended.",
+        "points": [
+          "REST APIs with Node.js, Express and NestJS",
+          "Authentication, validation and third-party webhooks",
+          "Clear module boundaries and documented endpoints"
+        ],
+        "stack": [
+          "Node.js",
+          "NestJS",
+          "Express",
+          "REST APIs",
+          "PHP / Yii"
+        ]
+      },
+      {
+        "title": "System Architecture",
+        "summary": "Turning business requirements into systems that can grow.",
+        "points": [
+          "System analysis and technical planning from requirements",
+          "Service boundaries, integrations and data flow",
+          "Cloud deployment on Google Cloud Run and Supabase"
+        ],
+        "stack": [
+          "System analysis",
+          "Google Cloud Run",
+          "Supabase",
+          "Docker"
+        ]
+      },
+      {
+        "title": "Database Design",
+        "summary": "Relational data models that keep products correct.",
+        "points": [
+          "Schema design and normalization in PostgreSQL",
+          "Migrations and type-safe queries with ORMs such as Drizzle",
+          "Data integrity through constraints and encrypted credentials"
+        ],
+        "stack": [
+          "PostgreSQL",
+          "SQL",
+          "Drizzle ORM",
+          "Supabase"
+        ]
+      },
+      {
+        "title": "AI & Platform Integrations",
+        "summary": "Bringing AI and social platforms into real business workflows.",
+        "points": [
+          "AI workflows with the Vercel AI SDK across several model providers",
+          "Chatbots on LINE, Messenger, Instagram and WhatsApp",
+          "OAuth integrations and app review for Meta, TikTok and YouTube"
+        ],
+        "stack": [
+          "Vercel AI SDK",
+          "OpenAI · Anthropic · Google",
+          "Meta Graph API",
+          "LINE Messaging API"
+        ]
+      },
+      {
+        "title": "CI/CD & Testing",
+        "summary": "Shipping small, safe and often.",
+        "points": [
+          "Pipelines and automated deploys on GitHub Actions",
+          "Unit and end-to-end tests with Jest, Karma and Playwright",
+          "Trunk-based delivery with code review"
+        ],
+        "stack": [
+          "GitHub Actions",
+          "Jest",
+          "Karma",
+          "Playwright"
+        ]
+      }
     ]
   },
   "lab": {
@@ -289,6 +371,15 @@
     ],
     "resume": "Download resume",
     "resumeMeta": "PDF · 1 page"
+  },
+  "knowledge": {
+    "kicker": "Knowledge",
+    "title": "Notes on tools, AI and building for the web.",
+    "intro": "Short, practical write-ups about the tools and techniques I use in real projects.",
+    "read": "Read article",
+    "back": "All articles",
+    "minutes": "min read",
+    "empty": "No articles yet."
   },
   "marquee": "REACT × NEXT.JS × NODE.JS × NESTJS × POSTGRESQL ×",
   "contact": {

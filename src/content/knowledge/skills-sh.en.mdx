@@ -1,0 +1,116 @@
+export const metadata = {
+  title: "skills.sh — the Agent Skills directory that makes AI coding agents domain experts",
+  description:
+    "What skills.sh is, what you can do with it, how to install skills, why it is useful, and what to watch out for before using it in a real project.",
+  date: "2026-10-03",
+  tags: ["AI Agent", "Developer Tools", "Claude Code"],
+  readingMinutes: 6,
+};
+
+If you work with an AI coding agent such as Claude Code, Cursor or GitHub Copilot every day, you have probably repeated the same instructions over and over: "use GSAP like this", "write SVG animations to this standard", "check this resume against ATS rules". **Agent Skills** exist to solve exactly that, and **[skills.sh](https://www.skills.sh/)** is where those skills are collected so you can find and install them with a single command.
+
+## What is skills.sh?
+
+skills.sh is an open-source directory and leaderboard for Agent Skills, run by Vercel (the CLI lives at [vercel-labs/skills](https://github.com/vercel-labs/skills)). Think of it as "npm for agent know-how": a place to discover, rank and install skills that developers share on GitHub.
+
+A **skill** is a folder centred on a `SKILL.md` file. Its frontmatter declares a `name` and a `description`; the body holds procedures, conventions or domain-specific examples, optionally with reference files or scripts. The agent uses the `description` to decide when a skill is relevant and only reads the details when the task calls for it, so context is not spent on knowledge you do not need.
+
+```md
+---
+name: svg-animations
+description: Create beautiful, performant SVG animations and illustrations...
+---
+
+This skill guides creation of handcrafted SVG animations...
+```
+
+## What you can do on the site
+
+- **Browse and search skills** by topic — React, Next.js, design, mobile, databases, testing, marketing and more.
+- **Leaderboard** ranked by real installs, both all-time and trending, which helps separate skills people actually use from abandoned ones.
+- **Skill detail pages** with a ready-to-copy install command, a link to the repository and where to report issues.
+- **Skill Packs** that bundle several public or private skills so a team can install them all from one URL.
+- **Security audits** that periodically check listed skills for malicious content, plus an "official" badge.
+
+## Supported agents
+
+One skill works across many agents. According to the skills.sh docs this includes Claude Code, Cursor, Codex, GitHub Copilot, Windsurf, Gemini, Cline, AMP, Antigravity, OpenClaw and more. The CLI places files in the folder each agent reads, such as `.claude/skills`, automatically.
+
+## Getting started with the CLI
+
+Nothing to install up front — run it through `npx`.
+
+```bash
+# Install from a GitHub repository (choose skills and agents interactively)
+npx skills add vercel-labs/agent-skills
+
+# Pick a specific skill and skip the prompts (add -a to choose agents)
+npx skills add vercel-labs/agent-skills -s vercel-react-best-practices -y
+
+# See what a repository offers without installing anything
+npx skills add vercel-labs/agent-skills --list
+```
+
+Other commands you will use often:
+
+- `npx skills find [query]` — search for skills interactively from the terminal
+- `npx skills list` — list skills installed in the project (`-g` for global)
+- `npx skills update` — update skills to their latest versions
+- `npx skills remove` — uninstall skills
+- `npx skills use <package>@<skill>` — generate a prompt from a skill to try it once without installing
+- `npx skills init [name]` — scaffold a `SKILL.md` for your own skill
+- `npx skills experimental_install` — restore every skill from `skills-lock.json`
+
+Installs are project-level by default; add `-g` to make a skill available everywhere.
+
+## A real example: this website
+
+The portfolio you are reading was built with help from skills found on skills.sh: `gsap-react` for GSAP animation, `svg-animations` for the SVG illustrations, `vercel-react-best-practices` for React/Next.js guidance and `resume-ats-optimizer` for the resume.
+
+After installing, the CLI does three things:
+
+1. Stores the skill files in `.agents/skills/`.
+2. Symlinks them into `.claude/skills/` so Claude Code can see them (use `--copy` if you prefer real copies).
+3. Records each skill's source and hash in `skills-lock.json`.
+
+```json
+{
+  "version": 1,
+  "skills": {
+    "gsap-react": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-react/SKILL.md",
+      "computedHash": "7d3b5282..."
+    }
+  }
+}
+```
+
+Commit the lock file and everyone who clones the project gets the same set of skills, with a clear record of where each one came from.
+
+## Why it is worth using
+
+- **Write once, use in many agents** — no separate prompt to maintain per tool.
+- **Expertise from the source** — for example the GSAP skill from the GreenSock team, or React guidance from Vercel.
+- **Consistent team output** — skills and the lock file live in the same repository as the code.
+- **Context-efficient** — agents load the details only when a task needs them.
+- **Low barrier** — a skill is just Markdown, so anyone can write and share one on GitHub.
+- **Choose by real usage** — the leaderboard shows which skills are popular and maintained.
+
+## What to watch out for
+
+- **Security** — a skill is a set of instructions your agent will follow, sometimes with scripts. skills.sh runs audits but states it cannot guarantee the quality or security of every listed skill. Read `SKILL.md` and its files before installing, especially non-official skills.
+- **Telemetry** — the CLI sends anonymous install data to power the rankings. Set `DISABLE_TELEMETRY=1` to opt out.
+- **Uneven quality** — popular does not always mean right for your project. Try `skills use` or `--list` first.
+- **Do not over-install** — skills with overlapping descriptions can make an agent pick the wrong one. Keep only what you use.
+
+## Summary
+
+skills.sh turns "the right way to do this" into packages you can install, share and update like any other dependency. For developers who work with AI agents daily, it is the fastest way to teach an agent your domain and keep a whole team's results consistent. Start with popular skills for the stack you already use, read before you install, and write your own team skills once you notice patterns you repeat.
+
+### References
+
+- [skills.sh](https://www.skills.sh/)
+- [skills.sh docs](https://www.skills.sh/docs) and [FAQ](https://www.skills.sh/docs/faq)
+- [vercel-labs/skills on GitHub](https://github.com/vercel-labs/skills)

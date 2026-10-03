@@ -20,7 +20,144 @@
   "intro": {
     "kicker": "มุมมอง",
     "statement": "ผมเปลี่ยน requirement ที่ซับซ้อนให้เป็นเว็บที่เชื่อถือได้ ตั้งแต่ interface ไปจนถึง infrastructure",
-    "meta": ["ประจำอยู่กรุงเทพฯ", "ประสบการณ์มากกว่า 10 ปี", "React / Next.js / Node.js / NestJS"]
+    "meta": ["ประจำอยู่กรุงเทพฯ", "ประสบการณ์มากกว่า 10 ปี", "React / Next.js / Node.js / NestJS"],
+    "review": {
+      "kicker": "Platform review & permission",
+      "title": "ผ่าน review เพื่อให้ระบบทำงานแทนธุรกิจบนโซเชียลได้",
+      "body": "การโพสต์ ตอบแชต และดึงผลลัพธ์บนเพจของลูกค้า ต้องผ่าน review ของแต่ละแพลตฟอร์มก่อน ผมกำหนดสิทธิ์ให้เท่าที่แต่ละฟีเจอร์ต้องใช้จริง อธิบายการใช้ข้อมูลให้ชัดเจน และพัฒนาส่วน consent, privacy และการลบข้อมูลตามที่ผู้ตรวจกำหนด",
+      "flow": {
+        "app": "แพลตฟอร์มของเรา",
+        "review": "Platform review",
+        "consent": "ธุรกิจยินยอม",
+        "steps": [
+          "ขอสิทธิ์เท่าที่ฟีเจอร์ต้องใช้จริง",
+          "ยื่น review พร้อม use case และนโยบาย",
+          "เจ้าของธุรกิจกดยินยอมผ่าน OAuth",
+          "เก็บ token แบบเข้ารหัส และยกเลิกได้ทุกเมื่อ"
+        ]
+      },
+      "complianceLabel": "สิ่งที่ทำเพื่อผ่าน review",
+      "compliance": [
+        "Privacy policy",
+        "Terms of service",
+        "Data-deletion callback",
+        "เข้ารหัส token ของแพลตฟอร์ม"
+      ],
+      "platforms": [
+        {
+          "name": "Meta",
+          "products": "Facebook · Instagram · Ads",
+          "review": "App Review · Advanced Access",
+          "capabilities": [
+            {
+              "icon": "publish",
+              "text": "โพสต์คอนเทนต์และ Reels ลงเพจและ Instagram"
+            },
+            {
+              "icon": "chat",
+              "text": "ตอบแชต DM และคอมเมนต์"
+            },
+            {
+              "icon": "insights",
+              "text": "ดึงสถิติโพสต์และผู้ติดตาม"
+            },
+            {
+              "icon": "ads",
+              "text": "จัดการโฆษณา แคมเปญ และฟอร์มลีด"
+            }
+          ]
+        },
+        {
+          "name": "WhatsApp Business",
+          "products": "Cloud API",
+          "review": "App Review",
+          "capabilities": [
+            {
+              "icon": "chat",
+              "text": "รับและส่งข้อความกับลูกค้า"
+            },
+            {
+              "icon": "profile",
+              "text": "จัดการเบอร์และบัญชีธุรกิจ"
+            }
+          ]
+        },
+        {
+          "name": "TikTok",
+          "products": "Content Posting API",
+          "review": "Content Posting audit",
+          "capabilities": [
+            {
+              "icon": "video",
+              "text": "อัปโหลดและเผยแพร่วิดีโอ"
+            },
+            {
+              "icon": "profile",
+              "text": "อ่านข้อมูลโปรไฟล์ที่เชื่อมต่อ"
+            }
+          ]
+        },
+        {
+          "name": "YouTube",
+          "products": "Data API",
+          "review": "Google OAuth verification",
+          "capabilities": [
+            {
+              "icon": "video",
+              "text": "อัปโหลดวิดีโอขึ้นช่อง"
+            },
+            {
+              "icon": "insights",
+              "text": "อ่านข้อมูลช่องและวิดีโอ"
+            }
+          ]
+        }
+      ]
+    },
+    "description": "กว่า 10 ปีที่ผมทำงานครบทั้งระบบ ตั้งแต่ interface, API, ฐานข้อมูล ไปจนถึง delivery pipeline ปัจจุบันผมโฟกัสการนำ AI มาใช้ใน workflow ของธุรกิจจริง ให้ AI ช่วยวางแผน พูดคุย และขายแทนธุรกิจขนาดเล็ก",
+    "now": {
+      "label": "สิ่งที่กำลังสร้างตอนนี้",
+      "product": "แพลตฟอร์ม AI สำหรับธุรกิจ",
+      "tagline": "พัฒนาแพลตฟอร์ม SaaS ระดับ production ที่ให้ AI ช่วยทำงานประจำวันของ SME ตั้งแต่การตลาด คอนเทนต์ ไปจนถึงการขายและแชตกับลูกค้า",
+      "roleLabel": "ตำแหน่ง",
+      "companyLabel": "บริษัท",
+      "periodLabel": "เริ่มงาน",
+      "stackLabel": "เทคโนโลยีที่ใช้",
+      "core": "AI",
+      "engine": "AI workflow engine",
+      "stats": [
+        { "value": 6, "label": "AI workflow" },
+        { "value": 4, "label": "ช่องทางแชต" },
+        { "value": 5, "label": "ผู้ให้บริการโมเดล AI" }
+      ],
+      "diagramLabel": "Workflow ของแพลตฟอร์ม: AI เป็นแกนกลางที่ขับเคลื่อนการวางแผนคอนเทนต์ ภาพและวิดีโอโฆษณา การโพสต์ลงโซเชียล แชตบอตหลายช่องทาง ลีดและออเดอร์ และการวัดผลคอนเทนต์",
+      "nodes": [
+        {
+          "title": "วางแผนคอนเทนต์",
+          "sub": "Goal → Pillar → Topic"
+        },
+        {
+          "title": "ภาพและวิดีโอโฆษณา",
+          "sub": "สร้างด้วย AI"
+        },
+        {
+          "title": "โพสต์ลงโซเชียล",
+          "sub": "FB · IG · TikTok"
+        },
+        {
+          "title": "แชตบอต AI",
+          "sub": "LINE · Messenger · IG · WhatsApp"
+        },
+        {
+          "title": "ลีดและออเดอร์",
+          "sub": "จากแชตสู่ยอดขาย"
+        },
+        {
+          "title": "วัดผลคอนเทนต์",
+          "sub": "Reach · ER · Funnel"
+        }
+      ]
+    }
   },
   "work": {
     "kicker": "ระบบที่เคยพัฒนา",

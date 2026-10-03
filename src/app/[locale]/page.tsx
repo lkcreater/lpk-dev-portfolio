@@ -19,10 +19,10 @@ export default async function PortfolioPage({ params }: { params: Promise<{ loca
   return (
     <>
       <Hero copy={dictionary.hero} profile={profile} />
-      <Intro copy={dictionary.intro} />
+      <Intro copy={dictionary.intro} profile={profile} />
       <SelectedWork copy={dictionary.work} projects={projects} />
       <Services copy={dictionary.services} />
-      <About copy={dictionary.about} profile={profile} />
+      <About copy={dictionary.about} />
       <Marquee text={dictionary.marquee} />
       <Contact copy={dictionary.contact} />
     </>

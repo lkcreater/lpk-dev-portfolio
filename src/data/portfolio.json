@@ -32,7 +32,13 @@
       "experienceLabel": "Years building for the web",
       "career": [
         {
-          "period": "2021 — Present",
+          "period": "Nov 2025 — Present",
+          "company": "Mekha (mekha.ai)",
+          "role": "Senior Full-Stack Developer",
+          "description": "Building an AI-powered business platform for SMEs end to end. Designing AI workflows for content planning, multi-channel chatbots, image and video ad generation, social publishing and performance analytics with NestJS, React and the Vercel AI SDK."
+        },
+        {
+          "period": "2021 — 2025",
           "company": "Paneet Interactive Co., Ltd.",
           "role": "Senior Full-Stack Developer",
           "description": "Developing web platforms with Angular, React and Next.js; building REST APIs with Node.js, Express and NestJS; designing systems and databases; and setting up CI/CD with GitHub Actions."
@@ -63,7 +69,13 @@
       "experienceLabel": "ปีบนเส้นทางพัฒนาเว็บ",
       "career": [
         {
-          "period": "2021 — ปัจจุบัน",
+          "period": "17 พ.ย. 2568 — ปัจจุบัน",
+          "company": "Mekha (mekha.ai)",
+          "role": "Senior Full-Stack Developer",
+          "description": "พัฒนาแพลตฟอร์ม AI สำหรับธุรกิจ SME แบบครบวงจร ออกแบบ AI workflow สำหรับวางแผนคอนเทนต์ แชตบอตหลายช่องทาง สร้างภาพและวิดีโอโฆษณา โพสต์ลงโซเชียล และวิเคราะห์ผลลัพธ์ ด้วย NestJS, React และ Vercel AI SDK"
+        },
+        {
+          "period": "2021 — 2025",
           "company": "Paneet Interactive Co., Ltd.",
           "role": "Senior Full-Stack Developer",
           "description": "พัฒนาเว็บด้วย Angular, React และ Next.js สร้าง REST API ด้วย Node.js, Express และ NestJS ออกแบบระบบและฐานข้อมูล รวมถึงวาง CI/CD ด้วย GitHub Actions"

@@ -20,7 +20,144 @@
   "intro": {
     "kicker": "Point of view",
     "statement": "I turn complex requirements into reliable web products — from interface to infrastructure.",
-    "meta": ["Based in Bangkok", "10+ years of experience", "React / Next.js / Node.js / NestJS"]
+    "meta": ["Based in Bangkok", "10+ years of experience", "React / Next.js / Node.js / NestJS"],
+    "review": {
+      "kicker": "Platform review & permissions",
+      "title": "Getting approved to act on a business's social accounts",
+      "body": "Posting, replying and reading performance on someone else's pages means passing each platform's review. I scoped access to exactly what each feature needs, documented how the data is used, and built the consent, privacy and data-deletion pieces the reviewers ask for.",
+      "flow": {
+        "app": "Our platform",
+        "review": "Platform review",
+        "consent": "Business consent",
+        "steps": [
+          "Request only the access each feature needs",
+          "Submit for review with use cases and policies",
+          "The business owner grants access via OAuth",
+          "Store platform tokens encrypted, revocable any time"
+        ]
+      },
+      "complianceLabel": "Review requirements shipped",
+      "compliance": [
+        "Privacy policy",
+        "Terms of service",
+        "Data-deletion callback",
+        "Encrypted platform tokens"
+      ],
+      "platforms": [
+        {
+          "name": "Meta",
+          "products": "Facebook · Instagram · Ads",
+          "review": "App Review · Advanced Access",
+          "capabilities": [
+            {
+              "icon": "publish",
+              "text": "Publish posts and Reels to Pages and Instagram"
+            },
+            {
+              "icon": "chat",
+              "text": "Reply to messages, DMs and comments"
+            },
+            {
+              "icon": "insights",
+              "text": "Read post and audience insights"
+            },
+            {
+              "icon": "ads",
+              "text": "Manage ads, campaigns and lead forms"
+            }
+          ]
+        },
+        {
+          "name": "WhatsApp Business",
+          "products": "Cloud API",
+          "review": "App Review",
+          "capabilities": [
+            {
+              "icon": "chat",
+              "text": "Send and receive customer messages"
+            },
+            {
+              "icon": "profile",
+              "text": "Manage the business number and account"
+            }
+          ]
+        },
+        {
+          "name": "TikTok",
+          "products": "Content Posting API",
+          "review": "Content Posting audit",
+          "capabilities": [
+            {
+              "icon": "video",
+              "text": "Upload and publish videos"
+            },
+            {
+              "icon": "profile",
+              "text": "Read the connected profile"
+            }
+          ]
+        },
+        {
+          "name": "YouTube",
+          "products": "Data API",
+          "review": "Google OAuth verification",
+          "capabilities": [
+            {
+              "icon": "video",
+              "text": "Upload videos to the channel"
+            },
+            {
+              "icon": "insights",
+              "text": "Read channel and video data"
+            }
+          ]
+        }
+      ]
+    },
+    "description": "For more than ten years I have worked across the whole stack — interfaces, APIs, databases and delivery pipelines. Today I bring AI into real business workflows, turning models into tools that plan, chat and sell for small businesses.",
+    "now": {
+      "label": "Currently building",
+      "product": "AI Business Platform",
+      "tagline": "Building a production SaaS platform where AI runs the daily work of SMEs — from marketing and content to sales and customer chat.",
+      "roleLabel": "Role",
+      "companyLabel": "Company",
+      "periodLabel": "Since",
+      "stackLabel": "Technology stack",
+      "core": "AI",
+      "engine": "AI workflow engine",
+      "stats": [
+        { "value": 6, "label": "AI workflows" },
+        { "value": 4, "label": "Chat channels" },
+        { "value": 5, "label": "AI model providers" }
+      ],
+      "diagramLabel": "Platform workflow: an AI core powering content planning, image and video ads, social publishing, a multi-channel chatbot, leads and orders, and content performance analytics.",
+      "nodes": [
+        {
+          "title": "Content Plan",
+          "sub": "Goal → Pillar → Topic"
+        },
+        {
+          "title": "Image & Video Ads",
+          "sub": "Generative creative"
+        },
+        {
+          "title": "Social Publishing",
+          "sub": "FB · IG · TikTok"
+        },
+        {
+          "title": "AI Chatbot",
+          "sub": "LINE · Messenger · IG · WhatsApp"
+        },
+        {
+          "title": "Leads & Orders",
+          "sub": "Chat → Customer"
+        },
+        {
+          "title": "Performance",
+          "sub": "Reach · ER · Funnel"
+        }
+      ]
+    }
   },
   "work": {
     "kicker": "Systems I have built",

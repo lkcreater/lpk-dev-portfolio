@@ -8,7 +8,7 @@ import type { Dictionary, Locale } from "@/lib/i18n";
 import type { PortfolioProfile } from "@/data/projects";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
-const navKeys = ["work", "about", "services", "contact"] as const;
+const navKeys = ["work", "services", "about", "contact"] as const;
 
 export function Header({
   locale,

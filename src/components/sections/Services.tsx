@@ -12,7 +12,7 @@ export function Services({ copy }: { copy: Dictionary["services"] }) {
       <div className="page-grid">
         <div className="services-intro">
           <p className="section-kicker light">
-            <span>06</span>
+            <span>04</span>
             {copy.kicker}
           </p>
           <p>{copy.intro}</p>

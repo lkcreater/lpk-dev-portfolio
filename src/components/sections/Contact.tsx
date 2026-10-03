@@ -1,11 +1,12 @@
 import type { Dictionary } from "@/lib/i18n";
+import type { PortfolioProfile } from "@/data/projects";
 import { MagneticButton } from "@/components/motion/MagneticButton";
 
-export function Contact({ copy }: { copy: Dictionary["contact"] }) {
+export function Contact({ copy, profile }: { copy: Dictionary["contact"]; profile: PortfolioProfile }) {
   return (
     <section id="contact" className="contact section-pad page-grid">
       <p className="section-kicker light">
-        <span>09</span>
+        <span>06</span>
         {copy.kicker}
       </p>
       <h2>
@@ -19,10 +20,10 @@ export function Contact({ copy }: { copy: Dictionary["contact"] }) {
           <a href={`mailto:${copy.email}`} data-cursor="OPEN">
             {copy.email}
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noreferrer" data-cursor="OPEN">
+          <a href={profile.linkedin} target="_blank" rel="noreferrer" data-cursor="OPEN">
             LinkedIn ↗
           </a>
-          <a href="https://github.com" target="_blank" rel="noreferrer" data-cursor="OPEN">
+          <a href={profile.github} target="_blank" rel="noreferrer" data-cursor="OPEN">
             GitHub ↗
           </a>
         </div>

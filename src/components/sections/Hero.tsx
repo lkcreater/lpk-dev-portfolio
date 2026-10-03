@@ -115,7 +115,7 @@ export function Hero({ copy, profile }: { copy: Dictionary["hero"]; profile: Por
             {copy.scroll}
           </span>
           <span>{copy.availability}</span>
-          <span className="hero-index">01 / 08</span>
+          <span className="hero-index">01 / 06</span>
         </div>
         <div className="hero-stack hero-fade" aria-label="Primary technology stack">
           {profile.heroStack.map((technology) => (

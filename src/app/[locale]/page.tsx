@@ -24,7 +24,7 @@ export default async function PortfolioPage({ params }: { params: Promise<{ loca
       <Services copy={dictionary.services} />
       <About copy={dictionary.about} />
       <Marquee text={dictionary.marquee} />
-      <Contact copy={dictionary.contact} />
+      <Contact copy={dictionary.contact} profile={profile} />
     </>
   );
 }

@@ -237,13 +237,58 @@
   "about": {
     "kicker": "About",
     "title": "I care about the whole system, not just the screen.",
-    "body": "Over the past decade I have worked across frontend, backend, databases and delivery pipelines. I enjoy learning, solving difficult requirements and turning them into clear, dependable products.",
+    "body": [
+      "Over the past decade I have worked across frontend, backend, databases and delivery pipelines — from PHP and jQuery at an agency, through years of freelancing, to full-stack work on enterprise and public-sector platforms.",
+      "Today I build an AI-powered business platform for SMEs, where the work spans product architecture, AI workflows, social platform integrations and the reviews that make them possible. I enjoy learning, untangling difficult requirements and turning them into clear, dependable products."
+    ],
     "facts": [
-      ["Location", "Bangkok, Thailand"],
-      ["Experience", "10+ years"],
-      ["Specialization", "Full-stack web development"],
-      ["Current focus", "Scalable product systems"]
-    ]
+      [
+        "Location",
+        "Bangkok, Thailand"
+      ],
+      [
+        "Experience",
+        "10+ years · since 2015"
+      ],
+      [
+        "Current role",
+        "Senior Full-Stack Developer · Mekha"
+      ],
+      [
+        "Specialization",
+        "Full-stack web & system design"
+      ],
+      [
+        "Education",
+        "B.Sc. Computer Science"
+      ],
+      [
+        "Current focus",
+        "AI workflows & scalable products"
+      ]
+    ],
+    "caption": "Ponlawat Koeisuwan — Bangkok",
+    "principlesLabel": "How I work",
+    "principles": [
+      {
+        "title": "Understand the business first",
+        "body": "A requirement becomes a system only after I know who uses it, and why."
+      },
+      {
+        "title": "Design for the next developer",
+        "body": "Clear modules, typed contracts and data models that stay easy to change."
+      },
+      {
+        "title": "Ship continuously",
+        "body": "CI/CD, automated tests and small, reviewable releases over big-bang launches."
+      },
+      {
+        "title": "Use AI with intent",
+        "body": "AI where it removes real work — with guardrails, privacy and cost in mind."
+      }
+    ],
+    "resume": "Download resume",
+    "resumeMeta": "PDF · 1 page"
   },
   "marquee": "REACT × NEXT.JS × NODE.JS × NESTJS × POSTGRESQL ×",
   "contact": {

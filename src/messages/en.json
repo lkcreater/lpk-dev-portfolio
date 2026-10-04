@@ -390,7 +390,9 @@
     "read": "Read article",
     "back": "All articles",
     "minutes": "min read",
-    "empty": "No articles yet."
+    "empty": "No articles yet.",
+    "search": "Search articles",
+    "noResults": "No articles match your search."
   },
   "playground": {
     "kicker": "Playground",

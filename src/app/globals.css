@@ -2124,9 +2124,29 @@ img {
   font-size: clamp(1rem, 1.4vw, 1.2rem);
   line-height: 1.65;
 }
+.knowledge-search {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: 32rem;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  padding: 0.85rem 0;
+  border: 0;
+  border-bottom: 1px solid rgba(238, 234, 225, 0.3);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1rem;
+}
+.knowledge-search::placeholder {
+  color: rgba(238, 234, 225, 0.45);
+}
+.knowledge-search:focus-visible {
+  outline: none;
+  border-bottom-color: var(--signal);
+}
 .knowledge-list {
   grid-column: 1 / -1;
-  margin-top: clamp(3rem, 6vw, 5rem);
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
   border-top: 1px solid rgba(238, 234, 225, 0.14);
 }
 .knowledge-empty {

@@ -3941,6 +3941,18 @@ button.line-login {
   button {
     cursor: none;
   }
+  /* Modal dialogs render in the top layer, above .custom-cursor, so use the native cursor there. */
+  dialog,
+  dialog * {
+    cursor: auto;
+  }
+  dialog a,
+  dialog button {
+    cursor: pointer;
+  }
+  dialog input {
+    cursor: text;
+  }
 }
 
 @media (max-width: 899px) {

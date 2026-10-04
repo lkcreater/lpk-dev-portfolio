@@ -15,6 +15,9 @@ export function publicOrigin(request: Request) {
   return `${proto}://${forwardedHost}`;
 }
 
+// A playground tool slug to land on after login; anything else is dropped so it can't redirect elsewhere.
+export const toolSlug = (value: unknown) => (typeof value === "string" && /^[a-z0-9-]+$/.test(value) ? value : "");
+
 export const lineCallbackUrl = (request: Request) => `${publicOrigin(request)}/api/auth/line/callback`;
 
 function credentials() {

@@ -19,7 +19,7 @@ export default async function SaleCampaignPage({ params }: CampaignPageProps) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const user = await getSession();
-  if (!user) redirect(`/${locale}/playground`);
+  if (!user) redirect(`/${locale}/playground?play=sale-campaign`);
   const playground = getDictionary(locale).playground;
   const copy = playground.campaign;
   const usage = await getUsage("sale-campaign", user.sub).catch(() => null);

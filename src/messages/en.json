@@ -402,13 +402,13 @@
       "button": "Log in with LINE",
       "failed": "LINE login didn't complete. Please try again.",
       "note": "Only your LINE display name and profile picture are used.",
+      "cancel": "Cancel",
       "dev": {
         "badge": "DEV MODE",
         "title": "Sign in with a mock LINE session",
         "body": "DEV_MODE is on, so LINE Login is skipped. Confirm to create a local test session. This never works in production.",
         "name": "Display name",
-        "confirm": "Create mock session",
-        "cancel": "Cancel"
+        "confirm": "Create mock session"
       }
     },
     "signedInAs": "Signed in as",

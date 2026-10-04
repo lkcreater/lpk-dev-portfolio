@@ -20,7 +20,7 @@ export default async function HotelChatPage({ params }: HotelChatPageProps) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const user = await getSession();
-  if (!user) redirect(`/${locale}/playground`);
+  if (!user) redirect(`/${locale}/playground?play=hotel-chat`);
   const playground = getDictionary(locale).playground;
   const copy = playground.hotel;
   const usage = await getUsage("hotel-chat", user.sub).catch(() => null);

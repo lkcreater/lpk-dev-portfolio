@@ -1,6 +1,6 @@
 import { isDevMode } from "@/lib/dev-mode";
 import { isLocale } from "@/lib/i18n";
-import { publicOrigin } from "@/lib/line-login";
+import { publicOrigin, toolSlug } from "@/lib/line-login";
 import { createSession } from "@/lib/session";
 
 // Creates a mock LINE session for local development (DEV_MODE=true, non-production only).
@@ -20,5 +20,7 @@ export async function POST(request: Request) {
       .replace(/^-|-$/g, "") || "user";
 
   await createSession({ sub: `dev-${slug}`, name });
-  return Response.redirect(`${publicOrigin(request)}/${isLocale(locale) ? locale : "en"}/playground`, 303);
+  const tool = toolSlug(form.get("tool"));
+  const playground = `${publicOrigin(request)}/${isLocale(locale) ? locale : "en"}/playground`;
+  return Response.redirect(tool ? `${playground}/${tool}` : playground, 303);
 }

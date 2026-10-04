@@ -19,7 +19,7 @@ export default async function SvgAnimationPage({ params }: ToolPageProps) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const user = await getSession();
-  if (!user) redirect(`/${locale}/playground`);
+  if (!user) redirect(`/${locale}/playground?play=svg-animation`);
   const playground = getDictionary(locale).playground;
   const copy = playground.svg;
   const usage = await getUsage("svg-animation", user.sub).catch(() => null);

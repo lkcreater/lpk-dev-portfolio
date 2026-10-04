@@ -1,0 +1,136 @@
+export const metadata = {
+  title: "รัน Claude Code บนโมเดลเจ้าอื่น — provider swap ด้วย settings profile และ alias",
+  description:
+    "เปลี่ยนโมเดลเบื้องหลัง Claude Code ไปใช้ provider ที่มี Anthropic-compatible API อย่าง Xiaomi MiMo ทีละขั้น ตั้งแต่สร้าง settings profile เก็บ API key จนถึงตั้ง alias แล้วเรียกใช้",
+  date: "2026-10-04T10:00",
+  tags: ["Claude Code", "LLM", "Workflow"],
+  readingMinutes: 6,
+};
+
+Claude Code ไม่จำเป็นต้องใช้กับโมเดลของ Anthropic เสมอไป ถ้า provider ไหนมี API ที่รับ request แบบเดียวกับ Anthropic เราก็ชี้ Claude Code ไปที่ provider นั้นได้ ทั้ง tool, subagent, skill และ workflow เดิมยังใช้ได้ครบ ที่เปลี่ยนไปมีแค่โมเดลที่ทำงานอยู่เบื้องหลัง
+
+บทความนี้ใช้ **Xiaomi MiMo** เป็นตัวอย่าง และทำทีละขั้นจนพิมพ์ `claude-mimo` แล้วใช้งานได้เลย
+
+## เรียกว่าอะไรในภาษา dev
+
+- **Provider swap / model swap** เปลี่ยน backend LLM จาก Anthropic ไปเป็นเจ้าอื่น
+- **Base URL override** ชี้ client ไปที่ endpoint อื่นแทน `api.anthropic.com`
+- **Anthropic-compatible API** provider ทำ API ให้รับ request แบบเดียวกับ Anthropic Messages API คล้ายกับที่หลายเจ้าทำ "OpenAI-compatible API"
+- **BYOM (Bring Your Own Model)** ใช้ harness ของ Claude Code กับโมเดลของคนอื่น
+- **Settings profile** ไฟล์ settings แยกที่โหลดเฉพาะตอนสั่ง คล้าย profile ของ AWS CLI หรือ context ของ kubeconfig
+
+## ทำงานยังไง
+
+Claude Code อ่าน environment variable อย่าง `ANTHROPIC_BASE_URL` และ `ANTHROPIC_AUTH_TOKEN` เพื่อดูว่าจะส่ง request ไปที่ไหนและยืนยันตัวตนด้วยอะไร ถ้าเราใส่ค่าเหล่านี้ไว้ในบล็อก `env` ของไฟล์ settings แล้วเปิด Claude Code ด้วย `--settings` ค่าเหล่านี้จะมีผลเฉพาะ session นั้น ส่วน `claude` ปกติยังใช้ Anthropic เหมือนเดิม
+
+## สิ่งที่ต้องมีก่อนเริ่ม
+
+1. Provider ต้องมี **Anthropic-compatible endpoint** ดูได้ในเอกสารของ provider มักมี path ลงท้ายด้วย `/anthropic`
+2. API key ของ provider นั้น
+3. ติดตั้ง Claude Code แล้ว เช็คได้ด้วย `claude --version`
+
+## ขั้นที่ 1: หา endpoint และชื่อโมเดล
+
+ค่าที่ต้องใช้มาจากเอกสารของ provider สำหรับ MiMo คือ
+
+- Base URL: `https://token-plan-sgp.xiaomimimo.com/anthropic`
+- Models: `mimo-v2.5` และ `mimo-v2.5-pro`
+
+## ขั้นที่ 2: สร้างไฟล์ settings profile
+
+สร้างไฟล์ `~/.claude/settings-mimo.json` แยกไว้ โดยไม่ต้องแก้ `settings.json` หลัก
+
+```json
+{
+  "disableClaudeAiConnectors": true,
+  "hasCompletedOnboarding": true,
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://token-plan-sgp.xiaomimimo.com/anthropic",
+    "ANTHROPIC_MODEL": "mimo-v2.5[1m]",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "mimo-v2.5[1m]",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "mimo-v2.5-pro",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "mimo-v2.5[1m]",
+    "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "1050000"
+  }
+}
+```
+
+แต่ละค่าทำหน้าที่ดังนี้
+
+- `ANTHROPIC_BASE_URL` ส่ง request ไปที่ provider แทน Anthropic
+- `ANTHROPIC_MODEL` โมเดลหลักของ session ส่วน `[1m]` บอกว่าเป็นโมเดลที่มี context 1M tokens
+- `ANTHROPIC_DEFAULT_SONNET_MODEL`, `..._OPUS_MODEL`, `..._HAIKU_MODEL` แปลงชื่อ `sonnet`, `opus` และ `haiku` เป็นโมเดลของ provider ทำให้ subagent ที่ตั้ง `model: opus` หรือคำสั่ง `/model opus` ไปใช้ `mimo-v2.5-pro`
+- `CLAUDE_CODE_MAX_CONTEXT_TOKENS` บอกขนาด context ที่แท้จริง เพื่อไม่ให้ Claude Code auto-compact เร็วเกินไป
+- `disableClaudeAiConnectors` ปิด MCP connectors ของ claude.ai เพราะไม่ได้ login ด้วยบัญชี Anthropic
+- `hasCompletedOnboarding` ข้ามหน้า onboarding และหน้า login
+
+ถ้าอยากให้ session เริ่มเป็น custom agent ตัวใดตัวหนึ่ง ก็เพิ่ม `"agent": "<ชื่อ agent>"` ได้
+
+## ขั้นที่ 3: เก็บ API key ให้ปลอดภัย
+
+ใส่ `ANTHROPIC_AUTH_TOKEN` ไว้ในไฟล์ settings ก็ใช้งานได้ แต่ key จะอยู่ในไฟล์เป็นข้อความธรรมดา ถ้าไฟล์นี้ถูก sync เข้า dotfiles repo หรือถูก backup ไปที่อื่น key ก็หลุดตามไปด้วย บน macOS เก็บ key ไว้ใน Keychain จะปลอดภัยกว่า
+
+```bash
+security add-generic-password -a "$USER" -s mimo-api-key -w 'tp-xxxxxxxx'
+```
+
+ค่า `env` ในไฟล์ settings จะทับค่าที่มาจาก shell ถ้าเลือกวิธีนี้ ต้องไม่มี `ANTHROPIC_AUTH_TOKEN` อยู่ในไฟล์ settings
+
+`ANTHROPIC_AUTH_TOKEN` จะถูกส่งเป็น header `Authorization: Bearer` ส่วน `ANTHROPIC_API_KEY` จะส่งเป็น header `x-api-key` ส่วนใหญ่ provider จะบอกในเอกสารว่าให้ใช้ตัวไหน
+
+## ขั้นที่ 4: ตั้ง alias
+
+เพิ่มบรรทัดนี้ใน `~/.zshrc`
+
+```bash
+alias claude-mimo='ANTHROPIC_AUTH_TOKEN="$(security find-generic-password -s mimo-api-key -w)" claude --settings ~/.claude/settings-mimo.json'
+```
+
+ถ้าใส่ key ไว้ในไฟล์ settings แล้ว ใช้ alias แบบสั้นได้เลย
+
+```bash
+alias claude-mimo='claude --settings ~/.claude/settings-mimo.json'
+```
+
+จากนั้นโหลด shell config ใหม่
+
+```bash
+source ~/.zshrc
+```
+
+## ขั้นที่ 5: เรียกใช้งาน
+
+```bash
+claude-mimo                        # เปิด session แบบ interactive
+claude-mimo -p "อธิบาย repo นี้"     # สั่งครั้งเดียวแล้วพิมพ์ผลลัพธ์
+claude-mimo --continue             # ทำต่อจาก session ล่าสุด
+claude                             # ยังเป็น Claude ปกติ ไม่กระทบ
+```
+
+## ขั้นที่ 6: เช็คว่าใช้โมเดลถูกตัว
+
+- พิมพ์ `/status` ใน session เพื่อดูโมเดลและ base URL ที่ใช้อยู่
+- หรือทดสอบเร็ว ๆ ด้วย `claude-mimo -p "what model are you?"`
+
+## เพิ่ม provider อื่น
+
+ทำขั้นที่ 2 ถึง 4 ซ้ำด้วยไฟล์ `settings-<provider>.json` และ alias `claude-<provider>` ใหม่ ค่าที่ต้องเปลี่ยนมีแค่ base URL ชื่อโมเดล และ key จะเก็บไว้หลาย profile แล้วสลับใช้ตามงานก็ได้
+
+## แก้ปัญหาที่เจอบ่อย
+
+- **401 หรือ auth error** key ผิด หมดอายุ หรือ `ANTHROPIC_AUTH_TOKEN` ว่าง ลองรัน `security find-generic-password -s mimo-api-key -w` เพื่อดูว่าได้ key ออกมาจริงไหม
+- **404 หรือ model not found** ชื่อโมเดลไม่ตรงกับที่ provider รองรับ หรือ base URL ไม่มี `/anthropic` ต่อท้าย
+- **เด้งไปหน้า login** ยังไม่ได้ใส่ `hasCompletedOnboarding: true`
+- **compact บ่อยผิดปกติ** ยังไม่ได้ตั้ง `CLAUDE_CODE_MAX_CONTEXT_TOKENS` ให้ตรงกับขนาด context ของโมเดล
+- **tool use หรือ thinking ทำงานแปลก ๆ** endpoint รองรับ API ของ Anthropic ได้ไม่ครบ ขึ้นกับว่า provider รองรับ feature ไหนบ้าง
+
+## ข้อควรรู้
+
+- โค้ดและบทสนทนาของเราจะถูกส่งไปที่ provider นั้น ควรอ่าน data policy ก่อนใช้กับงานที่เป็นความลับ
+- feature ที่ต้องใช้บัญชี Anthropic เช่น connectors ของ claude.ai จะใช้ไม่ได้ใน profile นี้
+- คุณภาพของงาน agent ขึ้นกับว่าโมเดลใช้ tool ได้เก่งแค่ไหน เพราะ harness เดียวกันใช้กับโมเดลต่างตัวอาจได้ผลต่างกันมาก
+
+### อ้างอิง
+
+- [Claude Code: Settings](https://code.claude.com/docs/en/settings)
+- [Claude Code: LLM gateway configuration](https://code.claude.com/docs/en/llm-gateway)

@@ -1,0 +1,136 @@
+export const metadata = {
+  title: "Run Claude Code on another provider's model — provider swap with a settings profile and an alias",
+  description:
+    "Point Claude Code at any provider with an Anthropic-compatible API, such as Xiaomi MiMo, step by step: create a settings profile, store the API key, set an alias and run it.",
+  date: "2026-10-04T10:00",
+  tags: ["Claude Code", "LLM", "Workflow"],
+  readingMinutes: 5,
+};
+
+You can use Claude Code with models from providers other than Anthropic. If a provider exposes an API that accepts Anthropic-style requests, you can point Claude Code at it. Your tools, subagents, skills and workflows keep working, and only the model behind them changes.
+
+This article uses **Xiaomi MiMo** as the example. By the end, typing `claude-mimo` opens a session on MiMo.
+
+## What developers call it
+
+- **Provider swap / model swap**: replacing the backend LLM.
+- **Base URL override**: sending the client's requests to an endpoint other than `api.anthropic.com`.
+- **Anthropic-compatible API**: the provider accepts the same requests as the Anthropic Messages API, the way many providers offer an "OpenAI-compatible API".
+- **BYOM (Bring Your Own Model)**: Claude Code's harness running someone else's model.
+- **Settings profile**: a separate settings file loaded only on demand, like an AWS CLI profile or a kubeconfig context.
+
+## How it works
+
+Claude Code reads environment variables such as `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN` to decide where to send requests and how to authenticate. Put them in the `env` block of a settings file and launch with `--settings`, and they apply only to that session. Plain `claude` keeps using Anthropic.
+
+## Prerequisites
+
+1. The provider offers an **Anthropic-compatible endpoint**. Its docs list it, and the path usually ends in `/anthropic`.
+2. An API key for that provider.
+3. Claude Code installed. Check with `claude --version`.
+
+## Step 1: Find the endpoint and model names
+
+Get these from the provider's docs. For MiMo:
+
+- Base URL: `https://token-plan-sgp.xiaomimimo.com/anthropic`
+- Models: `mimo-v2.5`, `mimo-v2.5-pro`
+
+## Step 2: Create a settings profile
+
+Create a separate file at `~/.claude/settings-mimo.json`. Your main `settings.json` stays as it is.
+
+```json
+{
+  "disableClaudeAiConnectors": true,
+  "hasCompletedOnboarding": true,
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://token-plan-sgp.xiaomimimo.com/anthropic",
+    "ANTHROPIC_MODEL": "mimo-v2.5[1m]",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "mimo-v2.5[1m]",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "mimo-v2.5-pro",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "mimo-v2.5[1m]",
+    "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "1050000"
+  }
+}
+```
+
+What each key does:
+
+- `ANTHROPIC_BASE_URL` sends requests to the provider instead of Anthropic.
+- `ANTHROPIC_MODEL` is the session's main model. The `[1m]` suffix marks a model with a 1M-token context.
+- `ANTHROPIC_DEFAULT_SONNET_MODEL`, `..._OPUS_MODEL` and `..._HAIKU_MODEL` map the aliases `sonnet`, `opus` and `haiku` to the provider's models. A subagent with `model: opus`, or the command `/model opus`, then runs on `mimo-v2.5-pro`.
+- `CLAUDE_CODE_MAX_CONTEXT_TOKENS` sets the model's real context size so Claude Code doesn't auto-compact too early.
+- `disableClaudeAiConnectors` turns off claude.ai MCP connectors, which need an Anthropic login.
+- `hasCompletedOnboarding` skips onboarding and the login screen.
+
+To start every session as a specific custom agent, add `"agent": "<agent name>"`.
+
+## Step 3: Store the API key safely
+
+You can put `ANTHROPIC_AUTH_TOKEN` in the settings file. The key then sits there in plain text, and it leaks if the file gets synced to a dotfiles repo or backed up somewhere shared. On macOS, the Keychain is a safer place for it:
+
+```bash
+security add-generic-password -a "$USER" -s mimo-api-key -w 'tp-xxxxxxxx'
+```
+
+Values in the settings file's `env` block override the shell, so with this approach the settings file must not contain `ANTHROPIC_AUTH_TOKEN`.
+
+`ANTHROPIC_AUTH_TOKEN` is sent as an `Authorization: Bearer` header. `ANTHROPIC_API_KEY` is sent as `x-api-key`. The provider's docs usually say which one it expects.
+
+## Step 4: Set an alias
+
+Add this to `~/.zshrc`:
+
+```bash
+alias claude-mimo='ANTHROPIC_AUTH_TOKEN="$(security find-generic-password -s mimo-api-key -w)" claude --settings ~/.claude/settings-mimo.json'
+```
+
+If the key is in the settings file, the short form is enough:
+
+```bash
+alias claude-mimo='claude --settings ~/.claude/settings-mimo.json'
+```
+
+Reload your shell config:
+
+```bash
+source ~/.zshrc
+```
+
+## Step 5: Run it
+
+```bash
+claude-mimo                          # interactive session
+claude-mimo -p "explain this repo"   # one-shot, print the result
+claude-mimo --continue               # resume the latest session
+claude                               # still regular Claude
+```
+
+## Step 6: Confirm the model
+
+- Run `/status` inside the session to see the active model and base URL.
+- Or run a quick check: `claude-mimo -p "what model are you?"`
+
+## Adding another provider
+
+Repeat steps 2 to 4 with a new `settings-<provider>.json` and a `claude-<provider>` alias. Only the base URL, the model names and the key change. You can keep several profiles and switch between them depending on the task.
+
+## Troubleshooting
+
+- **401 or auth error**: the key is wrong or expired, or `ANTHROPIC_AUTH_TOKEN` is empty. Run `security find-generic-password -s mimo-api-key -w` to check the Keychain returns it.
+- **404 or model not found**: the model name doesn't match what the provider supports, or the base URL is missing `/anthropic`.
+- **Login screen appears**: `hasCompletedOnboarding: true` is missing.
+- **Compacting too often**: `CLAUDE_CODE_MAX_CONTEXT_TOKENS` doesn't match the model's context size.
+- **Odd tool use or thinking behaviour**: the endpoint only partly implements Anthropic's API, and supported features vary by provider.
+
+## Things to know
+
+- Your code and conversations go to that provider. Read its data policy before using it on confidential work.
+- Features that need an Anthropic account, such as claude.ai connectors, aren't available in this profile.
+- Agent quality depends on how well the model handles tool calls. The same harness can give very different results on different models.
+
+### References
+
+- [Claude Code: Settings](https://code.claude.com/docs/en/settings)
+- [Claude Code: LLM gateway configuration](https://code.claude.com/docs/en/llm-gateway)

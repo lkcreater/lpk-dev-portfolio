@@ -1,0 +1,113 @@
+export const metadata = {
+  title: "pstack — ชุด skill ที่ทำให้ AI coding agent เข้าใจก่อนแก้ และพิสูจน์ก่อนส่ง",
+  description:
+    "รู้จัก pstack plugin ของ Lauren Tan (@poteto) จากทีม Cursor ที่ open-pstack พอร์ตมาให้ Claude Code และ Codex ใช้ได้ ทั้งวิธีทำงาน skill หลัก และวิธีติดตั้งจนเริ่มใช้งาน",
+  date: "2026-10-04T11:00",
+  tags: ["Claude Code", "AI Agent", "Workflow"],
+  readingMinutes: 6,
+};
+
+ปัญหาที่เจอบ่อยเวลาใช้ AI coding agent คือมันรีบลงมือแก้ทั้งที่ยังไม่เข้าใจระบบ เขียนโค้ดเกินที่ขอ แล้วจบงานแค่ "test ผ่าน" ทั้งที่ยังไม่เคยรันของจริงเลย **pstack** แก้ปัญหานี้ด้วยการใส่กฎการทำงาน workflow และ skill เฉพาะทางให้ agent เพื่อให้มันทำความเข้าใจก่อนแก้ และส่งงานพร้อมหลักฐานที่เราตรวจย้อนได้
+
+pstack เป็นชุด skill ที่ [Lauren Tan (@poteto)](https://x.com/poteto) ใช้ทำงานจริงที่ Cursor ในบทสัมภาษณ์เธอเล่าว่าส่ง pull request ได้ 1,000 ตัวในเดือนเดียว หลังจากค่อย ๆ ปรับวิธีที่ agent ทำงานและตรวจผลงานตัวเอง ส่วน [open-pstack](https://github.com/ericlitman/open-pstack) เป็นโปรเจกต์ของ community ที่พอร์ต pstack มาให้ใช้กับ Claude Code และ Codex ได้
+
+> If you want to go fast, go deep first.
+
+## pstack คืออะไร
+
+pstack เป็น **plugin** ไม่ใช่โมเดลใหม่และไม่ใช่ service ที่ต้องสมัคร ข้างในมีของ 4 อย่าง
+
+- **กฎการทำงาน** ที่ agent ต้องทำตามทุกงาน
+- **Workflow** สำหรับงานแต่ละแบบ เช่น feature, bug fix หรือดูแล PR
+- **Skill เฉพาะทาง** ที่เรียกใช้ได้ทีละตัว
+- **เครื่องมือเล็ก ๆ ในเครื่อง** สำหรับเรียกโมเดลจาก CLI ของเจ้าอื่นมาช่วยตรวจงาน
+
+## ทำงานยังไง
+
+### 1. ใส่คำสั่งตั้งต้นทุก session
+
+pstack ใช้ `SessionStart` hook ของ Claude Code ทุกครั้งที่เปิด session ใหม่ สั่ง `/clear` หรือ context ถูก compact มันจะใส่คำสั่งสั้น ๆ เข้าไปว่า ถ้าเป็นงาน engineering ที่ไม่ใช่เรื่องเล็ก ให้เรียก `pstack:poteto-mode` ก่อน
+
+### 2. poteto-mode เลือก workflow ให้
+
+`poteto-mode` เป็นทางเข้าหลัก เราสั่งงานเป็นภาษาธรรมดา แล้วมันจะเลือก skill ที่เข้ากับงานให้
+
+| สถานการณ์ | skill ที่ใช้ |
+|---|---|
+| ต้องเข้าใจระบบก่อนแก้ | `how` อธิบายว่าส่วนนั้นทำงานยังไง |
+| อยากรู้ว่าทำไมถึงออกแบบแบบนี้ | `why` หาหลักฐานจาก history และโค้ด |
+| bug ที่ reproduce ได้ | `tdd` เขียน test ให้ fail ก่อนแล้วค่อยแก้ |
+| โค้ดที่ข้าม function หรือ module | `architect` ร่าง types และโครงสร้างก่อนเขียน |
+| ทางเลือกการออกแบบที่สำคัญ | `arena` ให้หลาย agent ทำงานเดียวกัน แล้วเลือกตัวที่ดีที่สุดและเอาส่วนดีของตัวอื่นมารวม |
+| design ที่ยังไม่แน่ใจ | `interrogate` ให้หลายโมเดลช่วยกันหาจุดพังของ design หรือ diff |
+| ก่อน commit | `deslop` ลบโค้ดฟุ่มเฟือยที่ AI ชอบเขียน |
+| ก่อน review | `no-comments` ลบ comment ที่ไม่จำเป็น |
+| เขียน prose ทุกแบบ | `unslop` ตัดสำนวนแบบ AI |
+| PR ที่ต้องดูแล | `babysit` แก้ CI และตอบ review จนพร้อม merge |
+
+ถ้าสั่งให้เพิ่ม feature มันจะทำตามลำดับนี้ ทำความเข้าใจโค้ดที่มีอยู่ ตัดสินใจว่าจะเก็บข้อมูลเป็นโครงสร้างแบบไหน ทำเวอร์ชันที่เล็กที่สุดแต่ครบ รันจริงแบบที่ผู้ใช้ใช้ ตรวจผล แล้วเตรียม PR
+
+### 3. Principles
+
+pstack มีหลักการประมาณ 20 ข้อ แต่ละข้อเป็น skill แยกที่บอกไว้ว่าใช้ตอนไหน agent ต้องอ่านข้อที่จะใช้ให้ครบก่อน และต้องบอกในคำตอบว่าข้อไหนทำให้ตัดสินใจแบบนั้น ตัวอย่างเช่น
+
+- **Laziness Protocol** แก้ให้เล็กที่สุด ลบดีกว่าเพิ่ม
+- **Fix Root Causes** หาต้นเหตุแล้วแก้ตรงนั้น ไม่ใช่ใส่ null check ปิดอาการ
+- **Prove It Works** ก่อนบอกว่าเสร็จต้องรันของจริง "compile ผ่าน" ยังไม่นับ
+- **Model the Domain** ใช้โครงสร้างข้อมูลแทน if/else ที่กระจายอยู่หลายไฟล์
+- **Attack the Premise** ถ้าแก้หลายครั้งแล้วยังพังที่เดิม ให้สงสัยสมมติฐานที่ทุกวิธีใช้ร่วมกัน
+
+### 4. เลือกโมเดลตามบทบาท
+
+แต่ละบทบาทใน pstack ใช้โมเดลไม่เหมือนกันได้ เช่น คนเขียน feature คนรัน arena หรือ reviewer ใน interrogate ค่าเหล่านี้เก็บไว้ในไฟล์ model sheet เช่น `~/.claude/pstack-models.md`
+
+```text
+feature, refactoring: claude:opus@xhigh
+bug-fix: claude:opus@xhigh
+arena runners: claude:opus@xhigh, claude:opus@xhigh, claude:opus@xhigh
+interrogate reviewers: claude:opus@xhigh, claude:opus@xhigh, claude:opus@xhigh
+```
+
+แต่ละค่าเขียนเป็น `provider:model@effort` โมเดลของ app ที่เราใช้อยู่จะรันข้างใน app นั้น ส่วนโมเดลเจ้าอื่นอย่าง Codex หรือ Grok จะรันผ่าน CLI ที่ login ไว้ ถ้ารันโมเดลไหนไม่สำเร็จ pstack จะไม่เปลี่ยนไปใช้โมเดลที่อ่อนกว่าโดยไม่บอก
+
+## ติดตั้งใน Claude Code
+
+### 1. ติดตั้ง plugin
+
+พิมพ์ใน Claude Code
+
+```text
+/plugin marketplace add ericlitman/open-pstack
+/plugin install pstack@open-pstack
+/reload-plugins
+```
+
+ถ้าอยากให้ `interrogate` ใช้ครบทั้ง 3 โมเดล ต้องติดตั้งและ login CLI ของ Claude Code, Codex และ Grok และติดตั้ง [Bun](https://bun.sh) สำหรับเครื่องมือที่ใช้เรียกโมเดลข้าม CLI ถ้าไม่มีก็ยังใช้ workflow หลักได้ แค่มีโมเดลมาช่วยน้อยลง
+
+### 2. ตั้งค่าโมเดล
+
+```text
+/pstack:setup-pstack
+```
+
+ขั้นตอนนี้จะเช็คว่าเครื่องเรารันโมเดลไหนได้จริง แสดงว่าแต่ละบทบาทจะรันยังไง แล้วถามก่อนบันทึก
+
+### 3. เริ่มใช้งาน
+
+```text
+/pstack:poteto-mode Add saved filters to search. Keep the design simple, verify it in the real app, and open a pull request.
+```
+
+หรือสั่งงานตามปกติก็ได้ เพราะ hook ตอนเปิด session จะส่งงานที่ไม่ใช่เรื่องเล็กเข้า poteto-mode ให้เอง ถ้าต้องการ skill ไหนโดยตรงก็เรียกได้เลย เช่น `/pstack:how` หรือ `/pstack:architect`
+
+## ข้อควรรู้
+
+- **ใช้ token มาก** `arena`, `swarm` และ `interrogate` รันหลายโมเดลพร้อมกัน ถ้าตั้งไว้ 3 lane ที่ effort สูง ค่าใช้จ่ายจะเพิ่มขึ้นหลายเท่า ควรใช้กับงานที่การตัดสินใจผิดมีราคาแพงจริง ๆ
+- **ระวังกฎชนกัน** ถ้าใช้ร่วมกับ custom agent หรือ plugin อื่นที่มีกฎการทำงานของตัวเอง เช่น agent ที่สั่งให้ commit เองโดยอัตโนมัติ คำสั่งอาจขัดกัน ควรเลือกให้มีตัวหลักตัวเดียว
+- **ใช้ร่วมกับ provider อื่นได้** ถ้ารัน Claude Code บน provider อื่นตามบทความ [รัน Claude Code บนโมเดลเจ้าอื่น](/th/knowledge/claude-code-custom-provider) บทบาทที่ตั้งเป็น `opus` จะถูกแปลงไปเป็นโมเดลที่ map ไว้ใน `ANTHROPIC_DEFAULT_OPUS_MODEL`
+- **เริ่มจากงานที่ยังดูแลเองได้** README ของ pstack แนะนำให้ใช้กับงานที่ยังคอยดูอยู่ก่อน แล้วค่อยปล่อยให้รันขนานกันมากขึ้นเมื่อหลักฐานที่ agent ส่งมาพิสูจน์แล้วว่าไว้ใจได้ใน repo ของเรา
+
+### อ้างอิง
+
+- [open-pstack บน GitHub](https://github.com/ericlitman/open-pstack)
+- [pstack ต้นฉบับของ Lauren Tan (Cursor)](https://github.com/cursor/plugins/tree/main/pstack)

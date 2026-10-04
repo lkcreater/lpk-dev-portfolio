@@ -32,18 +32,16 @@ pstack registers a Claude Code `SessionStart` hook. On startup, after `/clear` a
 
 `poteto-mode` is the main entry point. You describe the task in plain language and it routes the work to the right skill.
 
-| Situation | Skill |
-|---|---|
-| You need to understand the system before changing it | `how` explains how that part works |
-| You want to know why it was built this way | `why` gathers evidence from history and code |
-| A bug you can reproduce | `tdd` writes a failing test first, then fixes it |
-| Code that crosses a function or module boundary | `architect` sketches types and structure before code |
-| An important design choice | `arena` runs several attempts at the same task, picks the best and grafts in the strongest parts of the rest |
-| A design you aren't sure about | `interrogate` has several models try to break the design or diff |
-| Before a commit | `deslop` removes the extra code AI tends to write |
-| Before a review | `no-comments` removes unnecessary comments |
-| Any prose | `unslop` removes AI writing tics |
-| A pull request that needs attention | `babysit` fixes CI and handles review comments until it's ready to merge |
+- `how` explains how a part of the system works, before you change it.
+- `why` gathers evidence from history and code for why it was built this way.
+- `tdd` handles a bug you can reproduce: it writes a failing test first, then fixes it.
+- `architect` sketches types and structure before code that crosses a function or module boundary.
+- `arena` settles an important design choice: it runs several attempts at the same task, picks the best and grafts in the strongest parts of the rest.
+- `interrogate` has several models try to break a design or diff you aren't sure about.
+- `deslop` removes the extra code AI tends to write, before a commit.
+- `no-comments` removes unnecessary comments, before a review.
+- `unslop` removes AI writing tics from any prose.
+- `babysit` fixes CI and handles review comments until a pull request is ready to merge.
 
 For a feature, it works in this order: understand the existing code, decide how the data should be represented, build the smallest complete version, run it the way a user would, review the result, and prepare the pull request.
 

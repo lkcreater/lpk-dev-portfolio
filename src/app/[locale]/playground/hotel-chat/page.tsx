@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { HotelChat } from "@/components/playground/HotelChat";
+import { PlaygroundAccount } from "@/components/playground/PlaygroundAccount";
 import { HotelPromptPanel } from "@/components/playground/HotelPromptPanel";
 import { getDictionary, isLocale } from "@/lib/i18n";
 import { getSession } from "@/lib/session";
@@ -34,6 +35,7 @@ export default async function HotelChatPage({ params }: HotelChatPageProps) {
         <h1>{copy.title}</h1>
         <p>{copy.intro}</p>
       </header>
+      <PlaygroundAccount user={user} locale={locale} copy={playground} />
       <div className="hotel-tool">
         <HotelPromptPanel copy={copy} />
         <HotelChat copy={copy} locale={locale} usageTemplate={playground.usage} initialUsage={usage} />

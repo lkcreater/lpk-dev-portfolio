@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { SvgAnimationTool } from "@/components/playground/SvgAnimationTool";
+import { PlaygroundAccount } from "@/components/playground/PlaygroundAccount";
 import { getDictionary, isLocale } from "@/lib/i18n";
 import { getSession } from "@/lib/session";
 import { getUsage } from "@/lib/usage-limit";
@@ -33,6 +34,7 @@ export default async function SvgAnimationPage({ params }: ToolPageProps) {
         <h1>{copy.title}</h1>
         <p>{copy.intro}</p>
       </header>
+      <PlaygroundAccount user={user} locale={locale} copy={playground} />
       <SvgAnimationTool copy={copy} locale={locale} usageTemplate={playground.usage} initialUsage={usage} />
     </section>
   );

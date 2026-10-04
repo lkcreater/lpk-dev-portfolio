@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDictionary, isLocale } from "@/lib/i18n";
 import { LoginGate } from "@/components/playground/LoginGate";
+import { PlaygroundAccount } from "@/components/playground/PlaygroundAccount";
 import { isDevMode } from "@/lib/dev-mode";
 import { getSession } from "@/lib/session";
 import { getUsage } from "@/lib/usage-limit";
@@ -38,19 +39,7 @@ export default async function PlaygroundPage({ params, searchParams }: Playgroun
       </header>
 
       {user ? (
-        <div className="playground-user">
-          {user.picture ? (
-            // eslint-disable-next-line @next/next/no-img-element -- LINE avatar host is dynamic
-            <img src={user.picture} alt="" width={36} height={36} />
-          ) : null}
-          <p>
-            <span>{copy.signedInAs}</span> {user.name}
-          </p>
-          <form action="/api/auth/logout" method="post">
-            <input type="hidden" name="locale" value={locale} />
-            <button type="submit">{copy.logout}</button>
-          </form>
-        </div>
+        <PlaygroundAccount user={user} locale={locale} copy={copy} />
       ) : (
         <LoginGate
           copy={copy.login}

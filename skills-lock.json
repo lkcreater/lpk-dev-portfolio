@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "diagram-design": {
+      "source": "cathrynlavery/diagram-design",
+      "sourceType": "github",
+      "skillPath": "skills/diagram-design/SKILL.md",
+      "computedHash": "0230e0ead15bfce1a0284d0919b5401e9ccf736ba1d0b762a7198bc910133c36"
+    },
     "gsap-react": {
       "source": "greensock/gsap-skills",
       "sourceType": "github",

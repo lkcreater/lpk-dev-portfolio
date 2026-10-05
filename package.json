@@ -10,6 +10,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
+    "test:diagrams": "node scripts/check-diagrams.mjs",
     "resume": "node scripts/build-resume.mjs"
   },
   "dependencies": {

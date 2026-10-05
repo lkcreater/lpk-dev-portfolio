@@ -420,6 +420,12 @@
     "open": "เปิดเครื่องมือ",
     "tools": [
       {
+        "slug": "diagram-design",
+        "title": "AI Diagram Designer",
+        "description": "เปลี่ยนคำอธิบายระบบหรือ Mermaid เป็น diagram ตรวจโครงสร้าง ปรับด้วย AI และดาวน์โหลด HTML หรือ SVG",
+        "tags": ["Text → Diagram", "diagram-design", "HTML / SVG"]
+      },
+      {
         "slug": "svg-animation",
         "title": "Generate SVG Animation",
         "description": "อัปโหลดรูปตัวอย่าง อธิบายการเคลื่อนไหวที่ต้องการ แล้วรับไฟล์ HTML ที่มี SVG animation พร้อมใช้งาน",
@@ -450,6 +456,65 @@
         ]
       }
     ],
+    "diagram": {
+      "back": "เครื่องมือทั้งหมด",
+      "title": "AI Diagram Designer",
+      "intro": "อธิบายระบบหรือวาง Mermaid ให้ AI ใช้ skill diagram-design เสนอโครงสร้าง แล้วตรวจและยืนยันก่อนวาด diagram",
+      "workflowLabel": "ขั้นตอนสร้าง diagram",
+      "steps": { "brief": "โจทย์", "analyze": "วิเคราะห์", "review": "ตรวจโครงสร้าง", "render": "วาด", "result": "ดาวน์โหลด" },
+      "sourceLabel": "รูปแบบข้อมูล",
+      "sourceText": "คำอธิบาย",
+      "typeLabel": "ประเภท diagram",
+      "auto": "ให้ AI เลือก",
+      "types": { "architecture": "Architecture", "flowchart": "Flowchart", "sequence": "Sequence", "er": "ER / Data Model" },
+      "briefLabel": "อยากให้ diagram อธิบายอะไร?",
+      "briefPlaceholder": "เช่น ลูกค้าจองคิวร้านเสริมสวยผ่าน LINE ระบบ Booking API ตรวจตารางพนักงาน บันทึกการจองใน PostgreSQL แล้วส่งเข้าคิวแจ้งเตือน",
+      "mermaidPlaceholder": "flowchart LR\n  Customer --> API\n  API --> Database",
+      "briefHint": "ระบุองค์ประกอบ ความสัมพันธ์ และจุดตัดสินใจสำคัญ รองรับไม่เกิน 9 nodes และ 12 connections ต่อ diagram",
+      "mermaidHint": "รองรับหนึ่ง flowchart/graph, sequenceDiagram หรือ erDiagram โดย AI อ่านความหมายแล้ววาดใหม่ ควรตรวจโครงสร้างที่เสนอ สีและคำสั่ง click ของต้นฉบับจะไม่ถูกนำมาใช้",
+      "examplesLabel": "ลองใช้ตัวอย่าง",
+      "examples": {
+        "architecture": "วาด architecture ระบบจองคิวร้านเสริมสวย: ลูกค้าใช้ LINE LIFF เรียก Booking API ซึ่งตรวจตารางพนักงานใน PostgreSQL และส่งการจองที่ยืนยันแล้วเข้าคิวแจ้งเตือน Worker อ่านคิวแล้วเรียก LINE Messaging API เน้น Booking API เป็นจุดสำคัญ",
+        "flowchart": "วาด flow จองคิว: ลูกค้าเลือกเวลา ระบบตรวจว่าเวลาว่างหรือไม่ ถ้าว่างให้ยืนยันการจองแล้วแจ้งลูกค้า ถ้าไม่ว่างให้เสนอเวลาอื่นแล้วกลับไปเลือกเวลา",
+        "sequence": "วาด sequence การจองผ่าน LINE กรณีสำเร็จ มี Customer, LIFF, Booking API และ PostgreSQL ลูกค้าเลือกเวลา LIFF ส่งคำขอจอง API ตรวจเวลาว่าง ฐานข้อมูลส่งผลกลับ API บันทึกการจอง ฐานข้อมูลยืนยัน API ส่งผลกลับ LIFF แล้ว LIFF แสดงการยืนยันให้ลูกค้า",
+        "er": "วาด logical ER ร้านเสริมสวย: Branch มี Staff หลายคน Staff มี Booking หลายรายการ Customer มี Booking หลายรายการ Service มี Booking หลายรายการ แสดง key fields ไม่เกินสี่รายการต่อ entity ระบุ PK และ FK การจองหนึ่งรายการเป็นของพนักงาน ลูกค้า และบริการอย่างละหนึ่ง"
+      },
+      "analyze": "วิเคราะห์โครงสร้าง",
+      "analyzing": "กำลังวิเคราะห์องค์ประกอบและความสัมพันธ์…",
+      "editBrief": "แก้โจทย์",
+      "quotaNote": "วิเคราะห์หรือปรับด้วย AI นับครั้งละ 1 โควตา การแก้ชื่อ วาด เปลี่ยน theme และดาวน์โหลดไม่นับเพิ่ม ถ้าวิเคราะห์ไม่สำเร็จจะคืนโควตา",
+      "privacy": "โจทย์ถูกส่งให้โมเดล AI เครื่องมือนี้ไม่บันทึก diagram กรุณาดาวน์โหลดไฟล์ก่อนออกจากหน้า",
+      "empty": "โครงสร้างที่ AI เสนอจะแสดงตรงนี้หลังวิเคราะห์",
+      "reviewHint": "ตรวจโครงสร้างและสมมติฐานก่อนยืนยันวาด สามารถแก้ชื่อ node ได้โดยตรง",
+      "nodesLabel": "nodes",
+      "edgesLabel": "connections",
+      "nodeName": "ชื่อ node",
+      "structureLabel": "องค์ประกอบและความสัมพันธ์",
+      "assumptionsLabel": "สมมติฐานที่ควรตรวจ",
+      "changesLabel": "การลดรายละเอียดและสิ่งที่เปลี่ยน",
+      "themeLabel": "Theme ของ diagram",
+      "dark": "LPK Dark",
+      "light": "LPK Light",
+      "confirm": "ยืนยันและวาด",
+      "rendering": "กำลังวาดและตรวจ layout…",
+      "previewLabel": "ตัวอย่าง diagram",
+      "previewHint": "เลื่อนภายใน preview เพื่อดู diagram ทั้งภาพ ไฟล์ HTML และ SVG ฝังฟอนต์ไว้แล้ว รวมภาษาไทย",
+      "downloadHtml": "ดาวน์โหลด HTML",
+      "downloadSvg": "ดาวน์โหลด SVG",
+      "revisionLabel": "ปรับโครงสร้างด้วย AI",
+      "revisionPlaceholder": "เช่น เพิ่ม Redis cache ระหว่าง API กับฐานข้อมูล และคงองค์ประกอบอื่นไว้เหมือนเดิม",
+      "revise": "ปรับโครงสร้าง",
+      "errors": {
+        "input": "กรุณากรอกโจทย์หรือสิ่งที่ต้องการปรับ และตรวจว่าทุก node มีชื่อ",
+        "mermaid": "กรุณาใช้ Mermaid หนึ่ง flowchart/graph, sequenceDiagram หรือ erDiagram ประเภทอื่นยังไม่รองรับใน MVP",
+        "typeMismatch": "ประเภทที่เลือกไม่ตรงกับ Mermaid กรุณาให้ AI เลือกหรือเลือกประเภทที่ตรงกับต้นฉบับ",
+        "layout": "โครงสร้างซับซ้อนเกินกว่าจะจัดวางชัดเจน ลองลดรายละเอียดหรือให้ AI ลดเส้นเชื่อม",
+        "failed": "วิเคราะห์แล้วไม่ได้โครงสร้างที่ตรวจผ่านและวาดได้ ลองอธิบายให้ง่ายขึ้น ครั้งที่ไม่สำเร็จนี้คืนโควตาแล้ว",
+        "limit": "คุณใช้ครบ {limit} ครั้งของวันนี้แล้ว แต่ยังตรวจ วาด และดาวน์โหลด diagram ปัจจุบันได้",
+        "unavailable": "เครื่องมือยังใช้งานไม่ได้ในขณะนี้ กรุณาลองใหม่ภายหลัง",
+        "unauthorized": "เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่"
+      }
+    },
     "svg": {
       "back": "เครื่องมือทั้งหมด",
       "title": "Generate SVG Animation",

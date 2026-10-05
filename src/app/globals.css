@@ -2723,6 +2723,238 @@ button.line-login {
   }
 }
 
+/* Playground — diagram design */
+.diagram-tool {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin-top: 3rem;
+}
+.diagram-progress {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin: 0 0 2.5rem;
+  padding: 0 0 1.5rem;
+  border-bottom: 1px solid rgba(238, 234, 225, 0.14);
+  list-style: none;
+}
+.diagram-progress li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: rgba(238, 234, 225, 0.35);
+  font-size: 0.75rem;
+}
+.diagram-progress li span {
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 1px solid rgba(238, 234, 225, 0.14);
+  place-items: center;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.62rem;
+}
+.diagram-progress .is-active {
+  color: var(--signal);
+}
+.diagram-progress .is-active span {
+  border-color: var(--signal);
+}
+.diagram-progress .is-done {
+  color: rgba(238, 234, 225, 0.7);
+}
+.diagram-tool-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+.diagram-controls,
+.diagram-output {
+  min-width: 0;
+}
+.diagram-fieldset {
+  display: grid;
+  gap: 1.2rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.diagram-fieldset:disabled {
+  opacity: 0.65;
+}
+.diagram-selects {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+.diagram-tool select,
+.diagram-nodes input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid rgba(238, 234, 225, 0.2);
+  background: #171714;
+  color: #eeeae1;
+  font: inherit;
+  font-size: 0.85rem;
+}
+.diagram-tool select:focus-visible,
+.diagram-nodes input:focus-visible {
+  outline: 1px solid var(--signal);
+  outline-offset: 2px;
+}
+.diagram-samples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.diagram-samples .svg-tool-label {
+  width: 100%;
+  margin-bottom: 0;
+}
+.diagram-samples button,
+.diagram-secondary {
+  padding: 0.65rem 0.9rem;
+  border: 1px solid rgba(238, 234, 225, 0.2);
+  border-radius: 999px;
+  background: transparent;
+  color: #eeeae1;
+  font-size: 0.76rem;
+}
+.diagram-secondary {
+  padding: 0.95rem 1.4rem;
+}
+.diagram-samples button:hover,
+.diagram-secondary:hover {
+  border-color: var(--signal);
+}
+.diagram-tool button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.diagram-revision {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(238, 234, 225, 0.14);
+}
+.diagram-revision button {
+  justify-self: start;
+}
+.diagram-status {
+  margin: 0 0 1.5rem;
+  padding: 1rem 1.2rem;
+  border-left: 2px solid var(--signal);
+  background: rgba(232, 93, 42, 0.05);
+  color: rgba(238, 234, 225, 0.7);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+.diagram-plan-head h2 {
+  margin: 0.6rem 0;
+  font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+  font-weight: 460;
+  letter-spacing: -0.04em;
+}
+.diagram-plan-head p {
+  color: rgba(238, 234, 225, 0.65);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.diagram-review {
+  margin-top: 1.5rem;
+  border: 1px solid rgba(238, 234, 225, 0.14);
+}
+.diagram-review summary {
+  padding: 1rem 1.2rem;
+  color: var(--signal);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.diagram-nodes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 0.5rem 1.2rem 1.2rem;
+}
+.diagram-nodes label {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+  min-width: 0;
+}
+.diagram-nodes span,
+.diagram-nodes small {
+  color: rgba(238, 234, 225, 0.5);
+  font-size: 0.68rem;
+  overflow-wrap: anywhere;
+}
+.diagram-relationships {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 1.2rem 1.2rem 1.2rem 2.4rem;
+  border-top: 1px solid rgba(238, 234, 225, 0.1);
+  font-size: 0.78rem;
+}
+.diagram-relationships span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.diagram-relationships small {
+  color: rgba(238, 234, 225, 0.5);
+  font-size: 0.72rem;
+}
+.diagram-notes {
+  margin-top: 1.4rem;
+}
+.diagram-notes h3 {
+  color: var(--signal);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+.diagram-notes ul {
+  padding-left: 1.2rem;
+  color: rgba(238, 234, 225, 0.6);
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+.diagram-render-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: end;
+  margin-top: 1.5rem;
+}
+.diagram-render-actions label {
+  width: 10rem;
+}
+.diagram-preview {
+  margin-top: 2rem;
+}
+.diagram-preview iframe {
+  display: block;
+  width: 100%;
+  min-height: 24rem;
+  border: 1px solid rgba(238, 234, 225, 0.14);
+}
+@media (max-width: 899px) {
+  .diagram-tool-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .diagram-progress {
+    gap: 0.8rem;
+  }
+}
+@media (max-width: 479px) {
+  .diagram-nodes,
+  .diagram-selects {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* Playground — hotel role-play chat */
 .hotel-tool {
   grid-column: 1 / -1;

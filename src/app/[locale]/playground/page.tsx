@@ -63,7 +63,14 @@ export default async function PlaygroundPage({ params, searchParams }: Playgroun
           >
             <span className="playground-card-index">{String(index + 1).padStart(2, "0")}</span>
             <svg className="playground-card-art" viewBox="0 0 120 80" aria-hidden="true">
-              {tool.slug === "sale-campaign" ? (
+              {tool.slug === "diagram-design" ? (
+                <>
+                  <rect className="pulse" x="44" y="6" width="32" height="18" rx="2" />
+                  <path className="draw" d="M60 24v14M24 38h72M24 38v12M96 38v12" />
+                  <rect x="8" y="50" width="32" height="20" rx="2" />
+                  <rect x="80" y="50" width="32" height="20" rx="2" />
+                </>
+              ) : tool.slug === "sale-campaign" ? (
                 <>
                   <rect x="8" y="12" width="34" height="56" rx="4" />
                   <path className="draw" d="M48 40h14m-5-5 5 5-5 5" />

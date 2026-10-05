@@ -420,6 +420,12 @@
     "open": "Open tool",
     "tools": [
       {
+        "slug": "diagram-design",
+        "title": "AI Diagram Designer",
+        "description": "Turn a system description or Mermaid into a diagram. Review the structure, refine it, and export HTML or SVG.",
+        "tags": ["Text → Diagram", "diagram-design", "HTML / SVG"]
+      },
+      {
         "slug": "svg-animation",
         "title": "Generate SVG Animation",
         "description": "Upload a reference image, describe the motion you want, and get a ready-to-use animated SVG as an HTML file.",
@@ -450,6 +456,65 @@
         ]
       }
     ],
+    "diagram": {
+      "back": "All tools",
+      "title": "AI Diagram Designer",
+      "intro": "Describe a system or paste Mermaid. The AI follows the diagram-design skill to propose its structure; you review it before the diagram is drawn.",
+      "workflowLabel": "Diagram workflow",
+      "steps": { "brief": "Brief", "analyze": "Analyse", "review": "Review", "render": "Draw", "result": "Export" },
+      "sourceLabel": "Input format",
+      "sourceText": "Description",
+      "typeLabel": "Diagram type",
+      "auto": "Let AI choose",
+      "types": { "architecture": "Architecture", "flowchart": "Flowchart", "sequence": "Sequence", "er": "ER / Data Model" },
+      "briefLabel": "What should the diagram explain?",
+      "briefPlaceholder": "e.g. Customers book salon appointments through LINE. A booking API checks staff availability, saves the booking in PostgreSQL, and queues a reminder.",
+      "mermaidPlaceholder": "flowchart LR\n  Customer --> API\n  API --> Database",
+      "briefHint": "Name the components, relationships and decisions that matter. Up to 9 nodes and 12 connections per diagram.",
+      "mermaidHint": "One flowchart/graph, sequenceDiagram or erDiagram. AI interprets the source and redraws it; check the proposed structure. Source styling and click actions are ignored.",
+      "examplesLabel": "Try an example",
+      "examples": {
+        "architecture": "Draw a salon booking architecture: customer uses LINE LIFF, which calls a Booking API. The API checks staff schedules in PostgreSQL and sends confirmed bookings to a reminder queue. A worker reads the queue and calls the LINE Messaging API. Highlight the Booking API.",
+        "flowchart": "Draw a booking flow: customer selects a time, the system checks availability, then branches. If available, confirm the booking and notify the customer. If unavailable, suggest another time and return to time selection.",
+        "sequence": "Draw the successful LINE booking sequence with Customer, LIFF, Booking API and PostgreSQL. Customer selects a time; LIFF sends the booking request; API checks availability; database returns availability; API saves the booking; database confirms; API returns the confirmation to LIFF; LIFF shows it to the customer.",
+        "er": "Draw a logical ER model for a salon: Branch has many Staff; Staff has many Bookings; Customer has many Bookings; Service has many Bookings. Show up to four key fields per entity, identifying primary and foreign keys. A booking belongs to exactly one staff member, customer and service."
+      },
+      "analyze": "Analyse structure",
+      "analyzing": "Analysing components and relationships…",
+      "editBrief": "Edit brief",
+      "quotaNote": "Each AI analysis or revision uses one run. Reviewing labels, drawing, changing theme and downloading are free. Failed analyses are refunded.",
+      "privacy": "Your brief is sent to the AI model. This tool does not save diagrams; download your files before leaving.",
+      "empty": "Your proposed structure will appear here after analysis.",
+      "reviewHint": "Review the structure and assumptions, then confirm to draw. You can edit node names directly.",
+      "nodesLabel": "nodes",
+      "edgesLabel": "connections",
+      "nodeName": "Node name",
+      "structureLabel": "Components & relationships",
+      "assumptionsLabel": "Assumptions to check",
+      "changesLabel": "Simplifications & changes",
+      "themeLabel": "Diagram theme",
+      "dark": "LPK Dark",
+      "light": "LPK Light",
+      "confirm": "Confirm & draw",
+      "rendering": "Drawing and checking the layout…",
+      "previewLabel": "Diagram preview",
+      "previewHint": "Scroll inside the preview to explore the full diagram. Fonts are embedded in both exports, including Thai.",
+      "downloadHtml": "Download HTML",
+      "downloadSvg": "Download SVG",
+      "revisionLabel": "Refine with AI",
+      "revisionPlaceholder": "e.g. Add Redis caching between the API and database, and keep all other components.",
+      "revise": "Revise structure",
+      "errors": {
+        "input": "Please enter a brief or revision and check that every node has a name.",
+        "mermaid": "Use one Mermaid flowchart/graph, sequenceDiagram or erDiagram. Other grammars are not supported in this MVP.",
+        "typeMismatch": "The selected type does not match the Mermaid source. Choose Auto or the matching diagram type.",
+        "layout": "The structure is too dense to lay out clearly. Simplify it or ask AI to reduce the connections.",
+        "failed": "The analysis could not produce a valid, drawable structure. Try a simpler brief — this failed run was refunded.",
+        "limit": "You have used today's {limit} AI runs. You can still review, draw and download your current diagram.",
+        "unavailable": "The tool is unavailable right now. Please try again later.",
+        "unauthorized": "Your session has expired. Please sign in again."
+      }
+    },
     "svg": {
       "back": "All tools",
       "title": "Generate SVG Animation",

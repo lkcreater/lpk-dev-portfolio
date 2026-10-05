@@ -3769,6 +3769,7 @@ button.line-login {
   justify-content: space-between;
   width: clamp(15rem, 25vw, 24rem);
   padding: 1.2rem 1.4rem;
+  border: 0;
   border-radius: 999px;
   background: var(--signal);
   color: #151411;
@@ -3780,6 +3781,20 @@ button.line-login {
 }
 .magnetic-button span {
   font-size: 1.2rem;
+}
+.contact-gate-qr {
+  width: min(100%, 18rem);
+  margin: 1.5rem auto 0;
+  padding: 0.55rem;
+  background: #fff;
+}
+.contact-gate-qr img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.contact-gate .resume-gate-actions {
+  margin-top: 1.25rem;
 }
 .contact-links {
   display: flex;

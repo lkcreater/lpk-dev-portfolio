@@ -563,6 +563,11 @@
     "kicker": "เริ่มบทสนทนา",
     "lines": ["มีเว็บที่อยากสร้าง?", "มาทำให้มันดี", "และเติบโตได้"],
     "cta": "เริ่มโปรเจกต์",
+    "modalKicker": "LINE OFFICIAL ACCOUNT",
+    "modalTitle": "มาคุยเรื่องโปรเจกต์กัน",
+    "modalDescription": "สแกน QR Code ด้วยแอป LINE เพื่อเพิ่มเพื่อน แล้วส่งรายละเอียดโปรเจกต์ที่อยากทำมาได้เลยครับ",
+    "modalClose": "ปิดหน้าต่าง",
+    "qrAlt": "QR Code สำหรับเพิ่มเพื่อน LINE Official Account",
     "email": "ponlawat6001@gmail.com"
   },
   "footer": {

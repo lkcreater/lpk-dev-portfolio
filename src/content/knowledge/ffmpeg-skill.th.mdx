@@ -1,0 +1,128 @@
+export const metadata = {
+  title: "ffmpeg-skill — เปลี่ยน AI coding agent ให้ตัดต่อวิดีโอด้วย FFmpeg อย่างเป็นระบบ",
+  description:
+    "รู้จัก ffmpeg-skill ชุดเครื่องมือ local-first ที่ให้ Claude Code, Cursor และ Codex ตัดต่อ ตรวจสอบ และส่งออกวิดีโอด้วย workflow ที่วัดผลและตรวจงานได้",
+  date: "2026-10-05T10:00",
+  tags: ["AI Agent", "FFmpeg", "Video Editing"],
+  readingMinutes: 8,
+};
+
+การบอก AI ว่า “ตัดคลิปนี้ให้เหลือ 60 วินาที ใส่ซับ แล้วส่งออกสำหรับ Reels” ฟังดูง่าย แต่ข้างใต้มีจุดที่พลาดได้เยอะ ตั้งแต่เดา frame rate ผิด เลือก codec ที่ container ไม่รองรับ ตัดแบบ lossless แล้วเวลาเหลื่อมเพราะ keyframe ไปจนถึงบอกว่างานเสร็จทั้งที่ยังไม่ได้เปิดดูผลลัพธ์
+
+**[ffmpeg-skill](https://github.com/kajisho5/ffmpeg-skill)** ของ kajisho5 แก้ปัญหานี้ด้วยการเปลี่ยน FFmpeg จากชุดคำสั่งที่ agent ต้องเดาเอง ให้เป็น workflow และเครื่องมือที่มี input ชัดเจน ตรวจความสามารถของเครื่องได้ และบังคับให้ตรวจผลหลังทำงาน รองรับ Claude Code, Cursor, Codex และ agent ที่อ่าน `SKILL.md` ได้ โดยประมวลผลทุกอย่างในเครื่อง ไม่ต้องอัปโหลดไฟล์ขึ้น cloud และไม่ต้องใช้ API key
+
+## ffmpeg-skill คืออะไร
+
+โปรเจกต์นี้มีสองส่วนที่ทำงานร่วมกัน
+
+- **Skill สำหรับ agent** บอกลำดับการทำงาน วิธีเลือกเครื่องมือ ข้อควรระวัง และรูปแบบรายงานผล
+- **Python scripts 42 ตัว** ครอบงานวิเคราะห์ ตัดต่อ เสียง ภาพ การส่งออก และ orchestration โดยเรียก `ffmpeg`/`ffprobe` ให้เรา
+
+แต่ละ script รับ argument ที่กำหนดชนิดและความหมายไว้แล้ว แทนที่จะปล่อยให้ agent ประกอบ shell command หรือ filter graph ตามใจ ผลคือคำสั่งทำซ้ำได้ง่ายกว่า ปลอดภัยกว่า และคืนผลแบบ JSON ให้ agent อ่านต่อได้
+
+ต้องแยกให้ชัดว่า ffmpeg-skill เป็น **execution engine**: มันตัด วัด ตรวจ และ export ตามคำสั่ง แต่ไม่ได้ตัดสินใจเชิงสร้างสรรค์แทนเราว่าช่วงไหนน่าสนใจ ควรเล่าเรื่องอย่างไร หรือข้อความ caption ควรเขียนว่าอะไร การตัดสินใจเหล่านั้นยังเป็นหน้าที่ของผู้ใช้หรือ agent ที่อยู่ข้างหน้า engine นี้
+
+## Workflow: probe → plan → edit → verify
+
+จุดเด่นไม่ได้อยู่แค่จำนวนเครื่องมือ แต่อยู่ที่กฎการทำงานที่ลดการเดา
+
+### 1. Probe ไฟล์จริงก่อน
+
+ทุกงานเริ่มจาก `probe.py` เพื่ออ่าน duration, frame rate, resolution, rotation, codec, bit depth, HDR และ audio streams จากไฟล์จริง Agent จึงไม่ตัดสินจากนามสกุลหรือชื่อไฟล์ และตรวจจับกรณีอย่าง variable frame rate จากมือถือหรือ screen recording ได้ก่อนเริ่มตัด
+
+### 2. วางแผนก่อน render
+
+ทุกเครื่องมือรองรับ `--dry-run` เพื่อแสดงแผนโดยไม่เขียนไฟล์ และ `--plan FILE` เพื่อบันทึกแผนพร้อม fingerprint ของ input ถ้าไฟล์ต้นฉบับเปลี่ยนก่อน render ระบบจะปฏิเสธแทนที่จะใช้แผนเก่ากับไฟล์ใหม่
+
+### 3. รักษาคุณภาพเท่าที่ทำได้
+
+งาน cut, join และ loudness จะ stream-copy ส่วนที่ไม่จำเป็นต้อง encode ใหม่ การ re-encode เกิดเมื่อจำเป็น เช่น ต้องตัดตรง frame, ใส่ filter, เปลี่ยน format หรือ keyframe อยู่ไกลจากจุดตัดเกิน tolerance
+
+### 4. ตรวจผล ไม่ใช่แค่เชื่อ exit code
+
+หลังทำงาน output จะถูก probe อีกครั้งและเทียบกับ spec ปลายทาง ถ้าภาพเปลี่ยน เช่น crop, caption, overlay หรือสี Agent ต้องใช้ `look.py` สร้าง contact sheet แล้วเปิดตรวจด้วยสายตา ส่วน `check.py` ตรวจเงื่อนไขของ YouTube, Shorts, Reels, TikTok, X, LinkedIn, Facebook, broadcast และ podcast
+
+เครื่องมือทุกตัวเขียน output เป็นไฟล์ใหม่ ไม่แก้ input เดิม และจะไม่ทับไฟล์ที่มีอยู่จนกว่าจะระบุ `--overwrite` ชัดเจน
+
+## ทำอะไรได้บ้าง
+
+เครื่องมือ 42 ตัวแบ่งเป็นกลุ่มใหญ่ ๆ ได้ดังนี้
+
+- **วิเคราะห์** — `probe.py` ดูข้อมูล media, `scenes.py` หา scene change/beat/audio peak และ `look.py` สร้าง contact sheet
+- **ตัดต่อ** — cut, join, ลบช่วงเงียบ, crop/reframe, denoise, stabilize, reverse, freeze frame, speed ramp, B-roll, grid และ multicam
+- **เสียง** — clean up เสียงพูด, compressor/limiter/gate, music ducking, sync หลายกล้องด้วยเสียง และ normalize loudness แบบ EBU R128
+- **ภาพและข้อความ** — caption, karaoke, logo, watermark, picture-in-picture, green screen, lower third, title card, progress bar, LUT และ HDR-to-SDR
+- **ส่งออก** — preset สำหรับ YouTube, Reels, TikTok, Shorts และ platform อื่น พร้อมตรวจ resolution, codec, loudness และ safe zone
+- **งานทั้งโปรเจกต์** — `render.py` อ่าน `project.json`, `batch.py` ประมวลผลทั้งโฟลเดอร์ และ export timeline เป็น FCPXML, EDL หรือ OTIO เพื่อนำไปต่อใน Final Cut, DaVinci Resolve หรือ Premiere
+
+ตัวอย่าง request ภาษาธรรมดา
+
+```text
+เอา interview.mp4 ช่วง 0:45–3:10 กับ 5:00–6:30
+ทำให้ยาว 60 วินาทีพอดีสำหรับ Reels และตรวจไฟล์ก่อนส่ง
+```
+
+Agent จะเรียกเครื่องมือตามลำดับประมาณ `probe` → `cut` → `fit` → `export` → `check` → `look` แล้วรายงานไฟล์ ระยะเวลา ขนาดภาพ frame rate เสียง และ contact sheet ที่ตรวจแล้ว
+
+## ติดตั้ง
+
+ต้องมี FFmpeg 5.0+ และ Python 3.9+ ส่วน Node 16+ ใช้เฉพาะตอนติดตั้งผ่าน `npx`
+
+```bash
+# Claude Code
+npx ffmpeg-skill
+
+# Cursor
+npx ffmpeg-skill --cursor
+
+# Codex
+npx ffmpeg-skill --codex
+
+# ติดตั้งให้ทั้งสาม agent
+npx ffmpeg-skill --all
+```
+
+ถ้าใช้ Claude Code แบบ plugin ติดตั้งโดยไม่ต้องมี Node ได้
+
+```bash
+claude plugin install kajisho5/ffmpeg-skill
+```
+
+ติดตั้งเสร็จแล้วควรตรวจเครื่องก่อน
+
+```bash
+npx ffmpeg-skill doctor
+npx ffmpeg-skill contract --json
+```
+
+`doctor` ตรวจทั้ง encoder และ filter ที่แต่ละ tool ต้องใช้ ไม่ควรดูแค่สถานะรวมว่า `ok` เพราะบางเครื่องอาจตัดวิดีโอได้ แต่ใช้ caption ไม่ได้เนื่องจากไม่มี `subtitles`/libass หรือแปลง HDR ไม่ได้เพราะไม่มี `zscale`
+
+บน macOS โปรเจกต์แนะนำ `brew install ffmpeg-full` เพราะสูตร `ffmpeg` ปกติอาจขาด filter ที่จำเป็น ส่วน Ubuntu/Debian ใช้ `sudo apt install ffmpeg` และ Windows ใช้ `winget install Gyan.FFmpeg`
+
+## ใช้ผ่าน MCP ได้ด้วย
+
+ทุกเครื่องมือเปิดให้เรียกผ่าน MCP server ได้ โดยค่าเริ่มต้น `tools/list` แสดงเฉพาะ 12 ตัวหลักเพื่อลด context แต่ยังเรียกครบทั้ง 42 ตัวด้วยชื่อได้ ถ้าต้องการให้แสดงทั้งหมดตั้ง `FFMPEG_SKILL_MCP_FULL=1`
+
+จุดที่น่าสนใจคือ MCP schema ไม่ได้เขียนซ้ำด้วยมือ แต่สร้างจาก `argparse` parser ชุดเดียวกับ CLI ผ่าน machine-readable contract เมื่อเพิ่มหรือเปลี่ยน flag ฝั่ง CLI, schema ของ MCP จึงเปลี่ยนตาม และ CI มี test ป้องกันไม่ให้สองฝั่ง drift ออกจากกัน
+
+## ข้อควรรู้ก่อนใช้จริง
+
+- **Crop ยังต้องใช้วิจารณญาณ** การแปลง 16:9 เป็น 9:16 แบบ crop ทิ้งความกว้างประมาณ 70% ค่าเริ่มต้นตัดตรงกลาง Agent ที่ดูภาพได้ควรเปิด contact sheet แล้วเลือก `--crop-x`/`--crop-y` ให้ตัวแบบยังอยู่ในเฟรม
+- **Lossless cut อาจไม่ตรง frame** stream-copy ต้องเกาะ keyframe ถ้าต้องการตำแหน่งแม่นยำให้ยอม re-encode ด้วย accurate mode
+- **HDR ไม่ถูกทำให้เป็น SDR อัตโนมัติ** เครื่องมือจะรักษา HDR ไว้ ต้องสั่ง `color.py --to-sdr` ก่อนส่งออก H.264 แบบ SDR หรือใช้ LUT
+- **Caption ไม่ได้เขียนข้อความให้ใหม่** cue ที่ให้มาจะถูก burn ตามเดิม ระบบช่วย wrap และย่อขนาดได้ แต่ไม่ย่อหรือ rewrite เนื้อหาเอง
+- **GPU encoding ยังไม่ใช่เส้นทางหลัก** `doctor` รายงาน encoder ที่มีได้ แต่เครื่องมือยังใช้ CPU x264/x265 เพราะการเห็น encoder ใน build ไม่ได้พิสูจน์ว่า hardware และ driver จะ encode งานจริงสำเร็จ
+- **ไฟล์ใหญ่ยังใช้เวลาและพื้นที่จริง** local-first ช่วยเรื่อง privacy แต่ไม่ได้ทำให้การ re-encode ฟรี ควรใช้ `--dry-run`, `--fast` และ proxy เพื่อตรวจแผนก่อน render เต็ม
+
+## เหมาะกับใคร
+
+ffmpeg-skill เหมาะกับคนที่ต้องทำงาน media ซ้ำ ๆ ผ่าน AI agent เช่น แปลงวิดีโอยาวเป็น social clips, ทำ subtitle หลายภาษา, normalize เสียง, เตรียมไฟล์ส่งหลาย platform หรือสร้าง pipeline ที่ต้องตรวจผลได้ จุดแข็งคือมันไม่ได้สอนแค่ syntax ของ FFmpeg แต่สร้างกรอบการทำงานที่เริ่มจากข้อมูลจริง รักษาต้นฉบับ เปิดเผยคำสั่ง และจบด้วยหลักฐานว่า output ตรงตามที่ขอ
+
+ถ้าต้องการแค่ตัดไฟล์ครั้งเดียว FFmpeg command สั้น ๆ อาจพอ แต่เมื่อ agent ต้องทำงานหลายขั้นกับไฟล์จริง ffmpeg-skill ช่วยเปลี่ยน “น่าจะได้” ให้เป็นกระบวนการที่วัด ตรวจ และทำซ้ำได้
+
+### อ้างอิง
+
+- [kajisho5/ffmpeg-skill บน GitHub](https://github.com/kajisho5/ffmpeg-skill)
+- [ตัวอย่าง request และคำสั่ง](https://github.com/kajisho5/ffmpeg-skill/tree/main/examples)
+- [Execution contract](https://github.com/kajisho5/ffmpeg-skill/blob/main/docs/contract.md)
+- [ข้อควรรู้ของไฟล์จากอุปกรณ์จริง](https://github.com/kajisho5/ffmpeg-skill/blob/main/references/devices.md)

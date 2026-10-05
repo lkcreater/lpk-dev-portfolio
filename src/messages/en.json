@@ -563,6 +563,11 @@
     "kicker": "Start a conversation",
     "lines": ["Need a web product?", "Let's build it", "to last."],
     "cta": "Start a project",
+    "modalKicker": "LINE OFFICIAL ACCOUNT",
+    "modalTitle": "Let's talk about your project",
+    "modalDescription": "Scan the QR code with LINE to add the official account, then send over the project you have in mind.",
+    "modalClose": "Close dialog",
+    "qrAlt": "QR code for adding the LINE Official Account",
     "email": "ponlawat6001@gmail.com"
   },
   "footer": {

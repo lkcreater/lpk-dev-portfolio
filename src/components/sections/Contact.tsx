@@ -1,6 +1,6 @@
 import type { Dictionary } from "@/lib/i18n";
 import type { PortfolioProfile } from "@/data/projects";
-import { MagneticButton } from "@/components/motion/MagneticButton";
+import { ContactModal } from "@/components/sections/ContactModal";
 
 export function Contact({ copy, profile }: { copy: Dictionary["contact"]; profile: PortfolioProfile }) {
   return (
@@ -15,7 +15,7 @@ export function Contact({ copy, profile }: { copy: Dictionary["contact"]; profil
         ))}
       </h2>
       <div className="contact-bottom">
-        <MagneticButton href={`mailto:${copy.email}`}>{copy.cta}</MagneticButton>
+        <ContactModal copy={copy} />
         <div className="contact-links">
           <a href={`mailto:${copy.email}`} data-cursor="OPEN">
             {copy.email}

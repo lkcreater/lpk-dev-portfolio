@@ -1,0 +1,128 @@
+export const metadata = {
+  title: "ffmpeg-skill — give your AI coding agent a disciplined local video editor",
+  description:
+    "A practical look at ffmpeg-skill, a local-first toolkit that lets Claude Code, Cursor and Codex edit, verify and deliver video through measurable workflows.",
+  date: "2026-10-05T10:00",
+  tags: ["AI Agent", "FFmpeg", "Video Editing"],
+  readingMinutes: 7,
+};
+
+“Trim this interview to 60 seconds, add captions and export it for Reels” sounds simple. Underneath, an agent can still guess the wrong frame rate, choose a codec the container cannot hold, make a lossless cut that drifts to a keyframe or declare success without ever looking at the result.
+
+**[ffmpeg-skill](https://github.com/kajisho5/ffmpeg-skill)** by kajisho5 turns FFmpeg from a collection of commands an agent has to improvise into a measured workflow with typed tools, capability checks and mandatory verification. It works with Claude Code, Cursor, Codex and other agents that read `SKILL.md`. Processing stays on your machine, with no upload, account or API key.
+
+## What is ffmpeg-skill?
+
+The project combines two layers:
+
+- **An agent skill** that defines the workflow, tool selection, pitfalls and result format.
+- **42 Python tools** for analysis, editing, audio, picture, delivery and orchestration, built on `ffmpeg` and `ffprobe`.
+
+Each script has typed arguments instead of accepting arbitrary shell commands or filter graphs. That makes operations more repeatable and limits what the caller can execute. Tools can also return structured JSON for an agent or another system to consume.
+
+It is important to understand its boundary: ffmpeg-skill is an **execution engine**. It cuts, measures, checks and exports. It does not decide which moment is emotionally compelling, whether an edit should be approved or what a caption ought to say. Those creative decisions belong to the user or to a planning agent in front of the engine.
+
+## The workflow: probe → plan → edit → verify
+
+The strongest part is not the tool count. It is the workflow that removes guesswork.
+
+### 1. Probe the real file first
+
+Every job begins with `probe.py`, which reads duration, frame rate, resolution, rotation, codecs, bit depth, HDR and all audio streams from the actual input. The agent does not infer media facts from a filename, and it can catch variable-frame-rate phone or screen recordings before editing.
+
+### 2. Plan before rendering
+
+Every tool supports `--dry-run` to show the plan without writing a file. `--plan FILE` saves that plan with fingerprints of its inputs; rendering is refused if an input has changed since the plan was made.
+
+### 3. Preserve quality where possible
+
+Cut, join and loudness operations stream-copy the parts they do not need to touch. Re-encoding happens only when required for frame-accurate cuts, filters, format changes or a keyframe beyond the permitted tolerance.
+
+### 4. Verify the result, not only the exit code
+
+Outputs are probed again and checked against their destination specification. If the picture changed — captions, crops, overlays or colour, for example — the agent runs `look.py` and visually inspects the generated contact sheet. `check.py` validates delivery for YouTube, Shorts, Reels, TikTok, X, LinkedIn, Facebook, broadcast and podcasts.
+
+Every operation writes a new output instead of modifying the source. Existing files are refused unless `--overwrite` is explicit.
+
+## What can it do?
+
+The 42 tools fall into a few broad groups:
+
+- **Analysis** — inspect media with `probe.py`, find scene changes, beats and audio peaks with `scenes.py`, and generate contact sheets with `look.py`.
+- **Editing** — cut, join, silence removal, crop and reframe, denoise, stabilise, reverse, freeze frames, speed ramps, B-roll, grids and multicam edits.
+- **Audio** — speech cleanup, typed compressor/limiter/gate controls, music ducking, audio-based camera sync and two-pass EBU R128 loudness normalisation.
+- **Picture and text** — captions, karaoke, logos, watermarks, picture-in-picture, chroma key, lower thirds, title cards, progress bars, LUTs and HDR-to-SDR conversion.
+- **Delivery** — presets for YouTube, Reels, TikTok, Shorts and other destinations, followed by checks for resolution, codecs, loudness and safe zones.
+- **Whole projects** — render a declarative `project.json`, batch-process folders and export FCPXML, EDL or OTIO timelines for Final Cut, DaVinci Resolve or Premiere.
+
+A natural-language request could be:
+
+```text
+Keep 0:45–3:10 and 5:00–6:30 from interview.mp4,
+make it exactly 60 seconds for Reels, and verify it before delivery.
+```
+
+The agent maps that to roughly `probe` → `cut` → `fit` → `export` → `check` → `look`, then reports the file, duration, dimensions, frame rate, audio and the contact sheet it inspected.
+
+## Installation
+
+You need FFmpeg 5.0+ and Python 3.9+. Node 16+ is only needed for the `npx` installer.
+
+```bash
+# Claude Code
+npx ffmpeg-skill
+
+# Cursor
+npx ffmpeg-skill --cursor
+
+# Codex
+npx ffmpeg-skill --codex
+
+# Install for all three
+npx ffmpeg-skill --all
+```
+
+Claude Code users can alternatively install the plugin without Node:
+
+```bash
+claude plugin install kajisho5/ffmpeg-skill
+```
+
+After installation, inspect the machine and the contract:
+
+```bash
+npx ffmpeg-skill doctor
+npx ffmpeg-skill contract --json
+```
+
+`doctor` checks the encoders and filters needed by each tool. Do not rely only on its overall `ok`: a machine might be able to cut video while captions remain unusable because `subtitles`/libass is absent, or HDR conversion may be unavailable without `zscale`.
+
+On macOS the project recommends `brew install ffmpeg-full`, because the regular formula may omit required filters. Ubuntu and Debian can use `sudo apt install ffmpeg`; Windows can use `winget install Gyan.FFmpeg`.
+
+## It also exposes an MCP server
+
+Every tool is callable through MCP. By default, `tools/list` advertises only 12 core tools to keep client context small, although all 42 remain callable by name. Set `FFMPEG_SKILL_MCP_FULL=1` if a client needs the complete list.
+
+The MCP schema is not maintained as a second handwritten definition. It is generated from the same `argparse` parsers that drive the CLI through a machine-readable contract. A changed CLI flag therefore changes the MCP input schema with it, and CI tests prevent the two interfaces from drifting apart.
+
+## Things to know before using it
+
+- **Cropping still needs judgement.** A 16:9-to-9:16 crop discards roughly 70% of the width. The default is centred; a vision-capable agent should inspect the contact sheet and choose `--crop-x`/`--crop-y` around the subject.
+- **Lossless cuts may not be frame-exact.** Stream copies snap to keyframes. Use accurate mode and accept a re-encode when the cut point matters more than bit-for-bit preservation.
+- **HDR remains HDR by default.** Convert deliberately with `color.py --to-sdr` before an SDR H.264 delivery or LUT workflow.
+- **Captions are not rewritten.** The supplied cue text is burned as written. The system can wrap or shrink it, but does not shorten or rephrase it.
+- **GPU encoding is not the main path yet.** `doctor` can report compiled GPU encoders, but the tools still use CPU x264/x265 because build availability alone does not prove the hardware and driver will complete a real encode.
+- **Large files still cost real time and disk space.** Local-first protects privacy; it does not make re-encoding free. Use `--dry-run`, `--fast` and proxies before a full render.
+
+## Who is it for?
+
+ffmpeg-skill is useful when an agent repeatedly handles real media: turning long footage into social clips, producing multilingual captions, normalising audio, delivering to several platforms or building an auditable media pipeline. Its value is not merely teaching an agent FFmpeg syntax. It creates a process that begins with measured facts, preserves the source, exposes the execution plan and ends with evidence that the output matches the request.
+
+For a one-off trim, a short FFmpeg command may still be enough. For a multi-step job delegated to an agent, ffmpeg-skill turns “this probably worked” into something measurable, inspectable and repeatable.
+
+### References
+
+- [kajisho5/ffmpeg-skill on GitHub](https://github.com/kajisho5/ffmpeg-skill)
+- [Requests and command examples](https://github.com/kajisho5/ffmpeg-skill/tree/main/examples)
+- [Execution contract](https://github.com/kajisho5/ffmpeg-skill/blob/main/docs/contract.md)
+- [Real-device media notes](https://github.com/kajisho5/ffmpeg-skill/blob/main/references/devices.md)

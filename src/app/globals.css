@@ -2268,6 +2268,30 @@ img {
 .prose p {
   margin: 0 0 1.3rem;
 }
+.prose .article-figure {
+  margin: 1.8rem 0;
+}
+.prose .article-figure a {
+  display: block;
+  overflow: hidden;
+  border: 1px solid rgba(238, 234, 225, 0.14);
+  border-radius: 0.6rem;
+}
+.prose .article-figure a:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 4px;
+}
+.prose .article-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.prose .article-figure figcaption {
+  margin-top: 0.7rem;
+  color: rgba(238, 234, 225, 0.6);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
 .prose strong {
   color: #f4f0e8;
   font-weight: 600;

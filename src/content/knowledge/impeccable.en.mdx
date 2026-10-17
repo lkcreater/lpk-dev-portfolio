@@ -1,0 +1,256 @@
+export const metadata = {
+  title: "Impeccable — give your AI coding agent a clearer UI design vocabulary",
+  description:
+    "A complete guide to Impeccable's commands: what each does, when to use it, example prompts, installation options and a practical UI review workflow.",
+  date: "2026-10-16T10:00",
+  tags: ["AI Agent", "Agent Skills", "UI/UX", "Frontend"],
+  readingMinutes: 10,
+};
+
+An AI-generated page can run correctly while still being hard to read. The primary action may disappear among competing elements, or every section may have the same visual weight. Asking an agent to “make it look better” leaves too much open to interpretation.
+
+**[Impeccable](https://impeccable.style/)** by pbakaus gives AI coding agents guidance for creating and improving frontend interfaces. It covers typography, layout, copy, color and responsive behavior, with focused commands for different kinds of refinement. The [skills.sh overview](https://www.skills.sh/pbakaus/impeccable/impeccable) describes its scope.
+
+## Getting started
+
+If you have read the [skills.sh article](/en/knowledge/skills-sh), you can install the shared skill with:
+
+```bash
+npx skills add https://github.com/pbakaus/impeccable --skill impeccable
+```
+
+Alternatively, the [Impeccable documentation](https://impeccable.style/docs/) recommends its installer, which lets you select your coding tool and installation scope, with integrations tailored to that tool:
+
+```bash
+npx impeccable install
+```
+
+Choose one installation method, then start in your agent's chat:
+
+```text
+/impeccable init
+```
+
+Setup records audience and product goals in `PRODUCT.md`. Visual decisions live separately in `DESIGN.md`, as explained in the [project README](https://github.com/pbakaus/impeccable).
+
+## All commands: purpose and when to use them
+
+As of October 16, 2026, the [Command Reference](https://impeccable.style/docs/) lists 24 entries across six groups. Here is what each does, when it helps, and an example prompt to adapt. The examples illustrate requests; they are not recorded command results.
+
+The general form is a skill invocation followed by a command and target, entered in your agent chat:
+
+```text
+/impeccable <command> <target or desired outcome>
+```
+
+Skill invocation differs between agents. Use your tool's skill picker where needed; the examples below follow the documentation's `/impeccable` form.
+
+### Create — build and plan
+
+**1. [impeccable](https://impeccable.style/docs/impeccable/) — start without choosing a specialist**
+
+Describe what you want to create or improve in ordinary language. The skill chooses an appropriate workflow for new or existing work; include the outcome and constraints. Invoked alone, `/impeccable` suggests next steps and waits for your choice.
+
+Example: `/impeccable design a workshop booking page with a clear date, price and reservation action`
+
+**2. [shape](https://impeccable.style/docs/shape/) — agree on a brief before implementation**
+
+Clarifies the audience, task, content, states, constraints and UX/UI direction. It ends with an agreed brief and stops before code changes. Use it when the idea is still loose or you want to review the plan separately from building.
+
+Example: `/impeccable shape notification preferences so people can reduce frequency without switching everything off`
+
+### Evaluate — understand the problems
+
+**3. [audit](https://impeccable.style/docs/audit/) — inspect implementation quality**
+
+Checks accessibility, performance, theming, responsive behavior and implementation consistency. It returns findings ordered by severity without changing code. Use it before release or after substantial changes; task-blocking findings matter more than the overall score.
+
+Example: `/impeccable audit checkout for keyboard access, dark mode and phone use`
+
+**4. [critique](https://impeccable.style/docs/critique/) — review the design and experience**
+
+Examines hierarchy, usability, character and confusing decisions, identifying strengths to preserve and priorities to address. It recommends changes while leaving the design intact. Use it when something feels wrong but you cannot explain why.
+
+Example: `/impeccable critique pricing so visitors can compare plans and choose confidently`
+
+### Refine — improve detail and character
+
+**5. [animate](https://impeccable.style/docs/animate/) — explain change through motion**
+
+Adds feedback and continuity to interactions such as moving an item, opening a panel or saving successfully. Use it when a state change is hard to follow. Consider repeated actions, interruptions, performance and reduced-motion preferences.
+
+Example: `/impeccable animate moving a task into Done so its new position is easy to follow`
+
+**6. [bolder](https://impeccable.style/docs/bolder/) — strengthen an important section**
+
+Adjusts emphasis, proportions and composition using the project's established visual language. Use it when a section feels timid or disappears into its surroundings. Name the target so the whole page does not become a competition for attention.
+
+Example: `/impeccable bolder selected work so the lead project stands out within our existing palette`
+
+**7. [colorize](https://impeccable.style/docs/colorize/) — give color a clear purpose**
+
+Uses color to communicate actions, selections, states or atmosphere. Use it when a flat treatment makes information difficult to distinguish. Preserve established tokens and meanings, check contrast, and retain text or other cues alongside color.
+
+Example: `/impeccable colorize the article list so published posts are easier to distinguish from drafts`
+
+**8. [delight](https://impeccable.style/docs/delight/) — make a meaningful moment memorable**
+
+Adds a response with product-specific personality, such as celebrating a first creation or useful milestone. Use it once the core interaction works. Repeat the interaction to check that the extra detail remains enjoyable and does not become a delay.
+
+Example: `/impeccable delight creating a first notebook so it feels personal without delaying writing`
+
+**9. [layout](https://impeccable.style/docs/layout/) — improve arrangement and spacing**
+
+Adjusts reading order, grouping, spacing and density within the current visual style. Use it when the necessary information is present but scattered or difficult to scan. Keep the visual sequence aligned with keyboard navigation.
+
+Example: `/impeccable layout account settings into clear personal-information and security groups`
+
+**10. [overdrive](https://impeccable.style/docs/overdrive/) — push an experience technically further**
+
+Explores ambitious interactions or rendering using techniques such as shaders, physics or custom rendering. It presents directions and trade-offs before implementation. Use it where the extraordinary treatment serves the task, with fallbacks and representative-device checks.
+
+Example: `/impeccable overdrive the sculpture viewer with rotation and shape changes plus an unsupported-device fallback`
+
+**11. [quieter](https://impeccable.style/docs/quieter/) — reduce competing visual intensity**
+
+Softens excessive accents, weight, shadows, decoration or motion. Use it when the content belongs but the page feels exhausting. Preserve readable contrast, visible focus and meaningful emphasis rather than making everything faint or identical.
+
+Example: `/impeccable quieter the plan cards so prices are easier to compare with less decoration`
+
+**12. [typeset](https://impeccable.style/docs/typeset/) — make the typography work as a system**
+
+Improves headings, body text, labels and supporting details through size, weight, line length and spacing. Use it when roles blend together or long passages are tiring. Check zoom, long titles and narrow viewports.
+
+Example: `/impeccable typeset the help articles using our current fonts with clearer heading levels`
+
+### Simplify — reduce effort
+
+**13. [adapt](https://impeccable.style/docs/adapt/) — fit a different device or context**
+
+Reworks layout, navigation, information priority and input assumptions, such as taking a desktop dashboard to a phone. Use it when shrinking the page is insufficient. Keep essential tasks available and replace hover-dependent interactions where touch needs them.
+
+Example: `/impeccable adapt order tracking for mobile with status and tracking actions easy to reach`
+
+**14. [clarify](https://impeccable.style/docs/clarify/) — make UI language actionable**
+
+Rewrites buttons, labels, instructions, errors and state messages around what someone needs to know next. Use it when people misunderstand terms or cannot recover from an error. Preserve factual meaning and avoid inventing an unknown failure cause.
+
+Example: `/impeccable clarify profile editing, including field requirements and failed-save messages`
+
+**15. [distill](https://impeccable.style/docs/distill/) — simplify around the main task**
+
+Removes repetition, combines related elements and reveals occasional options when needed. Use it when a page demands too much attention at once. Preserve decision-critical information and the less common paths people still need.
+
+Example: `/impeccable distill checkout around reviewing and paying while keeping gift-message options available`
+
+### Harden — prepare for real use
+
+**16. [harden](https://impeccable.style/docs/harden/) — handle extremes and failure states**
+
+Addresses long text, missing data, network errors, translations, repeated submissions and other fragile cases. Use it when sample data works but real conditions break the interface, such as losing a completed draft after a failed save.
+
+Example: `/impeccable harden address entry for long names, duplicate submissions and a lost connection without losing input`
+
+**17. [onboard](https://impeccable.style/docs/onboard/) — reach a first useful result**
+
+Improves first-use flows, empty states, sample content and timely guidance. Use it when new users cannot find a starting point or abandon setup before seeing value. Allow guidance to be skipped and avoid repeatedly interrupting returning users.
+
+Example: `/impeccable onboard reports with clearly labeled sample data before connecting a real source`
+
+**18. [optimize](https://impeccable.style/docs/optimize/) — fix measured bottlenecks**
+
+Investigates loading, rendering, interactions, assets and animation to remove expensive or unnecessary work. Use it for slow arrival, stuttering scroll or delayed responses. Compare before and after under similar conditions while checking behavior still works.
+
+Example: `/impeccable optimize slow mobile report loading with before-and-after measurements and the same functionality`
+
+**19. [polish](https://impeccable.style/docs/polish/) — finish and align existing work**
+
+Refines spacing, typography, alignment, copy, interactions and missing states within the established direction and design system. Use it when the main design is right and several details need attention. Blocking usability problems take priority over decorative adjustments.
+
+Example: `/impeccable polish checkout within the current layout and palette, including loading and error states`
+
+### System — record conventions and work in the browser
+
+**20. [document](https://impeccable.style/docs/document/) — record the visual system**
+
+Captures existing colors, typography, layout and component rules in `DESIGN.md`, with additional metadata in `.impeccable/design.json`. Use it when future work should follow an established style. Before implementation, `document --seed` can create a starting record; scan again once code exists.
+
+Example: `/impeccable document`
+
+**21. [extract](https://impeccable.style/docs/extract/) — consolidate repeated implementation**
+
+Finds components, tokens and patterns repeated with the same intent, creates shared versions and migrates existing uses. Use it when updates require changes across several screens. Whereas `document` records the system, `extract` makes the implementation reusable.
+
+Example: `/impeccable extract primary buttons across ordering, account and inventory while keeping each screen's behavior`
+
+**22. [generate](https://impeccable.style/docs/generate/) — request element variants from chat**
+
+Name an element, direction and count; the agent locates it and prepares browser comparisons through Live Mode. Request one to eight variants, with three as the default. Accept keeps the selected version in source; Discard restores the original.
+
+Example: `/impeccable generate 3 quieter variants of the pricing cards`
+
+**23. [init](https://impeccable.style/docs/init/) — save durable product context**
+
+Reads the project, asks about gaps, and records audience, goals, constraints and agreed facts in `PRODUCT.md`. Use it at setup or when important context changes. It does not select a new palette or write `DESIGN.md`; use `document` for the visual record.
+
+Example: `/impeccable init`
+
+**24. [live](https://impeccable.style/docs/live/) — select and refine visually on the page**
+
+Opens browser controls for selecting elements, adding comments or annotations, and comparing and accepting variants. Unlike `generate`, you pick the target while browsing. Live Mode is beta, needs an active agent session, and works with a development server or local HTML.
+
+Example: `/impeccable live`
+
+### craft and pin / unpin shortcuts
+
+**[craft](https://github.com/pbakaus/impeccable#24-commands)** still appears in the README's command table as the planning-through-building flow with visual iteration, for example `/impeccable craft a workshop booking page`. The documentation website presents the general creation entry point under `impeccable` itself. If your installed version differs, check its available commands first.
+
+**[pin / unpin](https://impeccable.style/docs/impeccable/)** add or remove standalone shortcuts for frequently used commands. A shortcut still delegates to the main skill:
+
+```text
+/impeccable pin audit
+/audit the checkout page
+/impeccable unpin audit
+```
+
+## Choose the closest fit
+
+- **Unclear what is wrong** — start with `critique`, or `audit` for implementation concerns.
+- **The right content arranged poorly** — choose `layout`; use `distill` for excess or repetition.
+- **Difficult reading** — use `typeset` for typography and `clarify` for wording.
+- **Unbalanced emphasis** — apply `bolder` to an overlooked section or `quieter` to competing elements.
+- **Compare alternatives** — use `generate` for a named element or `live` to pick it in the browser.
+- **Prepare to ship** — use `harden` for edge cases, `optimize` for delays and `polish` for finishing details.
+
+## A suggested signup-page workflow
+
+My recommendation is to start with an observable problem: “People cannot tell which fields to complete first.” That gives the review a concrete purpose.
+
+1. **Supply context** — who is signing up, why, and which information is essential.
+2. **Request a critique** — ask what competes for attention or makes decisions difficult.
+3. **Change one concern at a time** — clarify labels, remove repetition, then adjust spacing.
+4. **Inspect the rendered page** — try a phone viewport, keyboard navigation and invalid input.
+
+A prompt you could adapt:
+
+```text
+Review this signup page for a first-time visitor.
+They should understand what to enter and what happens after submission.
+Start by explaining the three issues that most affect usability.
+After changes, check long translated labels and mobile screens.
+```
+
+This is a proposed workflow to try, rather than a report of Impeccable being tested on this website.
+
+## Judge the result against the user's task
+
+Impeccable offers a more precise way to discuss UI quality with an agent. I would judge the resulting changes by whether people can find information, complete a form and understand the system's state.
+
+Compare the rendered result with the original goal. Your team's judgment about brand, content and users remains essential.
+
+### References
+
+- [Impeccable on skills.sh](https://www.skills.sh/pbakaus/impeccable/impeccable)
+- [Impeccable website](https://impeccable.style/)
+- [Documentation and commands](https://impeccable.style/docs/)
+- [pbakaus/impeccable on GitHub](https://github.com/pbakaus/impeccable)

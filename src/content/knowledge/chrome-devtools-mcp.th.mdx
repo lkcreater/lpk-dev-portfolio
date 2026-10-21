@@ -1,0 +1,205 @@
+export const metadata = {
+  title: "Chrome DevTools MCP — ให้ AI coding agent เปิด Chrome ดีบักเว็บได้เอง",
+  description:
+    "รู้จัก chrome-devtools-mcp จากทีม Chrome DevTools วิธีติดตั้งกับ Claude Code, Cursor และ Codex เครื่องมือที่มีให้ ตัวเลือกที่ควรรู้ และตัวอย่าง prompt สำหรับดีบัก performance, network และ console",
+  date: "2026-10-21T10:00",
+  tags: ["AI Agent", "MCP", "Developer Tools", "Frontend"],
+  readingMinutes: 9,
+};
+
+AI coding agent เขียนโค้ดหน้าเว็บได้เร็ว แต่โดยปกติ "มองไม่เห็น" ผลลัพธ์ในเบราว์เซอร์ เวลาปุ่มกดไม่ได้ API ตอบ 500 หรือหน้าโหลดช้า เราต้องเปิด DevTools เอง คัดลอก error แล้วแปะกลับไปให้ agent อ่าน วนแบบนี้หลายรอบ
+
+**[chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp)** (ชื่อเต็มคือ Chrome DevTools for agents) จากทีม Chrome DevTools ของ Google ปิดช่องว่างนี้ด้วยการเป็น MCP server ที่ให้ agent อย่าง Claude Code, Cursor, Copilot หรือ Gemini CLI ควบคุมและตรวจสอบ Chrome ตัวจริงได้เอง ทั้งเปิดหน้า คลิก กรอกฟอร์ม อ่าน console ดู network request อัด performance trace และถ่าย screenshot
+
+## ทำอะไรได้บ้าง
+
+ตาม [README](https://github.com/ChromeDevTools/chrome-devtools-mcp) จุดเด่นมี 3 ด้าน
+
+- **Performance insights** — อัด trace ด้วย Chrome DevTools แล้วสรุปเป็นข้อเสนอแนะที่นำไปแก้ได้ เช่นต้นเหตุของ LCP ช้า
+- **ดีบักเบราว์เซอร์เชิงลึก** — วิเคราะห์ network request, ถ่าย screenshot และอ่าน console message พร้อม stack trace ที่ map กลับไปหา source แล้ว
+- **Automation ที่เชื่อถือได้** — ใช้ [Puppeteer](https://github.com/puppeteer/puppeteer) สั่งงาน Chrome และรอให้ action เสร็จจริงก่อนไปขั้นถัดไป
+
+เครื่องมือแบ่งเป็นหมวดตาม [Tool Reference](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/tool-reference.md) (ณ วันที่ 21 ตุลาคม 2026)
+
+- **Input** — `click`, `fill`, `fill_form`, `hover`, `press_key`, `upload_file` โต้ตอบกับหน้าเว็บผ่าน uid ของ element จาก snapshot
+- **Navigation** — `new_page`, `navigate_page`, `list_pages`, `wait_for` เปิด ปิด สลับแท็บ และรอให้ข้อความปรากฏ
+- **Emulation** — `emulate`, `resize_page` จำลองเครือข่ายช้า CPU ช้า หรือขนาดจอ
+- **Performance** — `performance_start_trace`, `performance_stop_trace`, `performance_analyze_insight` อัด trace และเจาะดู insight แต่ละตัว
+- **Network** — `list_network_requests`, `get_network_request` ดู request/response ทั้งหมดของหน้า
+- **Debugging** — `take_snapshot`, `take_screenshot`, `list_console_messages`, `evaluate_script`, `lighthouse_audit` อ่านโครงสร้างหน้า console รัน JS และตรวจด้วย Lighthouse
+- **Memory** — `take_heapsnapshot`, `compare_heapsnapshots` และอื่น ๆ ไล่หา memory leak จาก heap snapshot
+
+ยังมีหมวดที่ปิดไว้เป็นค่าเริ่มต้น เช่น Extensions, PWA และ WebMCP ซึ่งเปิดได้ด้วย flag อย่าง `--categoryExtensions`
+
+จุดที่ควรเข้าใจคือ agent ไม่ได้คลิกตามพิกัดบนจอเป็นหลัก แต่เรียก `take_snapshot` เพื่ออ่าน accessibility tree ของหน้า ซึ่งแต่ละ element มี `uid` แล้วส่ง `uid` นั้นไปให้ `click` หรือ `fill` วิธีนี้แม่นและใช้ token น้อยกว่าการส่งภาพไปให้โมเดลเดาตำแหน่ง
+
+## ติดตั้ง
+
+สิ่งที่ต้องมีคือ [Node.js](https://nodejs.org/) เวอร์ชัน LTS, npm และ Chrome รุ่น stable ปัจจุบันขึ้นไป
+
+### Config มาตรฐาน (ใช้ได้กับ MCP client ส่วนใหญ่)
+
+```json
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"]
+    }
+  }
+}
+```
+
+การใช้ `@latest` ทำให้ได้เวอร์ชันล่าสุดทุกครั้งที่ client เปิด server
+
+### Claude Code
+
+แบบ MCP อย่างเดียว ใช้คำสั่งเดียวจบ (`--scope user` ทำให้ใช้ได้ทุกโปรเจกต์)
+
+```bash
+claude mcp add chrome-devtools --scope user npx chrome-devtools-mcp@latest
+```
+
+หรือติดตั้งเป็น plugin ซึ่งได้ทั้ง MCP server และ skill สำเร็จรูป เช่น `a11y-debugging`, `debug-optimize-lcp`, `memory-leak-debugging` และ `troubleshooting` พิมพ์ในแชตของ Claude Code
+
+```text
+/plugin marketplace add ChromeDevTools/chrome-devtools-mcp
+/plugin install chrome-devtools-mcp@chrome-devtools-plugins
+```
+
+จากนั้น restart Claude Code แล้วตรวจด้วย `/skills` ถ้าเคยติดตั้งแบบ MCP ไว้ก่อน ให้ลบออกก่อนลงแบบ plugin เพื่อไม่ให้ซ้ำกัน (อ่านเรื่อง skill เพิ่มเติมได้ที่บทความ [skills.sh](/th/knowledge/skills-sh))
+
+### Cursor
+
+ไปที่ `Cursor Settings` → `MCP` → `New MCP Server` แล้ววาง config มาตรฐานด้านบน หรือกดปุ่ม Install in Cursor ใน [Client Configurations Guide](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/client-configurations.md)
+
+### Codex
+
+```bash
+codex mcp add chrome-devtools -- npx chrome-devtools-mcp@latest
+```
+
+client อื่น เช่น VS Code Copilot, Gemini CLI, Amp หรือ Antigravity มีวิธีตั้งค่าแยกไว้ใน Client Configurations Guide เช่นกัน
+
+### ทดสอบว่าใช้ได้
+
+พิมพ์ prompt นี้ใน agent
+
+```text
+Check the performance of https://developers.chrome.com
+```
+
+agent ควรเปิด Chrome ขึ้นมาและอัด performance trace ให้ สังเกตว่า server จะยังไม่เปิดเบราว์เซอร์ตอนเชื่อมต่อ แต่จะเปิดเมื่อ agent เรียกเครื่องมือที่ต้องใช้เบราว์เซอร์ครั้งแรก
+
+## ตัวอย่างการใช้งาน
+
+ตัวอย่างด้านล่างเป็น prompt ประกอบบทความ ไม่ใช่ผลการรันจริง ลำดับเครื่องมือที่เขียนไว้คือแนวทางที่ agent น่าจะเลือก ซึ่งขึ้นกับโมเดลที่ใช้
+
+### 1. ตรวจว่าโค้ดที่เพิ่งแก้ทำงานจริง
+
+```text
+เปิด http://localhost:3000/login กรอกอีเมล test@example.com รหัส 123456
+กดเข้าสู่ระบบ แล้วยืนยันว่าเข้าหน้า dashboard ได้ ถ้าไม่ได้ให้ดู console กับ network ว่าพังตรงไหน
+```
+
+agent จะใช้ `new_page` → `take_snapshot` → `fill_form` → `click` → `wait_for` และถ้าล้มเหลวก็ต่อด้วย `list_console_messages` และ `list_network_requests` เพื่อหาสาเหตุ แทนที่เราจะต้องเปิดเบราว์เซอร์เองแล้วเล่าให้มันฟัง
+
+### 2. หาสาเหตุ API error
+
+```text
+หน้า /orders แสดงรายการว่าง ช่วยดู request ที่ไป /api/orders ว่า status และ response body เป็นอะไร
+แล้วไล่กลับไปแก้โค้ดฝั่ง server ที่เกี่ยวข้อง
+```
+
+`get_network_request` ให้ทั้ง header และ body ของ request นั้น agent จึงเห็นข้อมูลชุดเดียวกับที่เราเห็นในแท็บ Network
+
+### 3. วิเคราะห์ performance
+
+```text
+อัด performance trace ของ http://localhost:3000 แบบ reload
+บอกว่า LCP element คืออะไร ช้าเพราะอะไร และเสนอวิธีแก้ในโค้ดของโปรเจกต์นี้
+```
+
+agent ใช้ `performance_start_trace` และ `performance_analyze_insight` เพื่อเจาะดู insight อย่าง LCP breakdown หรือ render-blocking request แล้วโยงกลับมาที่ไฟล์ในโปรเจกต์ได้ทันที
+
+### 4. ทดสอบบนมือถือเครือข่ายช้า
+
+```text
+จำลองเครือข่าย Slow 4G และ CPU ช้าลง 4 เท่า ขนาดจอ 390x844
+เปิดหน้าแรก ถ่าย screenshot แล้วบอกว่าเลย์เอาต์หรือการโหลดมีปัญหาอะไร
+```
+
+### 5. ตรวจ accessibility
+
+```text
+รัน Lighthouse audit หมวด accessibility ของหน้า /pricing
+แล้วแก้ปัญหาที่พบในโค้ด
+```
+
+## ตัวเลือกที่ควรรู้
+
+ส่ง flag ผ่าน `args` ใน config ได้เลย รายการเต็มอยู่ใน [Configuration Guide](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/configuration.md) หรือรัน `npx chrome-devtools-mcp@latest --help`
+
+- `--headless` — ไม่ต้องการเห็นหน้าต่างเบราว์เซอร์ เช่นรันบน server
+- `--isolated` — ใช้ profile ชั่วคราวที่ถูกลบเมื่อปิดเบราว์เซอร์ ไม่มี cookie ค้าง
+- `--slim` — ต้องการแค่งานพื้นฐาน เหลือ 3 เครื่องมือ (navigate, evaluate, screenshot) ประหยัด context
+- `--viewport=1280x720` — กำหนดขนาดหน้าจอเริ่มต้น
+- `--channel=canary` — ใช้ Chrome ช่องอื่น เช่น beta, dev, canary
+- `--autoConnect` — ต่อเข้า Chrome ที่เปิดอยู่แล้ว (Chrome 144+)
+- `--browser-url=http://127.0.0.1:9222` — ต่อเข้า Chrome ที่เปิด remote debugging port ไว้
+- `--no-usage-statistics` — ปิดการส่งสถิติการใช้งานให้ Google
+- `--no-performance-crux` — ไม่ส่ง URL จาก trace ไปที่ CrUX API
+
+ตัวอย่าง config สำหรับงานพื้นฐานแบบไม่เปิดหน้าต่าง
+
+```json
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest", "--slim", "--headless"]
+    }
+  }
+}
+```
+
+### ใช้ Chrome ที่ login ไว้แล้ว
+
+ค่าเริ่มต้น server จะเปิด Chrome ใหม่ด้วย profile แยกที่ `~/.cache/chrome-devtools-mcp/chrome-profile` ถ้าต้องทดสอบหน้าที่ต้อง login หรืออยากสลับระหว่างเราทดสอบเองกับให้ agent ทดสอบโดยไม่เสีย state มี 2 ทางตาม [Advanced Usage Guide](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/advanced-usage.md)
+
+1. **`--autoConnect`** (Chrome 144+) — เปิด `chrome://inspect/#remote-debugging` ใน Chrome เพื่อเปิดใช้ remote debugging แล้วใส่ `--autoConnect` ใน config เมื่อ agent เชื่อมต่อ Chrome จะถามขออนุญาตก่อน
+2. **`--browser-url`** — เปิด Chrome ด้วย `--remote-debugging-port=9222` และ `--user-data-dir` ที่ไม่ใช่ profile หลัก เหมาะเมื่อ agent รันใน sandbox ที่เปิด Chrome เองไม่ได้
+
+### ใช้ผ่าน CLI โดยไม่ต้องมี MCP
+
+แพ็กเกจนี้มี [CLI](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/cli.md) แบบ experimental ที่เรียกเครื่องมือชุดเดียวกันจาก terminal ได้ เหมาะกับการเขียนสคริปต์ หรือ agent ที่ถนัดรันคำสั่ง shell มากกว่า
+
+```bash
+npm i chrome-devtools-mcp@latest -g
+chrome-devtools new_page "https://example.com"
+chrome-devtools take_screenshot 1 --filePath screenshot.png
+chrome-devtools stop
+```
+
+CLI จะเปิด daemon และเบราว์เซอร์ (headless) ไว้เบื้องหลัง แล้วใช้ตัวเดิมต่อในคำสั่งถัดไป
+
+## ข้อควรระวัง
+
+- **agent เห็นทุกอย่างในเบราว์เซอร์** — server เปิดให้ MCP client อ่านและแก้ข้อมูลใด ๆ ในเบราว์เซอร์ได้ อย่าเปิดเว็บที่มีข้อมูลส่วนตัวหรือข้อมูลลับในเบราว์เซอร์ที่ agent ควบคุมอยู่
+- **Remote debugging port ไม่มีการป้องกัน** — เมื่อเปิด port 9222 โปรแกรมใดก็ได้บนเครื่องต่อเข้ามาควบคุม Chrome ได้ ใช้ profile แยกเสมอ
+- **มีการเก็บสถิติเป็นค่าเริ่มต้น** — Google เก็บ usage statistics ของเครื่องมือ ปิดได้ด้วย `--no-usage-statistics` หรือตั้ง env `CHROME_DEVTOOLS_MCP_NO_USAGE_STATISTICS`
+- **รองรับ Chrome อย่างเป็นทางการเท่านั้น** — Chrome และ Chrome for Testing ส่วน browser ตระกูล Chromium อื่นอาจใช้ได้แต่ไม่รับประกัน
+- **จำกัดขอบเขตได้** — ใช้ `--allowedUrlPattern` หรือ `--blockedUrlPattern` จำกัดเว็บที่เข้าได้ และ `--no-javascript-evaluation` ปิดเครื่องมือรัน JS ที่ agent ส่งมา (แต่ไม่ใช่ sandbox เต็มรูปแบบ)
+
+## สรุป
+
+chrome-devtools-mcp เปลี่ยน agent จาก "เขียนโค้ดแล้วหวังว่าจะทำงาน" เป็น "เขียนโค้ด เปิดดูผลจริง แล้วแก้ต่อเอง" โดยใช้เครื่องมือเดียวกับที่ web developer ใช้ทุกวัน ทั้ง console, network, performance และ Lighthouse เริ่มได้ด้วยคำสั่งเดียว แล้วค่อยเพิ่ม flag อย่าง `--isolated`, `--autoConnect` หรือ `--slim` ตามลักษณะงาน
+
+### อ้างอิง
+
+- [ChromeDevTools/chrome-devtools-mcp บน GitHub](https://github.com/ChromeDevTools/chrome-devtools-mcp)
+- [Tool Reference](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/tool-reference.md)
+- [Client Configurations Guide](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/client-configurations.md)
+- [Configuration Guide](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/configuration.md)
+- [Advanced Usage Guide](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/advanced-usage.md)
+- [Troubleshooting](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/troubleshooting.md)

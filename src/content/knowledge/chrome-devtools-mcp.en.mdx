@@ -1,0 +1,204 @@
+export const metadata = {
+  title: "Chrome DevTools MCP — let your AI coding agent open and debug Chrome itself",
+  description:
+    "A practical guide to chrome-devtools-mcp from the Chrome DevTools team: installing it in Claude Code, Cursor and Codex, the tools it exposes, the flags worth knowing and example prompts for performance, network and console debugging.",
+  date: "2026-10-21T10:00",
+  tags: ["AI Agent", "MCP", "Developer Tools", "Frontend"],
+  readingMinutes: 8,
+};
+
+AI coding agents write front-end code quickly, but they usually cannot *see* what happens in the browser. When a button does nothing, an API returns 500 or a page loads slowly, we open DevTools ourselves, copy the error and paste it back for the agent. Then we repeat.
+
+**[chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp)** (officially "Chrome DevTools for agents") from Google's Chrome DevTools team closes that loop. It is an MCP server that lets agents such as Claude Code, Cursor, Copilot or Gemini CLI control and inspect a real Chrome: open pages, click, fill forms, read the console, inspect network requests, record performance traces and take screenshots.
+
+## What it can do
+
+The [README](https://github.com/ChromeDevTools/chrome-devtools-mcp) highlights three areas:
+
+- **Performance insights** — record traces with Chrome DevTools and turn them into actionable findings, such as why LCP is slow.
+- **Advanced browser debugging** — analyse network requests, take screenshots and read console messages with source-mapped stack traces.
+- **Reliable automation** — drive Chrome through [Puppeteer](https://github.com/puppeteer/puppeteer) and wait for actions to actually finish before moving on.
+
+Tools are grouped into categories in the [Tool Reference](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/tool-reference.md) (as of 21 October 2026):
+
+- **Input** — `click`, `fill`, `fill_form`, `hover`, `press_key`, `upload_file`: interact with elements by their snapshot `uid`.
+- **Navigation** — `new_page`, `navigate_page`, `list_pages`, `wait_for`: open, close and switch pages; wait for text to appear.
+- **Emulation** — `emulate`, `resize_page`: throttle network or CPU, change the viewport.
+- **Performance** — `performance_start_trace`, `performance_stop_trace`, `performance_analyze_insight`: record traces and drill into individual insights.
+- **Network** — `list_network_requests`, `get_network_request`: inspect every request and response on the page.
+- **Debugging** — `take_snapshot`, `take_screenshot`, `list_console_messages`, `evaluate_script`, `lighthouse_audit`: read page structure and console, run JS, audit with Lighthouse.
+- **Memory** — `take_heapsnapshot`, `compare_heapsnapshots` and more: hunt memory leaks via heap snapshots.
+
+Some categories, such as Extensions, PWA and WebMCP, are off by default and enabled with flags like `--categoryExtensions`.
+
+One detail worth understanding: the agent does not primarily click by screen coordinates. It calls `take_snapshot` to read the page's accessibility tree, where each element has a `uid`, then passes that `uid` to `click` or `fill`. This is more precise and cheaper in tokens than sending screenshots for the model to guess positions.
+
+## Installation
+
+You need an LTS version of [Node.js](https://nodejs.org/), npm, and the current stable Chrome or newer.
+
+### Standard config (works for most MCP clients)
+
+```json
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"]
+    }
+  }
+}
+```
+
+Using `@latest` means the client always starts the newest version.
+
+### Claude Code
+
+For MCP only, one command does it (`--scope user` makes it available in every project):
+
+```bash
+claude mcp add chrome-devtools --scope user npx chrome-devtools-mcp@latest
+```
+
+Or install it as a plugin to get the MCP server plus ready-made skills such as `a11y-debugging`, `debug-optimize-lcp`, `memory-leak-debugging` and `troubleshooting`. In the Claude Code chat:
+
+```text
+/plugin marketplace add ChromeDevTools/chrome-devtools-mcp
+/plugin install chrome-devtools-mcp@chrome-devtools-plugins
+```
+
+Restart Claude Code and check with `/skills`. If you previously added it as a plain MCP server, remove that first so the two do not clash. (More on skills in the [skills.sh](/en/knowledge/skills-sh) article.)
+
+### Cursor
+
+Go to `Cursor Settings` → `MCP` → `New MCP Server` and paste the standard config, or use the Install in Cursor button in the [Client Configurations Guide](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/client-configurations.md).
+
+### Codex
+
+```bash
+codex mcp add chrome-devtools -- npx chrome-devtools-mcp@latest
+```
+
+Other clients — VS Code Copilot, Gemini CLI, Amp, Antigravity and more — are covered in the same Client Configurations Guide.
+
+### Check that it works
+
+Give your agent this prompt:
+
+```text
+Check the performance of https://developers.chrome.com
+```
+
+It should open Chrome and record a performance trace. Note that connecting to the server does not launch the browser; Chrome starts the first time the agent calls a tool that needs it.
+
+## Examples
+
+The prompts below are illustrations, not recorded runs. The tool sequences describe the likely approach, which depends on the model.
+
+### 1. Verify the code you just changed
+
+```text
+Open http://localhost:3000/login, sign in with test@example.com / 123456
+and confirm the dashboard loads. If it doesn't, check the console and network to find out why.
+```
+
+The agent uses `new_page` → `take_snapshot` → `fill_form` → `click` → `wait_for`, and on failure follows up with `list_console_messages` and `list_network_requests` — instead of you opening the browser and describing what went wrong.
+
+### 2. Track down an API error
+
+```text
+The /orders page shows an empty list. Check the request to /api/orders —
+its status and response body — then fix the relevant server code.
+```
+
+`get_network_request` returns the headers and body, so the agent sees exactly what you would see in the Network panel.
+
+### 3. Analyse performance
+
+```text
+Record a performance trace of http://localhost:3000 with a reload.
+Tell me the LCP element, why it is slow, and how to fix it in this project.
+```
+
+The agent uses `performance_start_trace` and `performance_analyze_insight` to inspect insights such as the LCP breakdown or render-blocking requests, then maps them back to files in your repo.
+
+### 4. Test on a slow mobile connection
+
+```text
+Emulate Slow 4G with 4x CPU slowdown at 390x844.
+Open the home page, take a screenshot and report any layout or loading problems.
+```
+
+### 5. Check accessibility
+
+```text
+Run a Lighthouse accessibility audit on /pricing and fix the issues in the code.
+```
+
+## Flags worth knowing
+
+Pass flags through `args` in the config. The full list is in the [Configuration Guide](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/configuration.md), or run `npx chrome-devtools-mcp@latest --help`.
+
+- `--headless` — you don't need a visible window, e.g. on a server.
+- `--isolated` — use a temporary profile that is deleted on close, with no leftover cookies.
+- `--slim` — basic tasks only: 3 tools (navigate, evaluate, screenshot) and less context.
+- `--viewport=1280x720` — set the initial viewport size.
+- `--channel=canary` — use another Chrome channel: beta, dev or canary.
+- `--autoConnect` — attach to a Chrome you already have open (Chrome 144+).
+- `--browser-url=http://127.0.0.1:9222` — attach to a Chrome started with a remote debugging port.
+- `--no-usage-statistics` — opt out of usage statistics sent to Google.
+- `--no-performance-crux` — stop sending trace URLs to the CrUX API.
+
+A headless, basic-tasks config:
+
+```json
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest", "--slim", "--headless"]
+    }
+  }
+}
+```
+
+### Using a Chrome you are already signed in to
+
+By default the server launches a fresh Chrome with its own profile at `~/.cache/chrome-devtools-mcp/chrome-profile`. To test pages behind a login, or to switch between manual and agent testing without losing state, the [Advanced Usage Guide](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/advanced-usage.md) offers two options:
+
+1. **`--autoConnect`** (Chrome 144+) — open `chrome://inspect/#remote-debugging` in Chrome to enable remote debugging, then add `--autoConnect` to the config. Chrome asks for permission when the agent connects.
+2. **`--browser-url`** — start Chrome with `--remote-debugging-port=9222` and a non-default `--user-data-dir`. Useful when the agent runs in a sandbox that cannot launch Chrome itself.
+
+### Using the CLI without MCP
+
+The package also ships an experimental [CLI](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/cli.md) that calls the same tools from a terminal — handy for scripts or for agents that prefer shell commands.
+
+```bash
+npm i chrome-devtools-mcp@latest -g
+chrome-devtools new_page "https://example.com"
+chrome-devtools take_screenshot 1 --filePath screenshot.png
+chrome-devtools stop
+```
+
+The CLI keeps a background daemon and a headless browser alive and reuses them across commands.
+
+## Things to watch out for
+
+- **The agent sees everything in the browser.** The server lets MCP clients inspect and modify any data in that browser. Don't open sites with personal or confidential data in an agent-controlled browser.
+- **A remote debugging port is unauthenticated.** With port 9222 open, any program on your machine can control Chrome. Always use a separate profile.
+- **Usage statistics are on by default.** Google collects tool usage statistics; disable with `--no-usage-statistics` or the `CHROME_DEVTOOLS_MCP_NO_USAGE_STATISTICS` env variable.
+- **Only Chrome is officially supported.** Chrome and Chrome for Testing; other Chromium browsers may work but aren't guaranteed.
+- **You can narrow its reach.** `--allowedUrlPattern` / `--blockedUrlPattern` limit which sites it can load, and `--no-javascript-evaluation` disables agent-supplied JavaScript (though it is not a full sandbox).
+
+## Summary
+
+chrome-devtools-mcp moves an agent from "write the code and hope it works" to "write the code, look at the real result and keep fixing", using the same console, network, performance and Lighthouse tools web developers use every day. Start with a single command, then add flags such as `--isolated`, `--autoConnect` or `--slim` as your workflow needs.
+
+### References
+
+- [ChromeDevTools/chrome-devtools-mcp on GitHub](https://github.com/ChromeDevTools/chrome-devtools-mcp)
+- [Tool Reference](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/tool-reference.md)
+- [Client Configurations Guide](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/client-configurations.md)
+- [Configuration Guide](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/configuration.md)
+- [Advanced Usage Guide](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/advanced-usage.md)
+- [Troubleshooting](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/troubleshooting.md)

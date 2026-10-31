@@ -1,0 +1,104 @@
+export const metadata = {
+  title: "VoiceStudio — an AI workspace for local speech and video dubbing",
+  description:
+    "Meet open-source VoiceStudio for voice cloning, voice design, dubbing and transcription, with setup guidance, engine and language choices, local processing and API or MCP integration.",
+  date: "2026-10-31T11:00",
+  tags: ["AI Audio", "Open Source", "Voice Cloning", "Developer Tools"],
+  readingMinutes: 6,
+};
+
+Producing audio for a video can involve writing, recording or generating speech, transcribing it and matching its timing to the picture. **[VoiceStudio](https://github.com/debpalash/VoiceStudio)** brings speech generation, voice cloning, voice design, video dubbing and transcription into an open-source app supporting on-device processing.
+
+This article uses official documentation checked on October 31, 2026, with a suggested small trial. The examples are not measured audio-quality results from this project.
+
+## What it can do
+
+The [feature catalog](https://github.com/debpalash/VoiceStudio/blob/main/docs/feature-catalog.md) lists capabilities and engines, with availability dependent on models, hardware and configured providers:
+
+- **Voice cloning** generates speech conditioned on a reference voice.
+- **Voice design** creates a voice from selected attributes.
+- **Video dubbing** works with video dialogue and replacement speech.
+- **Dictation and transcription** turn speech into text.
+- **Batch work** includes a queue and supporting tools such as vocal isolation and speaker diarization.
+
+I would start with one useful output, such as narration for a product demo, before moving to a multi-speaker video.
+
+## Start with the installer for your system
+
+Download a package from [GitHub Releases](https://github.com/debpalash/VoiceStudio/releases/latest), or use the commands in the [installer guide](https://github.com/debpalash/VoiceStudio/blob/main/docs/install/script.md). The current desktop app uses Electron.
+
+For macOS / Linux:
+
+```bash
+curl -fsSL https://voicestudio.sh/install | sh
+```
+
+For Windows PowerShell:
+
+```powershell
+irm https://voicestudio.sh/install.ps1 | iex
+```
+
+The guide distinguishes release installation from building `main`, which needs additional development tools. I would begin with a release matching the operating system and architecture.
+
+### Check the machine before choosing a model
+
+The [macOS guide](https://github.com/debpalash/VoiceStudio/blob/main/docs/install/macos.md) supports a local backend with MPS acceleration on Apple Silicon. Intel Macs can run the UI connected to a remote backend; the local backend is unsupported.
+
+Windows and Linux offer CPU and GPU paths depending on the engine. The [README platform table](https://github.com/debpalash/VoiceStudio#platforms) summarizes support. CPU generation can be much slower, so I would try a short passage before starting a long job.
+
+## Choose an engine for the language and task
+
+The Model Manager offers several engines. The [language guide](https://github.com/debpalash/VoiceStudio/blob/main/docs/languages.md) attributes its 646-language catalog to OmniVoice, including Thai as `th`; other engines have their own language sets.
+
+The [OmniVoice guide](https://github.com/debpalash/VoiceStudio/blob/main/docs/engines/omnivoice.md) recommends a clear reference of roughly 3–10 seconds, with a matching transcript to improve conditioning. For cross-language generation, retain the reference transcript's original language and write the new script in the desired output language.
+
+Its voice-design controls use supported attributes such as age, pitch and delivery. Free-form descriptions map into that vocabulary, so check the engine's scope when designing a particular voice.
+
+For Thai work, I would test names, numbers, mixed English and punctuation before committing to an engine.
+
+## Prepare the model downloads
+
+The [download guide](https://github.com/debpalash/VoiceStudio/blob/main/docs/downloading-models.md) explains first-use downloads from Hugging Face and size/progress reporting. Separate installation and download time from generation time when evaluating performance.
+
+On-device processing supports a local workflow. Review remote-backend and external-provider choices separately for the tasks you enable, especially when audio access needs to be controlled.
+
+## Multi-speaker dubbing needs several review passes
+
+The [dubbing walkthrough](https://github.com/debpalash/VoiceStudio/blob/main/docs/dubbing/multi-speaker-guide.md) covers importing a video, correcting transcripts and speakers, translating dialogue, assigning voices, generating, checking timing and exporting. Outputs include MP4 and SRT / VTT subtitles.
+
+Speaker diarization has a Hugging Face token and model-terms step described in the guide. I would check speaker assignments before adjusting voices, since an incorrect label affects the later voice choice.
+
+## Connect scripts and agents
+
+The [local speech platform](https://github.com/debpalash/VoiceStudio/blob/main/docs/speech-platform.md) separates desktop microphone capture from backend transcription through HTTP and WebSocket. To inspect a running backend on its default port:
+
+```bash
+curl http://127.0.0.1:3900/.well-known/voicestudio-speech
+```
+
+An [MCP integration](https://github.com/debpalash/VoiceStudio/blob/main/docs/mcp.md) exposes audio tools to agents. I would begin with one operation whose output file is easy to inspect before connecting a longer pipeline.
+
+## Try a 30-second demo narration
+
+Using my own voice or one I have permission to use, I would:
+
+1. **Write a short script** with a clear message and pauses for the visuals.
+2. **Prepare the reference** from clean speech without music or overlapping voices.
+3. **Select the engine and language** and generate one paragraph first.
+4. **Listen against criteria** for pronunciation, emphasis, consistency and duration.
+5. **Play it with the video** to judge whether the explanation fits or the script needs shortening.
+
+Keep the engine, settings and script revision with the result, so later model or wording changes can be compared.
+
+## Separate application and model terms
+
+The [License Notice](https://github.com/debpalash/VoiceStudio/blob/main/LICENSE-NOTICE.md) identifies the application as AGPL-3.0-only, with separate terms for weights and model assets. It also records CC-BY-NC terms for the default OmniVoice weights. Read the selected model's notices for your intended use, and obtain the voice owner's permission before cloning.
+
+For editing and file preparation afterward, see the [FFmpeg Skill article](/en/knowledge/ffmpeg-skill).
+
+### References
+
+- [debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio)
+- [Features and engines](https://github.com/debpalash/VoiceStudio/blob/main/docs/feature-catalog.md)
+- [VoiceStudio Releases](https://github.com/debpalash/VoiceStudio/releases)

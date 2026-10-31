@@ -1,0 +1,104 @@
+export const metadata = {
+  title: "VoiceStudio — สตูดิโอ AI สำหรับสร้างเสียงและพากย์วิดีโอบนเครื่อง",
+  description:
+    "รู้จัก VoiceStudio เครื่องมือเสียงแบบ open source สำหรับ voice cloning, voice design, dubbing และ transcription พร้อมวิธีเริ่มใช้งาน เลือก engine ภาษาไทย และเชื่อม API หรือ MCP",
+  date: "2026-10-31T11:00",
+  tags: ["AI Audio", "Open Source", "Voice Cloning", "Developer Tools"],
+  readingMinutes: 7,
+};
+
+งานเสียงสำหรับวิดีโอหนึ่งชิ้นอาจต้องผ่านทั้งการเขียนบท อัดหรือสร้างเสียง ถอดข้อความ และปรับจังหวะให้ตรงภาพ **[VoiceStudio](https://github.com/debpalash/VoiceStudio)** รวมงานสร้างเสียง โคลนเสียง ออกแบบเสียง พากย์วิดีโอ และถอดเสียงไว้ในแอป open source ที่รองรับการประมวลผลบนเครื่อง
+
+บทความนี้ตรวจเอกสารทางการเมื่อ 31 ตุลาคม 2026 พร้อมแนวทางทดลองกับงานขนาดเล็ก ตัวอย่างด้านล่างไม่ได้เป็นผลทดสอบคุณภาพเสียงจากโปรเจกต์นี้
+
+## ทำอะไรได้บ้าง
+
+[Feature catalog](https://github.com/debpalash/VoiceStudio/blob/main/docs/feature-catalog.md) แสดงความสามารถและ engines ที่เลือกใช้ได้ โดยความพร้อมขึ้นกับโมเดล ฮาร์ดแวร์ และ provider ที่ตั้งไว้
+
+- **Voice cloning** — สร้างคำพูดโดยใช้เสียงอ้างอิง
+- **Voice design** — สร้างเสียงจากคุณลักษณะที่กำหนด
+- **Video dubbing** — ทำงานกับบทและเสียงพากย์ของวิดีโอ
+- **Dictation และ transcription** — ป้อนข้อความด้วยเสียงหรือถอดข้อความจากเสียง
+- **งานหลายรายการ** — มี batch queue และความสามารถประกอบ เช่น แยกเสียงร้องหรือจำแนกผู้พูด
+
+ผมจะเริ่มจากงานที่ใช้จริงหนึ่งอย่าง เช่น เสียงบรรยายเดโม แล้วค่อยเพิ่มงานพากย์หลายคนเมื่อเข้าใจคุณภาพและเวลาประมวลผลของเครื่องตัวเอง
+
+## เริ่มจากตัวติดตั้งของระบบที่ใช้
+
+ดาวน์โหลดแพ็กเกจจาก [GitHub Releases](https://github.com/debpalash/VoiceStudio/releases/latest) หรือใช้คำสั่งใน[คู่มือติดตั้ง](https://github.com/debpalash/VoiceStudio/blob/main/docs/install/script.md) แอปเดสก์ท็อปปัจจุบันใช้ Electron
+
+สำหรับ macOS / Linux
+
+```bash
+curl -fsSL https://voicestudio.sh/install | sh
+```
+
+สำหรับ Windows PowerShell
+
+```powershell
+irm https://voicestudio.sh/install.ps1 | iex
+```
+
+คู่มือแยกการติดตั้ง release ออกจากการ build `main` ซึ่งต้องมีเครื่องมือพัฒนาเพิ่มเติม สำหรับเริ่มใช้งาน ผมจะเลือก release ที่ตรงกับระบบและสถาปัตยกรรมก่อน
+
+### เช็กเครื่องก่อนเลือกโมเดล
+
+[คู่มือ macOS](https://github.com/debpalash/VoiceStudio/blob/main/docs/install/macos.md) ระบุว่า Apple Silicon รองรับ local backend และใช้ MPS ช่วยเร่งประมวลผล ส่วน Intel Mac ใช้ UI เชื่อม remote backend ได้ แต่ไม่รองรับ local backend
+
+ฝั่ง Windows และ Linux มีทางเลือก CPU และ GPU ตาม engine ตารางใน[README](https://github.com/debpalash/VoiceStudio#platforms) สรุปแพลตฟอร์มที่รองรับไว้ CPU ใช้งานได้แต่ความเร็วอาจต่างจาก GPU มาก จึงควรลองข้อความสั้นก่อนเริ่มงานยาว
+
+## เลือก engine ให้ตรงกับภาษาและงาน
+
+VoiceStudio มีหลาย engine ให้เลือกใน Model Manager โดย[คู่มือภาษา](https://github.com/debpalash/VoiceStudio/blob/main/docs/languages.md) ระบุว่าแค็ตตาล็อก 646 ภาษาเป็นของ OmniVoice และมีภาษาไทยรหัส `th` ส่วน engines อื่นมีชุดภาษาของตัวเอง
+
+สำหรับ OmniVoice [คู่มือ engine](https://github.com/debpalash/VoiceStudio/blob/main/docs/engines/omnivoice.md) แนะนำเสียงอ้างอิงที่ชัดประมาณ 3–10 วินาที และ transcript ที่ตรงกับเสียงช่วยในการสร้างเสียงได้ เมื่อสร้างข้ามภาษา ให้ transcript ของตัวอย่างอยู่ในภาษาต้นฉบับ และเขียนบทใหม่เป็นภาษาที่ต้องการให้พูด
+
+Voice design ของ engine นี้ใช้ชุดคุณลักษณะที่รองรับ เช่น อายุ pitch และลักษณะการพูด คำอธิบายอิสระจะถูกแปลงเข้าชุดคุณลักษณะนั้น จึงควรตรวจขอบเขตของ engine ก่อนคาดหวังว่าทุกคำบรรยายจะควบคุมเสียงได้ตรงทั้งหมด
+
+ถ้าจะทำงานภาษาไทย ผมจะทดลองประโยคที่มีชื่อเฉพาะ ตัวเลข ภาษาอังกฤษปน และเครื่องหมายวรรคตอน เพื่อฟังการออกเสียงกับจังหวะก่อนเลือกใช้ต่อ
+
+## โหลดโมเดลให้พร้อมก่อนทำงานจริง
+
+[คู่มือดาวน์โหลดโมเดล](https://github.com/debpalash/VoiceStudio/blob/main/docs/downloading-models.md) อธิบายการโหลดจาก Hugging Face ในการใช้งานครั้งแรก และการดูข้อมูลขนาดกับความคืบหน้า ควรแยกเวลาติดตั้งและดาวน์โหลดออกจากเวลาสร้างเสียงเมื่อทดลองประสิทธิภาพ
+
+การเลือกประมวลผลในเครื่องช่วยให้จัด workflow แบบ local ได้ ส่วนการตั้ง remote backend หรือ provider ภายนอกควรตรวจแยกตามงานที่ใช้อยู่ โดยเฉพาะเมื่อไฟล์เสียงมีข้อมูลที่ต้องควบคุมการเข้าถึง
+
+## พากย์วิดีโอหลายคนเป็นงานที่ต้องรีวิวหลายชั้น
+
+[คู่มือ multi-speaker dubbing](https://github.com/debpalash/VoiceStudio/blob/main/docs/dubbing/multi-speaker-guide.md) ไล่ตั้งแต่นำเข้าวิดีโอ ตรวจ transcript และผู้พูด แปลบท กำหนดเสียงให้แต่ละคน สร้างเสียง แล้วตรวจเวลาและ export มีตัวเลือก MP4 และคำบรรยาย SRT / VTT
+
+การจำแนกผู้พูดใช้โมเดล diarization ซึ่งมีขั้นตอน Hugging Face token และการรับเงื่อนไขของโมเดลตามคู่มือ หากจะทำคลิปสนทนา ผมจะตรวจว่าแต่ละบรรทัดเป็นของใครก่อนปรับเสียง เพราะการติดป้ายผู้พูดผิดจะกระทบการเลือกเสียงในขั้นถัดไป
+
+## เชื่อมกับสคริปต์และ agent ได้
+
+[Local speech platform](https://github.com/debpalash/VoiceStudio/blob/main/docs/speech-platform.md) แยกหน้าที่ของแอปเดสก์ท็อปที่รับเสียงไมโครโฟนออกจาก backend ที่ให้บริการถอดเสียงผ่าน HTTP และ WebSocket ตัวอย่างตรวจความสามารถของ backend ที่กำลังทำงานบนพอร์ตเริ่มต้น
+
+```bash
+curl http://127.0.0.1:3900/.well-known/voicestudio-speech
+```
+
+มี [MCP integration](https://github.com/debpalash/VoiceStudio/blob/main/docs/mcp.md) สำหรับให้ agent เรียกเครื่องมือเสียงด้วย ผมจะเริ่มจากงานเดี่ยวที่ตรวจไฟล์ผลลัพธ์ได้ แล้วค่อยเชื่อมเข้ากับ pipeline ที่ยาวขึ้น
+
+## ตัวอย่างทดลอง: เสียงบรรยายเดโม 30 วินาที
+
+ผมจะใช้เสียงของตัวเองหรือเสียงที่ได้รับอนุญาต แล้วทดลองตามลำดับนี้
+
+1. **เขียนบทสั้น** — ระบุสารหลักและตำแหน่งที่ต้องหยุดให้ภาพทำงาน
+2. **เตรียมเสียงอ้างอิง** — เลือกช่วงพูดชัด ไม่มีเพลงหรือคนอื่นแทรก
+3. **เลือก engine และภาษา** — สร้างตัวอย่างหนึ่งย่อหน้าก่อนส่งทั้งบท
+4. **ฟังเทียบเกณฑ์** — ตรวจคำอ่าน น้ำหนักคำ ความสม่ำเสมอ และเวลารวม
+5. **ลองกับวิดีโอจริง** — ดูว่าเสียงช่วยอธิบายภาพได้ทันหรือจำเป็นต้องย่อบท
+
+ผมจะบันทึก engine ที่ใช้ การตั้งค่า และบทเวอร์ชันนั้นไว้ เพื่อให้กลับมาเปรียบเทียบได้เมื่อเปลี่ยนโมเดลหรือแก้ข้อความ
+
+## แยกสิทธิ์ของแอปกับโมเดล
+
+[License Notice](https://github.com/debpalash/VoiceStudio/blob/main/LICENSE-NOTICE.md) ระบุว่าแอปใช้ AGPL-3.0-only ขณะที่ weights และทรัพย์สินของโมเดลมีเงื่อนไขแยกกัน โดย notice ระบุเงื่อนไข CC-BY-NC ของ weights เริ่มต้น OmniVoice ด้วย ควรอ่านข้อมูลของโมเดลที่เลือกก่อนนำผลงานไปใช้ตามวัตถุประสงค์ที่ต้องการ และโคลนเสียงเมื่อได้รับอนุญาตจากเจ้าของเสียง
+
+ถ้าต้องตัดต่อหรือจัดรูปแบบไฟล์ต่อ อ่าน [FFmpeg Skill](/th/knowledge/ffmpeg-skill) สำหรับแนวทางทำงานกับวิดีโอและเสียงผ่าน agent
+
+### อ้างอิง
+
+- [debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio)
+- [Features and engines](https://github.com/debpalash/VoiceStudio/blob/main/docs/feature-catalog.md)
+- [VoiceStudio Releases](https://github.com/debpalash/VoiceStudio/releases)

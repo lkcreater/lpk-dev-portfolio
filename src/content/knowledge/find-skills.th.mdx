@@ -1,0 +1,106 @@
+export const metadata = {
+  title: "Find Skills — ให้ AI agent ค้นหา skill ที่ตรงกับงาน",
+  description:
+    "รู้จัก Find Skills ของ Vercel Labs ผ่าน AgenticSkills ตั้งแต่การค้นด้วย Skills CLI เปรียบเทียบแหล่งที่มา เลือกขอบเขตติดตั้ง และทดลองว่า skill ช่วยงานได้จริงหรือไม่",
+  date: "2026-10-31T10:40",
+  tags: ["Agent Skills", "Developer Tools", "Workflow"],
+  readingMinutes: 6,
+};
+
+บางครั้งเรารู้ว่าอยากให้ AI ช่วยอะไร เช่น ตรวจฟอร์มให้ใช้งานด้วยคีย์บอร์ดได้ แต่ยังไม่รู้ว่ามี skill ไหนรองรับงานนั้น **[Find Skills บน AgenticSkills](https://agenticskills.io/skills/find-skills)** เป็นหน้ารายละเอียดของ skill จาก **Vercel Labs** ที่ช่วยจัดกระบวนการค้นหาและเลือกความสามารถเพิ่มเติมให้ agent โดย AgenticSkills เป็นไดเรกทอรีอิสระที่ชี้กลับไปยังต้นทาง
+
+บทความนี้ตรวจเอกสารเมื่อ 31 ตุลาคม 2026 และใช้ตัวอย่างคำค้นกับ workflow ที่นำไปปรับให้ตรงกับโปรเจกต์ได้
+
+## Find Skills ช่วยอะไร
+
+[ไฟล์ skill ต้นทาง](https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md) ให้ agent ทำความเข้าใจงาน ดูตัวเลือกบน leaderboard ค้นเพิ่มเติมเมื่อจำเป็น และเสนอ skill พร้อมแหล่งที่มา ลิงก์ และวิธีติดตั้ง โดยดูจำนวนติดตั้ง ชื่อเสียงผู้ดูแล และข้อมูล repository ประกอบ
+
+ใน workflow นี้ **Find Skills** ให้แนวทางตัดสินใจ ส่วน **Skills CLI** จัดการค้นหาและติดตั้ง และ **skills.sh** เป็นแหล่งค้นดู skills อ่านภาพรวมเพิ่มเติมได้ใน[บทความ skills.sh](/th/knowledge/skills-sh)
+
+ผมจะใช้เมื่อโจทย์ชัดพอที่จะค้นหา แต่ยังเลือก skill ไม่ได้ เช่น ต้องการตรวจ accessibility ของฟอร์ม มากกว่าขอ “skill สำหรับเว็บ” ที่กว้างจนเทียบความเหมาะสมยาก
+
+## ติดตั้ง Find Skills
+
+ใช้คำสั่งจาก[หน้า Find Skills บน skills.sh](https://www.skills.sh/vercel-labs/skills/find-skills) ใน terminal ของโปรเจกต์
+
+```bash
+npx skills add https://github.com/vercel-labs/skills --skill find-skills
+```
+
+[README ของ CLI](https://github.com/vercel-labs/skills) ปัจจุบันกำหนด Node.js 22.20 ขึ้นไป ค่าเริ่มต้นติดตั้งระดับโปรเจกต์ และเพิ่ม `-g` เมื่อต้องการใช้ข้ามโปรเจกต์ ตัวติดตั้งให้เลือก coding agent ที่ต้องการ
+
+หลังตั้งค่า ลองขอให้ agent ค้นหาโดยระบุผลลัพธ์ที่ต้องการ เช่น
+
+```text
+หา skill สำหรับตรวจฟอร์มสมัครสมาชิกที่ต้องใช้คีย์บอร์ดได้ครบ
+เปรียบเทียบขอบเขตงาน แหล่งที่มา และวิธีตรวจผลของแต่ละตัว
+เลือกตัวที่ตรงที่สุดพร้อมเหตุผล แล้วแสดงคำสั่งติดตั้ง
+```
+
+## เปลี่ยนโจทย์ให้เป็นคำค้นที่เจาะจง
+
+ใน[implementation ของคำสั่ง find](https://github.com/vercel-labs/skills/blob/main/src/find.ts) การใส่ query จะแสดงรายการพร้อมที่มา จำนวนติดตั้ง และลิงก์รายละเอียด ใช้ `--owner` เพื่อจำกัด GitHub owner ได้ ตัวอย่างคำค้น
+
+```bash
+npx skills find form accessibility
+npx skills find keyboard navigation
+npx skills find accessibility --owner vercel-labs
+```
+
+ผมจะเริ่มจาก **สิ่งที่ต้องทำ + เงื่อนไขสำคัญ** เช่น `form accessibility` แล้วลองศัพท์ใกล้เคียงหากยังไม่เจอ การระบุเทคโนโลยีที่ใช้เพิ่มจะช่วยแยก skill สำหรับตรวจแนวทางทั่วไปออกจาก skill ที่คาดหวัง framework เฉพาะ
+
+ผลค้นหาเป็นรายชื่อสำหรับนำไปตรวจต่อ ควรอ่านว่า skill ทำงานครอบคลุมอะไรและต้องใช้เครื่องมือใดก่อนเลือก
+
+## ดูรายการก่อนเลือกติดตั้ง
+
+[CLI reference](https://github.com/vercel-labs/skills/blob/main/docs/commands.md) รองรับ `--list` สำหรับดู skills ใน repository โดยยังไม่ติดตั้ง และ `--skill` กับ `-a` สำหรับเลือก skill และ agent ตัวอย่างกับ repository ที่มี web design guidelines
+
+```bash
+npx skills add vercel-labs/agent-skills --list
+npx skills add vercel-labs/agent-skills --skill web-design-guidelines -a claude-code
+```
+
+ตัวอย่างนี้สาธิตการเลือกให้เฉพาะเจาะจง ไม่ใช่ผลค้นหาจริงจากคำสั่งด้านบน ผมจะอ่าน `SKILL.md` และไฟล์ประกอบ แล้วดูว่างานที่ skill รับผิดชอบตรงกับปัญหาของเราหรือไม่
+
+[FAQ ของ skills.sh](https://www.skills.sh/docs/faq) ระบุว่า leaderboard ใช้ข้อมูลจำนวนติดตั้งแบบรวม ผมจึงใช้ความนิยมเป็นจุดเริ่มต้นค้นหา ส่วนความเหมาะสมจะดูจากขั้นตอนที่ skill เสนอและผลที่ตรวจได้กับงานจริง
+
+## ทดลองกับงานเล็กก่อนใช้ต่อเนื่อง
+
+สำหรับฟอร์มสมัครสมาชิก ผมจะเลือกหน้าที่ตรวจขอบเขตได้ แล้วทดลองดังนี้
+
+1. **กำหนดเกณฑ์ก่อน** — เช่น ใช้คีย์บอร์ดกรอกและส่งฟอร์มได้ เห็น focus และเข้าใจข้อความเมื่อกรอกผิด
+2. **ขอผลตรวจที่มีหลักฐาน** — แต่ละประเด็นควรระบุ element ปัญหา และวิธีตรวจซ้ำ
+3. **เลือกแก้ทีละเรื่อง** — แก้ปัญหาที่ขัดขวางการใช้งานก่อนปรับรายละเอียด
+4. **ลองหน้าเว็บจริง** — ตรวจพฤติกรรมตามเกณฑ์เดิม แล้วเปรียบเทียบกับก่อนใช้ skill
+
+ตัวอย่าง prompt สำหรับช่วงทดลอง
+
+```text
+ใช้ skill ที่เลือกตรวจฟอร์มนี้ก่อนแก้โค้ด
+จัดลำดับประเด็นตามผลกระทบต่อคนใช้คีย์บอร์ด
+แต่ละประเด็นให้บอกตำแหน่ง เหตุผล และขั้นตอนตรวจซ้ำ
+```
+
+หากผลลัพธ์มีแต่คำแนะนำกว้าง ๆ ผมจะทบทวนทั้งความชัดของโจทย์และขอบเขต skill ก่อนเพิ่ม skill ตัวอื่นเข้ามา
+
+## ดูแลหลังติดตั้ง
+
+คำสั่งใน[CLI reference](https://github.com/vercel-labs/skills/blob/main/docs/commands.md) สำหรับดูรายการ ตรวจอัปเดต และอัปเดตเฉพาะ Find Skills ได้แก่
+
+```bash
+npx skills list
+npx skills check
+npx skills update find-skills
+```
+
+หาก agent ไม่โหลด skill [คู่มือแก้ปัญหา](https://github.com/vercel-labs/skills/blob/main/docs/troubleshooting.md) แนะนำให้ตรวจตำแหน่งติดตั้ง ข้อกำหนดการโหลดของ agent และ YAML frontmatter ใน `SKILL.md` ก่อน
+
+ถ้ายังไม่มี skill ที่ตรงงาน สามารถทำงานด้วยวิธีปัจจุบันก่อน แล้วค่อยบันทึกขั้นตอนที่ใช้ซ้ำเป็น skill ของตัวเองตาม[คู่มือสร้าง skills](https://github.com/vercel-labs/skills/blob/main/docs/creating-skills.md) ผมจะเริ่มจากงานที่ทำซ้ำและมีเกณฑ์คุณภาพชัด เพื่อให้รู้ว่าคำแนะนำใหม่ช่วยอะไร
+
+สำหรับตัวอย่าง skill ตามงาน อ่านต่อ [Impeccable](/th/knowledge/impeccable) ด้าน UI, [Superpowers](/th/knowledge/superpowers) ด้านกระบวนการพัฒนา และ [Task Observer](/th/knowledge/one-skill-to-rule-them-all) สำหรับดูแลบทเรียนที่ควรปรับกลับเข้า skills
+
+### อ้างอิง
+
+- [Find Skills บน AgenticSkills](https://agenticskills.io/skills/find-skills)
+- [Find Skills: SKILL.md ต้นทาง](https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md)
+- [vercel-labs/skills](https://github.com/vercel-labs/skills)

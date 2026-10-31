@@ -1,0 +1,106 @@
+export const metadata = {
+  title: "Find Skills — help your AI agent discover the right skill for a task",
+  description:
+    "A guide to Vercel Labs' Find Skills through AgenticSkills: search with the Skills CLI, compare sources, choose installation scope and evaluate a skill on real work.",
+  date: "2026-10-31T10:40",
+  tags: ["Agent Skills", "Developer Tools", "Workflow"],
+  readingMinutes: 5,
+};
+
+You may know what you want an AI to help with, such as checking a form for keyboard access, without knowing which skill supports it. **[Find Skills on AgenticSkills](https://agenticskills.io/skills/find-skills)** introduces a **Vercel Labs** skill for discovering and choosing additional capabilities. AgenticSkills is an independent directory linking back to the source.
+
+This article uses documentation checked on October 31, 2026. The queries and workflow are examples to adapt to your project.
+
+## What Find Skills does
+
+The [upstream skill](https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md) guides the agent to understand the task, consult the leaderboard, search further when needed, and present candidates with sources, links and installation commands. It considers install counts, maintainer reputation and repository information.
+
+**Find Skills** supplies decision guidance, the **Skills CLI** handles discovery and installation, and **skills.sh** provides a place to browse. The [skills.sh article](/en/knowledge/skills-sh) covers the broader ecosystem.
+
+I would use it when the task is clear enough to search but the right skill is unknown. “Check form accessibility” gives candidates a more useful target than “find a web skill.”
+
+## Install Find Skills
+
+Run the command from its [skills.sh listing](https://www.skills.sh/vercel-labs/skills/find-skills) in your project's terminal:
+
+```bash
+npx skills add https://github.com/vercel-labs/skills --skill find-skills
+```
+
+The current [CLI README](https://github.com/vercel-labs/skills) requires Node.js 22.20 or later. Installation defaults to the project; add `-g` for use across projects. The installer lets you choose the target coding agent.
+
+After setup, describe the outcome you need:
+
+```text
+Find a skill for reviewing a signup form for full keyboard access.
+Compare each candidate's scope, source and verification approach.
+Recommend the closest fit with reasons and its installation command.
+```
+
+## Turn the task into a specific query
+
+The [find implementation](https://github.com/vercel-labs/skills/blob/main/src/find.ts) prints candidates with sources, install counts and detail links when given a query. `--owner` restricts the GitHub owner. Example searches:
+
+```bash
+npx skills find form accessibility
+npx skills find keyboard navigation
+npx skills find accessibility --owner vercel-labs
+```
+
+I would start with **the task plus an important constraint**, then try nearby terms. Adding the technology in use can help distinguish general review guidance from a skill expecting a particular framework.
+
+Treat results as candidates to inspect. Read what each covers and which tools it expects before choosing.
+
+## Inspect the repository before selecting a skill
+
+The [CLI reference](https://github.com/vercel-labs/skills/blob/main/docs/commands.md) documents `--list` for listing repository skills without installing, and `--skill` plus `-a` for selecting a skill and agent. For example:
+
+```bash
+npx skills add vercel-labs/agent-skills --list
+npx skills add vercel-labs/agent-skills --skill web-design-guidelines -a claude-code
+```
+
+This illustrates targeted selection; it is not recorded output from the searches above. I would read `SKILL.md` and its supporting files, then compare its responsibilities with the problem at hand.
+
+The [skills.sh FAQ](https://www.skills.sh/docs/faq) explains that leaderboard rankings use aggregate installation data. I would use popularity to start discovery, then assess fit through the proposed process and observable results.
+
+## Try a small task first
+
+For a signup form, I would choose one page and evaluate the skill as follows:
+
+1. **Define criteria** — keyboard users can complete and submit the form, see focus, and understand invalid-input messages.
+2. **Request evidence** — each finding identifies an element, a problem and a way to reproduce it.
+3. **Change one concern at a time** — address blocked interactions before finishing details.
+4. **Inspect the actual page** — repeat the original checks and compare the result.
+
+A trial prompt:
+
+```text
+Use the selected skill to review this form before editing code.
+Prioritize findings by their impact on keyboard users.
+Give the location, reasoning and reproduction steps for each finding.
+```
+
+If the response stays generic, I would revisit the task description and skill scope before adding another skill.
+
+## Maintain the installation
+
+The [CLI reference](https://github.com/vercel-labs/skills/blob/main/docs/commands.md) provides commands to list skills, check for updates and update Find Skills specifically:
+
+```bash
+npx skills list
+npx skills check
+npx skills update find-skills
+```
+
+If the agent does not load the skill, the [troubleshooting guide](https://github.com/vercel-labs/skills/blob/main/docs/troubleshooting.md) recommends checking installation paths, the agent's loading requirements and valid YAML frontmatter in `SKILL.md`.
+
+If no skill fits, continue with the available workflow and turn repeatable steps into a skill later using the [authoring guide](https://github.com/vercel-labs/skills/blob/main/docs/creating-skills.md). I would begin with recurring work and explicit quality criteria, so the new guidance has a clear purpose.
+
+For related examples, read about [Impeccable](/en/knowledge/impeccable) for UI work, [Superpowers](/en/knowledge/superpowers) for development processes and [Task Observer](/en/knowledge/one-skill-to-rule-them-all) for lessons worth incorporating into existing skills.
+
+### References
+
+- [Find Skills on AgenticSkills](https://agenticskills.io/skills/find-skills)
+- [Find Skills: upstream SKILL.md](https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md)
+- [vercel-labs/skills](https://github.com/vercel-labs/skills)

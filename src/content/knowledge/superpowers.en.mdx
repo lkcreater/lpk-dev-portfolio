@@ -1,0 +1,98 @@
+export const metadata = {
+  title: "Superpowers — a coding-agent workflow from requirements to verification",
+  description:
+    "A guide to obra/superpowers: composable skills for design, plans, TDD, debugging and review, with Claude Code installation and a practical feature workflow.",
+  date: "2026-10-31T10:20",
+  tags: ["Claude Code", "Agent Skills", "Workflow", "Testing"],
+  readingMinutes: 6,
+};
+
+A coding agent can edit files quickly, but speed compounds a misunderstanding when the goal is unclear. **[Superpowers](https://github.com/obra/superpowers)** packages a software development methodology as composable skills, connecting clarification, design, planning, testing and review.
+
+This article uses the official repository checked on October 31, 2026. The example prompts are suggestions to adapt to your own project.
+
+## Install in Claude Code
+
+The [README](https://github.com/obra/superpowers#installation) documents installation from the official marketplace. Enter this in Claude Code chat:
+
+```text
+/plugin install superpowers@claude-plugins-official
+```
+
+Or use the project's marketplace instead:
+
+```text
+/plugin marketplace add obra/superpowers-marketplace
+/plugin install superpowers@superpowers-marketplace
+```
+
+Choose one route. Other coding tools have their own setup; consult the repository for your environment.
+
+## How the skills fit together
+
+The entry point, [`using-superpowers`](https://github.com/obra/superpowers/blob/main/skills/using-superpowers/SKILL.md), tells the agent to check for relevant skills before acting and choose process guidance before implementation details. A bug should trigger investigation of its cause. User instructions take precedence over skill defaults.
+
+### 1. Clarify the goal and design
+
+[`brainstorming`](https://github.com/obra/superpowers/blob/main/skills/brainstorming/SKILL.md) reads existing context, explores missing requirements, compares approaches and presents a design for agreement before implementation planning. A fully specified tiny task can proceed directly, and users can opt out of questions.
+
+I would value questions that change the system's behavior. Whether saved filters belong to one user or a whole team affects storage, permissions and UI, so it is worth settling early.
+
+### 2. Produce an actionable plan
+
+[`writing-plans`](https://github.com/obra/superpowers/blob/main/skills/writing-plans/SKILL.md) breaks the design into verifiable tasks with file paths, interfaces, test behavior, verification commands and commit steps. Plans default to `docs/superpowers/plans/`, subject to project conventions and user instructions.
+
+Before approving a plan, I would check what behavior each step delivers and what evidence proves it works. “Build the page, then add tests” leaves too many consequential decisions unresolved.
+
+### 3. Choose an execution approach
+
+Both main approaches run in the current session:
+
+- **[`subagent-driven-development`](https://github.com/obra/superpowers/blob/main/skills/subagent-driven-development/SKILL.md)** assigns a fresh implementer to each task, followed by a reviewer checking requirements and code quality. A broader branch review follows the final task.
+- **[`executing-plans`](https://github.com/obra/superpowers/blob/main/skills/executing-plans/SKILL.md)** has the main agent execute the plan inline, track progress and verify each step, with a final review in a fresh context when supported.
+
+Delegation gives each task a deliberately selected context. Inline execution involves fewer handoffs. I would choose according to the task size and value of an independent review after each task.
+
+## Test behavior and debug from evidence
+
+[`test-driven-development`](https://github.com/obra/superpowers/blob/main/skills/test-driven-development/SKILL.md) follows **red → green → refactor**: write a behavior test, observe it fail for the intended reason, implement enough to pass, then improve the structure while keeping tests green. A new test that passes immediately does not demonstrate that it detects missing behavior.
+
+For bugs, [`systematic-debugging`](https://github.com/obra/superpowers/blob/main/skills/systematic-debugging/SKILL.md) starts with reproduction, complete error messages and data tracing. Compare with working cases, form one hypothesis, test the smallest change, then implement and verify the fix.
+
+If filters disappear after refresh, first determine whether the value is lost in the URL, initial state or data loading. That gives a proposed persistence change a concrete cause to address.
+
+## Review against the requirements and report actual checks
+
+[`requesting-code-review`](https://github.com/obra/superpowers/blob/main/skills/requesting-code-review/SKILL.md) supplies requirements, a change description and the relevant commit range. [`receiving-code-review`](https://github.com/obra/superpowers/blob/main/skills/receiving-code-review/SKILL.md) asks the agent to check suggestions against the code and constraints, with technical reasons for disagreeing when appropriate.
+
+[`verification-before-completion`](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md) requires a current command result, its output and exit status before claiming success. A passing lint run supports the checks lint performs; claiming the build passes requires a build result.
+
+[`using-git-worktrees`](https://github.com/obra/superpowers/blob/main/skills/using-git-worktrees/SKILL.md) checks existing isolation and workspace preferences before arranging a separate workspace. [`finishing-a-development-branch`](https://github.com/obra/superpowers/blob/main/skills/finishing-a-development-branch/SKILL.md) verifies the test suite before choosing how to integrate the work, such as a merge, PR or retained branch.
+
+## Example: saved filters for an order list
+
+Try a bounded feature with behavior that needs an explicit decision:
+
+```text
+Add saved filters to the order list.
+Inspect the existing search flow and clarify whether filters belong
+to one user or the whole team.
+Propose the behavior and acceptance criteria before editing code.
+After we agree on the design, plan, implement and test the behavior.
+Report verification commands, results and review findings at handoff.
+```
+
+I would inspect saving, reusing and deleting a filter, refreshing the page, and opening it as a different user. Then compare whether the plan, code and tests describe the same behavior.
+
+## Match the process to the work
+
+Superpowers suits work with several steps where consistent agent behavior matters. It is easier to assess when the project has clear ways to run and verify its behavior. Clarification, planning and reviews consume time and context, so start with one measurable task.
+
+I would look for fewer rework cycles caused by misunderstood requirements, reviews tied to acceptance criteria, and completion claims backed by evidence. Skills organize the process; the requirements and resulting behavior still need scrutiny.
+
+Read more about [Agent Skills](/en/knowledge/skills-sh), [Claude Code Subagents](/en/knowledge/claude-code-subagents) and [Impeccable](/en/knowledge/impeccable) for adding UI design guidance to this workflow.
+
+### References
+
+- [obra/superpowers](https://github.com/obra/superpowers)
+- [Repository skills](https://github.com/obra/superpowers/tree/main/skills)

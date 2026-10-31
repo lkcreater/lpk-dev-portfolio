@@ -1,0 +1,97 @@
+export const metadata = {
+  title: "Superpowers — จัด workflow ให้ coding agent ตั้งแต่โจทย์จนถึงตรวจงาน",
+  description:
+    "รู้จัก obra/superpowers ชุด Agent Skills สำหรับออกแบบ วางแผน ทำ TDD วิเคราะห์ bug และตรวจงาน พร้อมวิธีติดตั้งใน Claude Code และตัวอย่าง workflow ที่นำไปปรับใช้ได้",
+  date: "2026-10-31T10:20",
+  tags: ["Claude Code", "Agent Skills", "Workflow", "Testing"],
+  readingMinutes: 7,
+};
+
+Coding agent อาจแก้ไฟล์ได้เร็ว แต่ถ้าเริ่มจากความเข้าใจโจทย์ที่คลาดเคลื่อน โค้ดที่เพิ่มขึ้นก็อาจยิ่งพาออกจากเป้าหมาย **[Superpowers](https://github.com/obra/superpowers)** เป็นชุดวิธีทำงานสำหรับ agent ที่เชื่อมการทำโจทย์ให้ชัด การออกแบบ วางแผน ทดสอบ และรีวิวเข้าด้วยกัน ผ่าน skills ที่ประกอบใช้ตามงาน
+
+บทความนี้อ้างอิง repository ทางการที่ตรวจเมื่อ 31 ตุลาคม 2026 ตัวอย่าง prompt เป็นแนวทางสำหรับทดลองกับโปรเจกต์ของตัวเอง
+
+## ติดตั้งใน Claude Code
+
+[README](https://github.com/obra/superpowers#installation) ระบุวิธีติดตั้งจาก official marketplace โดยพิมพ์ในแชต Claude Code
+
+```text
+/plugin install superpowers@claude-plugins-official
+```
+
+หรือเลือก marketplace ของโครงการแทน
+
+```text
+/plugin marketplace add obra/superpowers-marketplace
+/plugin install superpowers@superpowers-marketplace
+```
+
+เลือกวิธีใดวิธีหนึ่ง การติดตั้งกับ coding tool อื่นมีขั้นตอนของตัวเอง ควรตรวจคำแนะนำใน repository ให้ตรงกับเครื่องมือที่ใช้
+
+## Skills ทำงานต่อกันอย่างไร
+
+จุดเริ่มต้นคือ [`using-superpowers`](https://github.com/obra/superpowers/blob/main/skills/using-superpowers/SKILL.md) ซึ่งกำหนดให้ agent ตรวจว่า skill ใดเกี่ยวข้องก่อนลงมือ และเลือกกระบวนการทำงานก่อนรายละเอียด implementation เช่น เริ่มวิเคราะห์สาเหตุเมื่อเจอ bug คำสั่งของผู้ใช้ยังมีลำดับสูงกว่าแนวทางเริ่มต้นของ skill
+
+### 1. ทำโจทย์และดีไซน์ให้ชัด
+
+[`brainstorming`](https://github.com/obra/superpowers/blob/main/skills/brainstorming/SKILL.md) อ่านบริบทเดิม สำรวจความต้องการที่ยังไม่ชัด เปรียบเทียบทางเลือก แล้วเสนอแบบให้ตกลงก่อนวางแผน implementation งานเล็กที่ระบุครบแล้วไม่จำเป็นต้องผ่านบทสนทนายาวเท่างานใหญ่ และผู้ใช้สามารถระบุให้ข้ามคำถามได้
+
+สำหรับผม คำถามที่มีประโยชน์คือคำถามที่เปลี่ยนพฤติกรรมของระบบ เช่น filter ที่บันทึกไว้เป็นของผู้ใช้คนเดียวหรือแชร์ทั้งทีม เพราะคำตอบกระทบทั้งข้อมูล สิทธิ์ และ UI
+
+### 2. เปลี่ยนดีไซน์เป็นแผนที่ทำตามได้
+
+[`writing-plans`](https://github.com/obra/superpowers/blob/main/skills/writing-plans/SKILL.md) แตกงานเป็นขั้นที่ตรวจสอบได้ ระบุไฟล์ interface พฤติกรรมที่ต้องทดสอบ คำสั่งตรวจ และจังหวะ commit ค่าเริ่มต้นเก็บแผนใน `docs/superpowers/plans/` แต่ปรับตามรูปแบบโปรเจกต์หรือคำสั่งผู้ใช้ได้
+
+สิ่งที่ผมจะอ่านก่อนอนุมัติแผนคือแต่ละขั้นส่งมอบพฤติกรรมอะไร และหลักฐานใดจะบอกว่าทำสำเร็จแล้ว แผนที่มีแค่ “สร้างหน้า แล้วเขียน test” ยังทิ้งการตัดสินใจสำคัญไว้มากเกินไป
+
+### 3. เลือกวิธีลงมือ
+
+มีสองแนวทางหลักใน session ปัจจุบัน
+
+- **[`subagent-driven-development`](https://github.com/obra/superpowers/blob/main/skills/subagent-driven-development/SKILL.md)** — ใช้ implementer ใหม่ต่อ task แล้วให้ reviewer ตรวจทั้งความตรงตามข้อกำหนดและคุณภาพโค้ด เมื่อครบงานมีรีวิวทั้ง branch อีกครั้ง
+- **[`executing-plans`](https://github.com/obra/superpowers/blob/main/skills/executing-plans/SKILL.md)** — agent หลักทำแผนทีละขั้นใน session เดิม ติดตามความคืบหน้าและตรวจผลระหว่างทาง แล้วขอรีวิวภาพรวมจาก context ใหม่เมื่อเครื่องมือรองรับ
+
+แบบแบ่ง agent ช่วยให้แต่ละ task เริ่มจากบริบทที่จัดให้เฉพาะเรื่อง ส่วนแบบ inline ใช้การส่งต่องานน้อยกว่า ผมจะเลือกตามขนาดงานและความจำเป็นของการตรวจแยกต่อ task
+
+## ทดสอบพฤติกรรมและวิเคราะห์ bug จากหลักฐาน
+
+[`test-driven-development`](https://github.com/obra/superpowers/blob/main/skills/test-driven-development/SKILL.md) ใช้ลูป **red → green → refactor**: เขียน test สำหรับพฤติกรรมที่ต้องการ เห็นมันล้มด้วยเหตุผลที่ถูกต้อง เพิ่มโค้ดเท่าที่ทำให้ผ่าน แล้วปรับโครงสร้างโดยรักษาผลทดสอบไว้ การเพิ่ม test ที่ผ่านทันทีอย่างเดียวไม่ได้แสดงว่า test จับพฤติกรรมที่ขาดได้จริง
+
+เมื่อเป็น bug ให้ใช้ [`systematic-debugging`](https://github.com/obra/superpowers/blob/main/skills/systematic-debugging/SKILL.md) ซึ่งเริ่มจากทำให้เกิดซ้ำ อ่าน error และตามเส้นทางข้อมูล จากนั้นเทียบกับกรณีที่ทำงานได้ ตั้งสมมติฐานหนึ่งข้อ ทดลองการเปลี่ยนแปลงเล็กที่สุด แล้วจึงแก้และตรวจผล
+
+ตัวอย่างเช่น filter หายหลัง refresh ควรตามว่าค่าหายที่ URL, state เริ่มต้น หรือการอ่านข้อมูล ก่อนเพิ่มวิธีเก็บ state อีกชุดโดยยังไม่รู้สาเหตุ
+
+## รีวิวให้ตรงโจทย์ และรายงานสิ่งที่ตรวจจริง
+
+[`requesting-code-review`](https://github.com/obra/superpowers/blob/main/skills/requesting-code-review/SKILL.md) ให้ reviewer มีข้อกำหนด รายละเอียดการเปลี่ยนแปลง และขอบเขต commit ที่ต้องตรวจ ส่วน [`receiving-code-review`](https://github.com/obra/superpowers/blob/main/skills/receiving-code-review/SKILL.md) ให้ตรวจคำแนะนำกับโค้ดและข้อจำกัดจริงก่อนแก้ หากข้อเสนอไม่เหมาะก็ควรอธิบายเหตุผลทางเทคนิคได้
+
+อีกหลักสำคัญคือ [`verification-before-completion`](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md): ก่อนบอกว่างานผ่าน ต้องรันคำสั่งที่รองรับข้อสรุป อ่านผล และตรวจ exit status ให้ครบ เช่น lint ผ่านเป็นหลักฐานเรื่องที่ lint ตรวจได้ ส่วนการอ้างว่า build ผ่านต้องมีผล build รองรับ
+
+งานที่ต้องแยกพื้นที่มี [`using-git-worktrees`](https://github.com/obra/superpowers/blob/main/skills/using-git-worktrees/SKILL.md) โดยตรวจการแยก workspace และความต้องการเดิมก่อน ส่วน [`finishing-a-development-branch`](https://github.com/obra/superpowers/blob/main/skills/finishing-a-development-branch/SKILL.md) ตรวจชุดทดสอบก่อนเลือกวิธีนำงานไปรวม เช่น merge, PR หรือเก็บ branch ไว้ตามบริบท
+
+## ตัวอย่าง: เพิ่ม saved filters ให้รายการคำสั่งซื้อ
+
+ลองใช้โจทย์ที่มีขอบเขตชัด แต่มีการตัดสินใจด้านพฤติกรรมให้ตรวจได้
+
+```text
+เพิ่ม saved filters ให้หน้ารายการคำสั่งซื้อ
+อ่าน flow ค้นหาเดิม แล้วทำให้ชัดว่า filter เป็นของผู้ใช้หรือแชร์ทั้งทีม
+เสนอพฤติกรรมที่ต้องรองรับและ acceptance criteria ก่อนแก้โค้ด
+เมื่อเราตกลงแบบแล้ว ให้แตกแผน ลงมือ และทดสอบตามพฤติกรรม
+ตอนส่งงานรายงานคำสั่งที่ตรวจ ผลลัพธ์ และข้อค้นพบจากรีวิว
+```
+
+ผมจะตรวจผลจากสถานการณ์จริง เช่น บันทึก filter เปิดกลับมาใช้ ลบรายการ และ refresh หน้า รวมถึงสิ่งที่ควรเกิดเมื่อผู้ใช้อีกคนเข้ามา จากนั้นค่อยเทียบว่าแผน โค้ด และ test อธิบายพฤติกรรมเดียวกันหรือไม่
+
+## เลือกใช้ให้เหมาะกับขนาดงาน
+
+Superpowers เหมาะกับงานที่มีหลายขั้นและอยากให้ agent ทำงานตามกระบวนการสม่ำเสมอ ประโยชน์จะประเมินง่ายขึ้นเมื่อโปรเจกต์มีวิธีรันและตรวจผลที่ชัดเจน การถาม วางแผน และรีวิวเพิ่มทั้งเวลาและการใช้ context จึงควรเริ่มจากงานหนึ่งชิ้นที่วัดผลได้
+
+ผมจะดูว่าต้องย้อนแก้เพราะเข้าใจโจทย์ผิดน้อยลงหรือไม่ รีวิวอ้างอิงข้อกำหนดได้ไหม และคำว่า “เสร็จ” มีหลักฐานอะไรประกอบ แนวทางใน skill ช่วยจัดลำดับงาน ส่วนความครบถ้วนของโจทย์และคุณภาพผลลัพธ์ยังต้องตรวจจริง
+
+อ่านต่อเรื่อง [Agent Skills](/th/knowledge/skills-sh), [Claude Code Subagents](/th/knowledge/claude-code-subagents) และ [Impeccable](/th/knowledge/impeccable) สำหรับการเสริมแนวทางออกแบบ UI ใน workflow เดียวกัน
+
+### อ้างอิง
+
+- [obra/superpowers](https://github.com/obra/superpowers)
+- [Skills ใน repository](https://github.com/obra/superpowers/tree/main/skills)

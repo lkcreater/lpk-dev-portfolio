@@ -1,0 +1,107 @@
+export const metadata = {
+  title: "Task Observer — เปลี่ยนสิ่งที่แก้ซ้ำให้เป็น skill ที่ดีขึ้น",
+  description:
+    "รู้จัก One Skill to Rule Them All หรือ task-observer: meta-skill ที่บันทึกบทเรียนจากงาน เสนอ skill ใหม่ และจัดรอบรีวิวอัปเดต พร้อมวิธีติดตั้ง เปิดใช้งาน และดูแลข้อมูลข้าม session",
+  date: "2026-10-31T10:30",
+  tags: ["Agent Skills", "Workflow", "Knowledge Management"],
+  readingMinutes: 7,
+};
+
+ถ้าเราต้องแก้คำตอบของ AI ด้วยเรื่องเดิมบ่อย ๆ เช่น “ต้องใส่หลักฐานให้ข้อเสนอด้วย” สิ่งที่ขาดอาจเป็นขั้นตอนใน skill ที่ใช้ทำงาน **[One Skill to Rule Them All](https://github.com/rebelytics/one-skill-to-rule-them-all)** เป็น repository ของ **Task Observer** หรือ skill ชื่อ `task-observer` ที่ช่วยเก็บบทเรียนและเสนอการปรับปรุงจากงานเหล่านี้
+
+บทความนี้เรียบเรียงจากเอกสารทางการที่ตรวจเมื่อ 31 ตุลาคม 2026 ตัวอย่างประกอบเป็นแนวทางทดลอง ไม่ใช่ผลใช้งานที่วัดจากโปรเจกต์นี้
+
+## Meta-skill สังเกตอะไร
+
+ตาม[ไฟล์ skill หลัก](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/SKILL.md) Task Observer ทำงานควบคู่กับงานหลายขั้น เก็บสิ่งที่น่าปรับใน skills ที่ใช้อยู่ และมองหาวิธีทำงานที่ควรพัฒนาเป็น skill ใหม่ รวมถึงข้อบกพร่องของกระบวนการสังเกตเอง
+
+[คู่มือ signals](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/references/signals.md) ครอบคลุมทั้งคำแก้ไขที่พบซ้ำ วิธีที่ได้ผล และกฎที่ล้าสมัยหรือขัดกัน การปรับ skill จึงรวมถึงการลดขั้นตอนด้วย สิ่งที่ควรบันทึกต้องนำไปใช้กับงานอื่นได้ ส่วน workaround ชั่วคราวอาจเหมาะกับบริบทของงานนั้นมากกว่า
+
+สำหรับผม จุดที่น่าสนใจคือการแยก “เหตุการณ์ที่เกิดขึ้น” ออกจาก “กฎที่ควรใช้ครั้งหน้า” ก่อนเพิ่มคำสั่งใหม่ ควรมีตัวอย่างที่อธิบายได้ว่าปัญหาคืออะไรและข้อเสนอช่วยอย่างไร
+
+## ติดตั้งให้ครบชุด
+
+ใช้คำสั่งตาม[README](https://github.com/rebelytics/one-skill-to-rule-them-all#installation) ใน terminal
+
+```bash
+npx skills add rebelytics/one-skill-to-rule-them-all --skill task-observer
+```
+
+เพิ่ม `-g` หากต้องการติดตั้งให้ใช้ข้ามโปรเจกต์ หากวางไฟล์เอง ให้เก็บ `SKILL.md`, `references/` และ `scripts/` ไว้ด้วยกัน การคัดลอกเฉพาะไฟล์หลักทำให้ความสามารถไม่ครบ
+
+## ติดตั้งแล้วต้องเปิดใช้งานและตรวจอีกครั้ง
+
+ทำตาม[คู่มือ environment](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/references/environments.md) โดยเพิ่ม activation template ใน `CLAUDE.md` หรือไฟล์คำสั่งที่เครื่องมือรองรับ แล้วตรวจใน **session ใหม่** ว่า agent ทำ Session Start Protocol จริง การอ่านไฟล์ skill อย่างเดียวไม่ใช่หลักฐานว่าเริ่มกระบวนการแล้ว
+
+กำหนด workspace เป็น absolute path ที่เก็บถาวร เข้าถึงได้ข้าม session และตรงกับชุด skills ที่ต้องการดูแล หลีกเลี่ยง worktree ชั่วคราว
+
+ตัวอย่างคำขอให้ agent ช่วยตั้งค่า โดยอ้างอิง template ทางการแทนการคัดลอกขั้นตอนที่อาจเปลี่ยนเวอร์ชัน
+
+```text
+ตั้งค่า task-observer ตามคู่มือ environment ปัจจุบันและพื้นที่เก็บข้อมูลถาวรที่กำหนดไว้
+อธิบายวิธีตรวจใน session ใหม่ว่า Session Start Protocol ทำงานจริง
+```
+
+## ความรู้ถูกบันทึกไว้ที่ไหน
+
+[Observation log reference](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/references/observation-log.md) ใช้ไฟล์ Markdown แยกต่อ observation พร้อม metadata และ archive สำหรับรายการที่จัดการแล้ว โครงสร้างสำคัญใน workspace เช่น
+
+```text
+skill-observations/
+  observation-log/
+    NNNN-short-slug.md
+    archive/
+  cross-cutting-principles.md
+  reviews/
+skill-updates/
+```
+
+การแยกไฟล์ช่วยให้อ่าน metadata ของรายการที่ยังเปิดอยู่ได้โดยไม่ต้องโหลด backlog ทั้งหมด ส่วนหลักการที่เกี่ยวกับหลาย skills มีบันทึกแยกจาก observation รายเรื่อง
+
+## จาก observation ไปเป็นอัปเดตที่ตรวจได้
+
+[ขั้นตอนรีวิว](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/references/weekly-review.md) แยกการเสนอแก้ไขออกจากการติดตั้งจริง
+
+1. รวม observation ตาม skill ที่เกี่ยวข้อง
+2. ใน interactive review ผู้ใช้เลือกอนุมัติทั้งหมดหรือบางรายการ
+3. เตรียมการเปลี่ยนแปลงใน staged copies ใต้ `skill-updates/`
+4. ผู้ใช้ติดตั้งชุดที่อัปเดตแล้ว จึงมีผลกับ skill ที่ใช้งานจริง
+
+Scheduled review สามารถจัดการรายการที่ไม่ต้องตัดสินใจเพิ่มใน staged copies ส่วน skill ใหม่ การเปลี่ยนโครงสร้างใหญ่ หรือข้อขัดแย้งต้องให้คนตัดสิน ทั้งสองโหมดไม่ได้แทนที่ skill ที่ติดตั้งอยู่โดยเงียบ ๆ
+
+ถ้าอยากตรวจว่าสังเกตอะไรไว้บ้าง [User Guide](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/USER-GUIDE.md) แนะนำให้ถามช่วงท้าย session หากอยู่ในแชตที่ไม่มีพื้นที่เก็บถาวร สามารถขอเอกสารส่งต่องานเพื่อนำไปใช้ใน session ที่เข้าถึงไฟล์ได้
+
+## ตัวอย่าง: รายงานที่ต้องแก้เรื่องหลักฐานทุกครั้ง
+
+สมมติว่ามี skill สำหรับเขียนรายงาน แต่เราต้องทักซ้ำว่าข้อเสนอไม่มีที่มา ผมจะทดลองดังนี้
+
+1. **ทำงานปัจจุบันให้ถูกก่อน** — แก้รายงานให้มีหลักฐานและข้อเสนอที่ตรวจได้
+2. **บันทึก observation** — ระบุสิ่งที่ขาด ตัวอย่าง และ skill ที่เกี่ยวข้อง
+3. **เสนอการปรับที่ใช้ซ้ำได้** — เช่น เพิ่มขั้นตรวจว่าทุกข้อเสนอระบุหลักฐานและการลงมือถัดไป
+4. **อ่าน staged update** — ตรวจว่ากฎชัดพอ และไม่ได้ผูกกับลูกค้าหรือรายงานฉบับเดียว
+5. **ลองกับรายงานอีกชิ้น** — ดูว่าลดการแก้ซ้ำได้จริงก่อนนำไปใช้ต่อ
+
+ตัวอย่าง prompt สำหรับช่วงรีวิว
+
+```text
+สรุป observation ที่ยังเปิดอยู่ของ skill เขียนรายงาน
+แยกรายการที่เป็นปัญหาซ้ำออกจากบริบทเฉพาะงาน
+เสนอการแก้พร้อมตัวอย่างก่อน–หลัง แล้วให้เราเลือกก่อนจัดทำ staged update
+```
+
+ผมจะใช้จำนวนครั้งที่ต้องทักซ้ำและคุณภาพรายงานถัดไปเป็นเกณฑ์ประเมิน หากกฎใหม่ทำให้ทุกงานยาวขึ้นโดยไม่ช่วยให้ตัดสินใจดีขึ้น ก็ควรย่อหรือปรับขอบเขต
+
+## ดูแลคุณภาพของคลัง skills
+
+[แนวทางเขียน skill](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/references/skill-authoring.md) แยกวิธีทำงานที่เผยแพร่ใช้ซ้ำได้จากความรู้ภายในเฉพาะลูกค้า และให้ตรวจผลก่อนส่ง ผมจึงจะทบทวนรายละเอียดเฉพาะโปรเจกต์ก่อนเปลี่ยน observation เป็นกฎที่ใช้ข้ามงาน
+
+Task Observer เพิ่มทั้งบันทึกและงานรีวิว จึงเหมาะทดลองเมื่อมีหลาย skills หรือพบคำแก้ไขซ้ำจนการดูแลด้วยมือเริ่มตามไม่ทัน ถ้ามีเพียงกฎเล็ก ๆ หนึ่งข้อ การแก้ไฟล์ skill โดยตรงก็อาจจัดการได้ง่ายกว่า
+
+หากอ่าน [Claude-Mem](/th/knowledge/claude-mem) มาแล้ว ผมจะแยกหน้าที่ในการออกแบบ workflow แบบนี้: ประวัติโปรเจกต์ช่วยให้กลับมาทำงานต่อ ส่วน observation ที่ผ่านการทบทวนช่วยปรับวิธีทำงานที่ใช้ซ้ำได้ เลือกเก็บให้เหมาะกับชนิดของความรู้
+
+โปรเจกต์ใช้สัญญาอนุญาต [CC BY 4.0](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/LICENSE) อ่านต่อเรื่อง [Agent Skills](/th/knowledge/skills-sh) และ [Superpowers](/th/knowledge/superpowers) สำหรับตัวอย่างจัด workflow ของ coding agent
+
+### อ้างอิง
+
+- [rebelytics/one-skill-to-rule-them-all](https://github.com/rebelytics/one-skill-to-rule-them-all)
+- [User Guide](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/USER-GUIDE.md)

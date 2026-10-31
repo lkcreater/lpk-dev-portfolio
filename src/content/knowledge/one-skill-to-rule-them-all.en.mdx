@@ -1,0 +1,108 @@
+export const metadata = {
+  title: "Task Observer — turn repeated corrections into better skills",
+  description:
+    "Meet One Skill to Rule Them All, or task-observer: a meta-skill for recording lessons, proposing new skills and reviewing staged updates, with installation and activation guidance.",
+  date: "2026-10-31T10:30",
+  tags: ["Agent Skills", "Workflow", "Knowledge Management"],
+  readingMinutes: 6,
+};
+
+If you repeatedly tell an AI “include evidence for that recommendation,” its working skill may be missing a useful step. **[One Skill to Rule Them All](https://github.com/rebelytics/one-skill-to-rule-them-all)** is the repository for **Task Observer**, installed as `task-observer`, which records lessons from work and proposes skill improvements.
+
+This article draws on the official documentation checked on October 31, 2026. The examples are proposed workflows, rather than measured results from this project.
+
+## What the meta-skill observes
+
+The [core skill](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/SKILL.md) works alongside multi-step tasks, looking for improvements to active skills and repeatable methods that could become new skills. It also observes gaps in its own process.
+
+The [signals reference](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/references/signals.md) includes recurring corrections, successful techniques, and obsolete or contradictory rules. Improvement can mean simplifying a skill. An observation should transfer to another task; a temporary workaround may belong in the current task's context.
+
+I would separate the event from the proposed rule. Before adding an instruction, keep a concrete example showing the problem and how the change would help.
+
+## Install the complete bundle
+
+Use the terminal command documented in the [README](https://github.com/rebelytics/one-skill-to-rule-them-all#installation):
+
+```bash
+npx skills add rebelytics/one-skill-to-rule-them-all --skill task-observer
+```
+
+Add `-g` for installation across projects. For manual installation, preserve `SKILL.md`, `references/` and `scripts/` together. Copying only the main file leaves capabilities incomplete.
+
+## Activate it and verify a new session
+
+Follow the [environment guide](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/references/environments.md) to add its activation template to `CLAUDE.md` or your tool's equivalent. In a **new session**, verify that the Session Start Protocol executes. Merely loading the skill does not establish that it ran.
+
+Use an absolute, persistent workspace path, scoped to your skill library and accessible across sessions. Avoid temporary worktrees.
+
+A setup request to adapt, using the official template as the reference:
+
+```text
+Configure task-observer using its current environment guide and our permanent workspace.
+Explain how to verify the Session Start Protocol in a new session.
+```
+
+## Where the observations live
+
+The [observation log reference](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/references/observation-log.md) uses one Markdown file per observation, with metadata and an archive for resolved records. Important workspace paths include:
+
+```text
+skill-observations/
+  observation-log/
+    NNNN-short-slug.md
+    archive/
+  cross-cutting-principles.md
+  reviews/
+skill-updates/
+```
+
+Separate files let the agent scan metadata for open items without loading the entire backlog. Principles affecting multiple skills have their own record.
+
+## From observation to a reviewable update
+
+The [review procedure](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/references/weekly-review.md) separates proposals from installation:
+
+1. Group observations by the skill they affect.
+2. In interactive review, approve all or selected proposals.
+3. Prepare changes in staged copies under `skill-updates/`.
+4. Install the updated bundle to change the live skill.
+
+Scheduled review can handle straightforward items in staged copies. New skills, major restructuring and conflicting observations need a human decision. Neither mode silently replaces installed skills.
+
+The [User Guide](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/USER-GUIDE.md) suggests asking about observations near the end of a session. In a chat without persistent storage, request a handoff document for a later session with file access.
+
+## Example: reports that repeatedly lack evidence
+
+Suppose a report-writing skill keeps producing recommendations without supporting evidence. I would try this:
+
+1. **Finish the current task well** — correct the report with traceable evidence and actionable recommendations.
+2. **Record an observation** — capture the omission, an example and the affected skill.
+3. **Propose a reusable improvement** — check that each recommendation names its evidence and next action.
+4. **Read the staged update** — check the rule is precise and useful beyond one client or report.
+5. **Try another report** — assess whether it reduces repeated corrections before wider use.
+
+A review prompt:
+
+```text
+Summarize open observations for the report-writing skill.
+Separate recurring issues from task-specific context.
+Propose changes with before-and-after examples, then let us choose
+before preparing a staged update.
+```
+
+I would evaluate the next report's quality and how often the same correction is needed. If a new rule lengthens every task without improving decisions, narrow or simplify it.
+
+## Maintain the quality of the library
+
+The [skill-authoring guidance](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/references/skill-authoring.md) distinguishes reusable methods from client-specific internal knowledge and calls for checking deliverables. I would review project-specific details before turning an observation into a rule shared across tasks.
+
+Task Observer adds records and review work. I would try it when a growing skill library or repeated corrections make manual maintenance difficult. A single small rule may be easier to edit directly.
+
+If you have read about [Claude-Mem](/en/knowledge/claude-mem), I would assign different roles when designing a workflow: project history supports resuming work, while reviewed observations improve reusable methods. Store knowledge according to the job it needs to do.
+
+The project uses [CC BY 4.0](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/LICENSE). Read more about [Agent Skills](/en/knowledge/skills-sh) and [Superpowers](/en/knowledge/superpowers) for coding-agent workflow examples.
+
+### References
+
+- [rebelytics/one-skill-to-rule-them-all](https://github.com/rebelytics/one-skill-to-rule-them-all)
+- [User Guide](https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/USER-GUIDE.md)

@@ -1,0 +1,101 @@
+export const metadata = {
+  title: "SkillSpector — inspect Agent Skills for risks before installation",
+  description:
+    "Meet NVIDIA's SkillSpector: static and LLM analysis for Agent Skills, findings and coverage review, CI failure policies and a practical pre-installation workflow.",
+  date: "2026-10-31T10:50",
+  tags: ["Agent Skills", "Security", "Developer Tools", "NVIDIA"],
+  readingMinutes: 6,
+};
+
+After [Find Skills](/en/knowledge/find-skills) surfaces a promising candidate, the next step is understanding its instructions and supporting files. **[SkillSpector](https://github.com/NVIDIA/SkillSpector)** is NVIDIA's scanner for risks in Agent Skills before installation, including prompt injection, data exfiltration and dependency issues.
+
+This article uses official documentation checked on October 31, 2026. The commands are examples to adapt, rather than recorded scans of this website's skills.
+
+## Inspect patterns and intent
+
+The [NVIDIA guide](https://docs.nvidia.com/skills/scanning-agent-skills/) describes two analysis layers:
+
+- **Static analysis** checks suspicious patterns in text, code, dependencies and declared permissions.
+- **Semantic analysis** uses an LLM to compare the skill's stated purpose with the behavior suggested by its files.
+
+I would use findings to identify where a closer read matters. If a document-processing skill uploads files to an external service, the next questions are whether that transfer serves its purpose and where the behavior is explained to users.
+
+## Install the CLI
+
+The [README](https://github.com/NVIDIA/SkillSpector#installation) provides a CLI installation through `uv`:
+
+```bash
+uv tool install git+https://github.com/NVIDIA/skillspector.git
+```
+
+The current [`pyproject.toml`](https://github.com/NVIDIA/SkillSpector/blob/main/pyproject.toml) requires Python `>=3.12,<3.16`. Check compatibility before installation.
+
+The [scanning guide](https://docs.nvidia.com/skills/scanning-agent-skills/) lists directory, single `SKILL.md`, Git repository, URL and ZIP inputs. I would start with a folder downloaded for review:
+
+```bash
+skillspector scan ./candidate-skill/ --no-llm
+```
+
+`--no-llm` explicitly disables model calls, as implemented in the [CLI](https://github.com/NVIDIA/SkillSpector/blob/main/src/skillspector/cli.py). For semantic analysis, configure a provider before scanning without that flag.
+
+## Static-only can still use the network
+
+The [SC4 documentation](https://github.com/NVIDIA/SkillSpector/blob/main/docs/SC4-osv-live-vulnerability-lookups.md) explains that dependency checks query OSV.dev with package names, ecosystems and versions. A static fallback is available when the service cannot be reached.
+
+Treat model usage and network access as separate choices. If you enable semantic analysis, also review the selected provider and the content sent for processing.
+
+## Read individual findings
+
+The [finding model](https://github.com/NVIDIA/SkillSpector/blob/main/src/skillspector/models.py) includes rule IDs, severity, confidence, file locations, explanations and remediation. I would trace each relevant finding back to the source:
+
+1. **Locate it** — open the file and read the surrounding context.
+2. **Identify the behavior** — such as reading data, running commands or contacting a service.
+3. **Compare with the purpose** — check the skill's stated responsibilities against your intended task.
+4. **Choose a response** — fix the file, narrow the scope or document why the finding is accepted.
+
+The [output guide](https://docs.nvidia.com/skills/scanning-agent-skills/#choose-an-output-format) describes JSON for automation, Markdown for review and SARIF for code scanning systems:
+
+```bash
+skillspector scan ./candidate-skill/ --no-llm --format json --output report.json
+skillspector scan ./candidate-skill/ --no-llm --format markdown --output report.md
+```
+
+## Check how much was inspected
+
+[Analysis Resource Bounds](https://github.com/NVIDIA/SkillSpector/blob/main/docs/ANALYSIS_RESOURCE_BOUNDS.md) documents resource ceilings and partial analysis, including unreadable artifacts, size or time limits, and references that could not be fully inspected.
+
+I would read completeness and coverage alongside findings. If an important file was not inspected, the absence of a finding from that file provides little evidence about it. Resolve the limitation or arrange additional inspection.
+
+## Set an explicit CI policy
+
+The [CLI](https://github.com/NVIDIA/SkillSpector/blob/main/src/skillspector/cli.py) offers `--fail-on-findings` and `--fail-on-incomplete` to control pipeline failure. For example, save a SARIF report:
+
+```bash
+skillspector scan ./candidate-skill/ --no-llm \
+  --fail-on-findings --fail-on-incomplete \
+  --format sarif --output report.sarif
+```
+
+Default exit policy can return `0` for a `CAUTION` result. Select gates that match the team's requirements and read the report alongside the command status.
+
+A [baseline](https://github.com/NVIDIA/SkillSpector/blob/main/docs/SUPPRESSION.md) separates reviewed, accepted findings from new ones. Suppressed findings do not contribute to the risk score, so preserve reasons and review baseline changes. Suppressing findings does not resolve missing coverage.
+
+## A workflow before adoption
+
+I would begin with one skill small enough to inspect:
+
+1. **Define the job** — state its purpose and required access.
+2. **Read the source** — inspect `SKILL.md`, scripts and references before registering it with an agent.
+3. **Scan and triage** — review findings and incomplete areas, then record necessary changes.
+4. **Verify the revised files** — scan the actual source intended for installation.
+5. **Try a bounded task** — compare observed behavior with the intended work and permissions.
+
+My criterion would be whether the evidence explains how findings were handled and what still needs inspection. A scan helps organize that decision; the skill's guidance also needs evaluation on real work.
+
+Read more about [skills.sh](/en/knowledge/skills-sh) for installation concepts and [Task Observer](/en/knowledge/one-skill-to-rule-them-all) for turning recurring lessons into proposed skill improvements.
+
+### References
+
+- [NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector)
+- [Scan Agent Skills Before Installation](https://docs.nvidia.com/skills/scanning-agent-skills/)
+- [Baseline / False-Positive Suppression](https://github.com/NVIDIA/SkillSpector/blob/main/docs/SUPPRESSION.md)

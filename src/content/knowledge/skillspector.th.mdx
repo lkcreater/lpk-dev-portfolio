@@ -1,0 +1,101 @@
+export const metadata = {
+  title: "SkillSpector — ตรวจความเสี่ยงของ Agent Skills ก่อนติดตั้ง",
+  description:
+    "รู้จัก SkillSpector จาก NVIDIA: สแกนคำสั่งและไฟล์ใน Agent Skills ด้วย static checks และ LLM อ่าน findings กับ coverage และตั้งเงื่อนไขตรวจใน CI พร้อมตัวอย่างใช้งาน",
+  date: "2026-10-31T10:50",
+  tags: ["Agent Skills", "Security", "Developer Tools", "NVIDIA"],
+  readingMinutes: 7,
+};
+
+หลังจากใช้ [Find Skills](/th/knowledge/find-skills) ค้นเจอ skill ที่ดูตรงงาน ขั้นต่อมาคืออ่านว่าคำสั่งและไฟล์ประกอบทำอะไรจริง **[SkillSpector](https://github.com/NVIDIA/SkillSpector)** เป็นเครื่องมือจาก NVIDIA สำหรับตรวจความเสี่ยงของ Agent Skills ก่อนติดตั้ง เช่น prompt injection, การส่งข้อมูลออก และความเสี่ยงจาก dependency
+
+บทความนี้เรียบเรียงจากเอกสารทางการที่ตรวจเมื่อ 31 ตุลาคม 2026 ตัวอย่างคำสั่งเป็นแนวทางนำไปทดลอง ไม่ใช่ผลสแกนของ skills ในเว็บไซต์นี้
+
+## ตรวจทั้งรูปแบบและความหมายของงาน
+
+[คู่มือ NVIDIA](https://docs.nvidia.com/skills/scanning-agent-skills/) อธิบายการวิเคราะห์สองส่วน
+
+- **Static analysis** — ตรวจรูปแบบที่น่าสงสัยในข้อความ โค้ด dependency และการประกาศสิทธิ์
+- **Semantic analysis** — ใช้ LLM เปรียบเทียบสิ่งที่ skill บอกว่าจะทำกับพฤติกรรมที่เห็นจากไฟล์ เพื่อหาความไม่สอดคล้องที่ต้องอาศัยบริบท
+
+ผมจะใช้ผลตรวจเพื่อเลือกจุดที่ต้องอ่านละเอียด เช่น skill สำหรับจัดเอกสารที่มีการส่งไฟล์ไปบริการภายนอก คำถามถัดไปคือการส่งนั้นจำเป็นต่อหน้าที่หรือไม่ และอธิบายให้ผู้ใช้รู้ไว้ตรงไหน
+
+## เริ่มติดตั้ง CLI
+
+[README](https://github.com/NVIDIA/SkillSpector#installation) แนะนำวิธีติดตั้ง CLI ผ่าน `uv`
+
+```bash
+uv tool install git+https://github.com/NVIDIA/skillspector.git
+```
+
+ข้อกำหนด Python ปัจจุบันใน [`pyproject.toml`](https://github.com/NVIDIA/SkillSpector/blob/main/pyproject.toml) คือ `>=3.12,<3.16` ควรตรวจเวอร์ชันที่รองรับก่อนติดตั้ง
+
+เครื่องมือรับทั้งโฟลเดอร์ ไฟล์ `SKILL.md`, Git repository, URL และ ZIP ตาม[คู่มือสแกน](https://docs.nvidia.com/skills/scanning-agent-skills/) สำหรับการตรวจครั้งแรก ผมจะเริ่มจากโฟลเดอร์ที่ดาวน์โหลดไว้สำหรับรีวิว
+
+```bash
+skillspector scan ./candidate-skill/ --no-llm
+```
+
+`--no-llm` ปิดขั้นตอนเรียกโมเดลอย่างชัดเจน ตาม[ตัวเลือก CLI](https://github.com/NVIDIA/SkillSpector/blob/main/src/skillspector/cli.py) หากต้องการ semantic analysis ให้ตั้ง provider ตามเอกสารก่อนเรียก scan โดยไม่มี flag นี้
+
+## Static-only ยังอาจใช้เครือข่าย
+
+[เอกสาร SC4](https://github.com/NVIDIA/SkillSpector/blob/main/docs/SC4-osv-live-vulnerability-lookups.md) ระบุว่าการตรวจ dependency ใช้ OSV.dev เพื่อค้นข้อมูลช่องโหว่ โดยส่งชื่อแพ็กเกจ ecosystem และเวอร์ชันไปเทียบ พร้อม fallback เป็นข้อมูล static เมื่อเชื่อมต่อไม่ได้
+
+ดังนั้น `--no-llm` บอกขอบเขตการใช้โมเดล ส่วนการเชื่อมต่อเครือข่ายต้องพิจารณาแยกกัน หากเปิด semantic analysis ก็ควรตรวจ provider และข้อมูลที่จะส่งไปประมวลผลด้วย
+
+## อ่าน findings ก่อนดูแค่ผลสรุป
+
+ใน[โครงสร้างข้อมูล finding](https://github.com/NVIDIA/SkillSpector/blob/main/src/skillspector/models.py) มี rule ID, severity, confidence, ตำแหน่งไฟล์และบรรทัด พร้อมคำอธิบายและแนวทางแก้ ผมจะใช้ข้อมูลเหล่านี้ไล่ตรวจกลับไปยัง source
+
+1. **พบที่ไหน** — เปิดไฟล์และอ่านบริบทรอบบรรทัดที่ระบุ
+2. **พฤติกรรมเกี่ยวกับอะไร** — เช่น อ่านข้อมูล เรียกคำสั่ง หรือเชื่อมบริการภายนอก
+3. **ตรงหน้าที่หรือไม่** — เทียบกับสิ่งที่ skill ประกาศไว้และงานที่เราจะให้ทำ
+4. **ต้องจัดการอย่างไร** — แก้ไฟล์ จำกัดขอบเขต หรือบันทึกเหตุผลที่ยอมรับประเด็นนั้น
+
+เก็บผลได้หลายรูปแบบตาม[คู่มือ output](https://docs.nvidia.com/skills/scanning-agent-skills/#choose-an-output-format) เช่น JSON สำหรับประมวลผลต่อ Markdown สำหรับอ่านร่วมกัน และ SARIF สำหรับระบบ code scanning
+
+```bash
+skillspector scan ./candidate-skill/ --no-llm --format json --output report.json
+skillspector scan ./candidate-skill/ --no-llm --format markdown --output report.md
+```
+
+## ดูด้วยว่าตรวจครบแค่ไหน
+
+[Analysis Resource Bounds](https://github.com/NVIDIA/SkillSpector/blob/main/docs/ANALYSIS_RESOURCE_BOUNDS.md) อธิบายเพดานทรัพยากรและกรณีที่รายงานการวิเคราะห์บางส่วน เช่น อ่าน artifact ไม่ได้ ชนขนาดหรือเวลาที่กำหนด หรือมี reference ที่ยังตรวจไม่ครบ
+
+ผมจะอ่านสถานะ completeness และ coverage คู่กับ findings เสมอ หากไฟล์สำคัญยังไม่ได้ตรวจ การไม่มี finding จากไฟล์นั้นยังใช้สรุปความเสี่ยงของมันไม่ได้ ควรแก้สาเหตุที่ตรวจไม่ครบหรือแยกตรวจเพิ่มเติม
+
+## ตั้งเกณฑ์ CI ให้ตรงกับทีม
+
+[CLI](https://github.com/NVIDIA/SkillSpector/blob/main/src/skillspector/cli.py) มี `--fail-on-findings` และ `--fail-on-incomplete` สำหรับกำหนดเงื่อนไขให้ pipeline ไม่ผ่าน ตัวอย่างการเก็บรายงาน SARIF
+
+```bash
+skillspector scan ./candidate-skill/ --no-llm \
+  --fail-on-findings --fail-on-incomplete \
+  --format sarif --output report.sarif
+```
+
+นโยบาย exit code เริ่มต้นยังอาจคืน `0` เมื่อมีผลระดับ `CAUTION` จึงควรตั้งเงื่อนไขตามเป้าหมายของทีม และอ่านรายงานร่วมกับผลของคำสั่ง
+
+สำหรับประเด็นที่ทบทวนแล้วยอมรับได้ [baseline](https://github.com/NVIDIA/SkillSpector/blob/main/docs/SUPPRESSION.md) ช่วยแยก findings ที่ยอมรับออกจากรายการใหม่ แต่รายการที่ suppress จะไม่ถูกนำไปคิด risk score จึงควรมีเหตุผลกำกับและรีวิวการเปลี่ยนแปลง baseline ด้วย การ suppress findings ไม่ได้ทำให้ coverage ที่ขาดหายกลับมาครบ
+
+## ตัวอย่าง workflow ก่อนนำ skill มาใช้
+
+ผมจะเริ่มจาก skill หนึ่งตัวที่มีขอบเขตอ่านไหว แล้วจัดลำดับดังนี้
+
+1. **กำหนดงาน** — ต้องการให้ skill ทำอะไร และจำเป็นต้องเข้าถึงอะไรบ้าง
+2. **อ่านต้นทาง** — ดู `SKILL.md` พร้อม scripts และ references ที่เกี่ยวข้อง โดยยังไม่ลงทะเบียนให้ agent ใช้
+3. **สแกนและทบทวน** — อ่าน findings รวมถึงรายการที่ตรวจไม่ครบ แล้วบันทึกสิ่งที่ต้องแก้
+4. **ตรวจไฟล์หลังแก้** — สแกน source ชุดที่จะนำไปใช้จริงอีกครั้ง
+5. **ทดลองกับงานจำกัดขอบเขต** — ตรวจว่าพฤติกรรมตรงกับสิ่งที่ตั้งใจและสิทธิ์ที่ให้ไว้
+
+เกณฑ์ของผมคืออธิบายได้ว่าประเด็นที่พบถูกจัดการอย่างไร และยังมีส่วนใดที่ต้องตรวจเพิ่ม ผลสแกนช่วยจัดหลักฐานสำหรับตัดสินใจ ส่วนคำแนะนำของ skill ก็ยังต้องนำไปลองกับงานจริง
+
+อ่านต่อ [skills.sh](/th/knowledge/skills-sh) สำหรับภาพรวมการติดตั้ง และ [Task Observer](/th/knowledge/one-skill-to-rule-them-all) สำหรับเปลี่ยนบทเรียนที่พบซ้ำให้เป็นข้อเสนอปรับปรุง skills
+
+### อ้างอิง
+
+- [NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector)
+- [Scan Agent Skills Before Installation](https://docs.nvidia.com/skills/scanning-agent-skills/)
+- [Baseline / False-Positive Suppression](https://github.com/NVIDIA/SkillSpector/blob/main/docs/SUPPRESSION.md)

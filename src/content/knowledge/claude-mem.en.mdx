@@ -1,0 +1,129 @@
+export const metadata = {
+  title: "Claude-Mem — give Claude Code project memory across sessions",
+  description:
+    "How Claude-Mem preserves project context for Claude Code: automatic observations, installation, progressive memory search, folder context and privacy settings.",
+  date: "2026-10-31T10:00",
+  tags: ["Claude Code", "AI Agent", "Context Engineering"],
+  readingMinutes: 6,
+};
+
+When a coding task stretches across several days, the hardest things to repeat are often the reasons behind the code: why a particular approach won, what failed, and where work stopped. **[Claude-Mem](https://docs.claude-mem.ai/introduction)** helps carry that context between sessions by capturing tool activity, summarizing discoveries and making them available to Claude Code later.
+
+This article draws on the official documentation checked on October 31, 2026, with a suggested workflow to try.
+
+## What Claude-Mem remembers
+
+Claude-Mem is a persistent memory system that works with Claude Code. Once installed, it turns work activity into searchable **observations**, preserving useful knowledge for future sessions. The purpose is to carry forward relevant context so each conversation has less ground to cover again. See the project's [introduction](https://docs.claude-mem.ai/introduction).
+
+For workflow design, I would keep deliberate team rules in project instruction files and use work history to explain previous discoveries. Rules provide direction, history provides background, and the current code still needs inspection.
+
+## From tool activity to the next session
+
+The [Getting Started guide](https://docs.claude-mem.ai/usage/getting-started) describes this cycle:
+
+1. **Start a session** — recent project observations and summaries enter the context.
+2. **Work normally** — tool activity such as reading files, editing code, searching and running commands is captured.
+3. **Extract knowledge** — the worker produces titles, facts, work categories and references to affected files.
+4. **Summarize** — the Stop hook triggers a summary of discoveries, completed work and next steps for future sessions.
+
+The system combines lifecycle hooks, a processing worker and SQLite with FTS5 text search. Chroma is optional for semantic search, and a viewer displays saved memory. The [Architecture Overview](https://docs.claude-mem.ai/architecture/overview) explains these components.
+
+Data and settings live under `~/.claude-mem/`. Its `settings.json` controls behavior and the context injected into sessions; see [Configuration](https://docs.claude-mem.ai/configuration). Database location and model processing are separate choices, so check the configured provider too.
+
+## Install it
+
+Inside Claude Code, add the marketplace, install the plugin, then restart Claude Code:
+
+```text
+/plugin marketplace add thedotmack/claude-mem
+/plugin install claude-mem
+```
+
+Or install from the terminal using your Anthropic plan:
+
+```bash
+npx claude-mem install --provider claude
+```
+
+Interactive `npx claude-mem install` currently preselects CMEM Pro. The `--provider claude` option skips installer sign-in and shares your plan usage. See [Installation](https://docs.claude-mem.ai/installation).
+
+## Retrieve details gradually
+
+Stored history helps when the agent finds the parts relevant to today's task. [Smart Memory Search](https://docs.claude-mem.ai/usage/search-tools) uses **progressive disclosure** through its skill and MCP tools:
+
+- **`search`** returns a compact index with IDs, titles, dates and categories.
+- **`timeline`** shows events around a relevant result to recover its context.
+- **`get_observations`** retrieves full details for selected IDs.
+
+A prompt to adapt:
+
+```text
+Search this project's history for how we fixed the login redirect issue.
+Start with the index, then read only the relevant observations.
+Explain why we chose that fix and cite the observation IDs.
+```
+
+I would then have the agent compare those findings with the current files. A decision that made sense when recorded may need revisiting after a refactor.
+
+## Review work and add folder context
+
+**My Work** is a local viewer for recorded requests, progress, results and human handoffs. Open the worker URL printed by Claude-Mem. Viewing saved work does not require another model call. See the [My Work guide](https://docs.claude-mem.ai/usage/my-work).
+
+Another feature writes activity timelines into subfolder `CLAUDE.md` files. It is **disabled by default**. To enable it, merge this setting into `~/.claude-mem/settings.json`, following [Folder Context Files](https://docs.claude-mem.ai/usage/folder-context):
+
+```json
+{
+  "CLAUDE_MEM_FOLDER_CLAUDEMD_ENABLED": "true"
+}
+```
+
+Generated text sits inside dedicated tags; handwritten content outside them is preserved. If a team enables this feature, decide whether timelines belong in Git or stay local, since they can change frequently.
+
+## Control what gets remembered
+
+**Private tags** mark content to exclude from Claude-Mem's saved memory, such as temporary background information. See [Private Tags](https://docs.claude-mem.ai/usage/private-tags):
+
+```text
+<private>
+Use this background only for analysis in the current session.
+</private>
+
+Help compare the options without persisting that background in memory.
+```
+
+Claude still sees this content in the live conversation. These tags control Claude-Mem storage; they do not hide information from the conversational model.
+
+**Auto-redaction** is a separate, opt-in layer. It uses regex patterns to replace recognized secrets with placeholders before storage. Merge this setting into the existing settings file, as described in [Auto-Redaction](https://docs.claude-mem.ai/usage/auto-redaction):
+
+```json
+{
+  "CLAUDE_MEM_REDACT_ENABLED": "true"
+}
+```
+
+Pattern detection has limits, so keep the project's normal secret management and access controls in place.
+
+Telemetry is also enabled by default. The docs describe anonymous usage analytics; the [Telemetry guide](https://docs.claude-mem.ai/telemetry) provides this opt-out command:
+
+```bash
+npx claude-mem telemetry disable
+```
+
+## Try it on work you revisit
+
+I would start with a project that needs repeated visits, such as a bug tied to an earlier design decision:
+
+1. Have the agent investigate, fix and verify the problem as usual.
+2. Check the viewer for an accurate account of the reasoning and discoveries.
+3. Open a new session and ask about that work without pasting the whole conversation again.
+4. Compare the answer with its cited observations and the latest code before continuing.
+
+I would judge the result by how much repetition it removes, whether old reasoning is easy to find, and whether unwanted information enters the record. Test commands, team rules and important conclusions that people need to review should still have deliberately maintained documentation.
+
+For related workflow ideas, read about [Claude Code subagents](/en/knowledge/claude-code-subagents) and [Agent Skills](/en/knowledge/skills-sh) to organize how agents work alongside the context they need.
+
+### Further references
+
+- [Claude-Mem: Introduction](https://docs.claude-mem.ai/introduction)
+- [Installation and provider options](https://docs.claude-mem.ai/installation)
+- [Configuration](https://docs.claude-mem.ai/configuration)

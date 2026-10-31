@@ -1,10 +1,10 @@
 export const metadata = {
   title: "Impeccable — give your AI coding agent a clearer UI design vocabulary",
   description:
-    "A complete guide to Impeccable's commands: what each does, when to use it, example prompts, installation options and a practical UI review workflow.",
-  date: "2026-10-16T10:00",
+    "A guide to Impeccable's design commands, deterministic detector, automatic design hooks and project context, with installation options and practical UI review examples.",
+  date: "2026-10-31T10:10",
   tags: ["AI Agent", "Agent Skills", "UI/UX", "Frontend"],
-  readingMinutes: 10,
+  readingMinutes: 12,
 };
 
 An AI-generated page can run correctly while still being hard to read. The primary action may disappear among competing elements, or every section may have the same visual weight. Asking an agent to “make it look better” leaves too much open to interpretation.
@@ -33,9 +33,39 @@ Choose one installation method, then start in your agent's chat:
 
 Setup records audience and product goals in `PRODUCT.md`. Visual decisions live separately in `DESIGN.md`, as explained in the [project README](https://github.com/pbakaus/impeccable).
 
+## Check UI from the terminal
+
+The [GitHub project](https://github.com/pbakaus/impeccable) also includes a deterministic design detector that runs without an LLM or API key. It complements the agent's design guidance with repeatable checks.
+
+Use a source target for code patterns and a URL for rendered checks such as contrast and text size. The [detector guide](https://impeccable.style/docs/detector/) documents these terminal commands:
+
+```bash
+npx impeccable detect src/
+npx impeccable detect http://localhost:3000
+npx impeccable detect --json src/
+```
+
+Exit `0` means no primary findings, `2` means primary findings, and `1` means a target could not be scanned. Advisories may still appear with `0`; a clean scan is one input to a wider design review.
+
+### Give the agent feedback while it edits
+
+[Design hooks](https://impeccable.style/docs/hooks/) run supported checks during UI work. The installer offers hook setup where supported; a shared skill copy alone does not provide all integrations. In Claude Code, inspect the installed hooks with `/hooks`. Check Impeccable's state in chat:
+
+```text
+/impeccable hooks status
+/impeccable hooks on
+/impeccable doctor
+```
+
+The agent can act on findings or explain a deliberate choice. Silence can also mean an inactive hook, so use `doctor` to check setup.
+
+### Keep product and design context with the project
+
+The [context guide](https://impeccable.style/docs/context/) separates audience and requirements in `PRODUCT.md`, shared visual decisions in `DESIGN.md`, and page briefs in `.impeccable/surfaces/`. Structured design metadata lives in `.impeccable/design.json`. Keep those records current so later changes follow the same decisions; review shared configuration and ignore rules using [Configuration & ignores](https://impeccable.style/docs/config/).
+
 ## All commands: purpose and when to use them
 
-As of October 16, 2026, the [Command Reference](https://impeccable.style/docs/) lists 24 entries across six groups. Here is what each does, when it helps, and an example prompt to adapt. The examples illustrate requests; they are not recorded command results.
+As of October 31, 2026, the [Command Reference](https://impeccable.style/docs/) lists 24 entries across six groups. Here is what each does, when it helps, and an example prompt to adapt. The examples illustrate requests; they are not recorded command results.
 
 The general form is a skill invocation followed by a command and target, entered in your agent chat:
 
@@ -203,7 +233,7 @@ Example: `/impeccable live`
 
 ### craft and pin / unpin shortcuts
 
-**[craft](https://github.com/pbakaus/impeccable#24-commands)** still appears in the README's command table as the planning-through-building flow with visual iteration, for example `/impeccable craft a workshop booking page`. The documentation website presents the general creation entry point under `impeccable` itself. If your installed version differs, check its available commands first.
+**[craft](https://github.com/pbakaus/impeccable#24-commands)** is now a deprecated alias for an ordinary build request. Prefer describing the work directly, such as `/impeccable design a workshop booking page`, or use `shape` when you want a brief before implementation. The README counts commands differently from the website reference above; check the list in your installed version.
 
 **[pin / unpin](https://impeccable.style/docs/impeccable/)** add or remove standalone shortcuts for frequently used commands. A shortcut still delegates to the main skill:
 

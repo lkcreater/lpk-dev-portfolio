@@ -1,10 +1,10 @@
 export const metadata = {
   title: "Impeccable — เพิ่มทักษะออกแบบ UI ให้ AI coding agent",
   description:
-    "รู้จัก Impeccable ของ pbakaus พร้อมรายละเอียด Commands ครบทุกตัว วิธีเลือกใช้ ตัวอย่างคำสั่ง และ workflow สำหรับออกแบบและตรวจปรับ UI",
-  date: "2026-10-16T10:00",
+    "รู้จัก Impeccable ของ pbakaus ทั้งคำสั่งออกแบบ UI, deterministic detector, design hooks และบริบทโปรเจกต์ พร้อมวิธีติดตั้งและตัวอย่าง workflow ตรวจปรับงาน",
+  date: "2026-10-31T10:10",
   tags: ["AI Agent", "Agent Skills", "UI/UX", "Frontend"],
-  readingMinutes: 12,
+  readingMinutes: 14,
 };
 
 เวลาให้ AI สร้างหน้าเว็บ โค้ดอาจรันได้ตั้งแต่ครั้งแรก แต่หน้าเว็บยังอ่านยาก ปุ่มสำคัญไม่เด่น หรือทุกส่วนดูมีน้ำหนักเท่ากัน การสั่งว่า “ทำให้สวยขึ้น” เปิดช่องให้ agent เดาว่าเราต้องการอะไร
@@ -33,9 +33,39 @@ npx impeccable install
 
 ขั้นตอนนี้ช่วยบันทึกบริบทผู้ใช้และเป้าหมายลง `PRODUCT.md` ส่วนแนวทางภาพของโปรเจกต์อยู่ใน `DESIGN.md` ตาม [README ของโปรเจกต์](https://github.com/pbakaus/impeccable) การแยกสองส่วนนี้ช่วยให้เปลี่ยนหน้าตาโดยยังยึดเป้าหมายของผลิตภัณฑ์
 
+## ตรวจ UI จาก terminal
+
+[โปรเจกต์บน GitHub](https://github.com/pbakaus/impeccable) มี deterministic design detector ที่ทำงานได้โดยไม่เรียก LLM หรือใช้ API key ช่วยเสริมแนวทางออกแบบของ agent ด้วยกฎตรวจที่รันซ้ำได้
+
+เลือกตรวจ source เพื่อหาปัญหาจากรูปแบบโค้ด หรือใช้ URL เพื่อตรวจหน้าที่ render แล้ว เช่น contrast และขนาดข้อความ คำสั่งตาม[คู่มือ detector](https://impeccable.style/docs/detector/) ใช้ใน terminal
+
+```bash
+npx impeccable detect src/
+npx impeccable detect http://localhost:3000
+npx impeccable detect --json src/
+```
+
+Exit code `0` หมายถึงไม่มี primary findings, `2` หมายถึงพบ primary findings และ `1` หมายถึงมีเป้าหมายที่สแกนไม่ได้ แม้ได้ `0` ก็ยังอาจมี advisory จึงควรใช้ผลสแกนประกอบการตรวจดีไซน์ทั้งภาพรวม
+
+### ส่ง feedback ให้ agent ระหว่างแก้ UI
+
+[Design hooks](https://impeccable.style/docs/hooks/) เรียกการตรวจระหว่างทำงานกับ UI ตัวติดตั้งเสนอการตั้งค่า hook ในเครื่องมือที่รองรับ ส่วนการคัดลอก shared skill อย่างเดียวไม่ได้ติดตั้ง integration ครบ ใน Claude Code เปิด `/hooks` เพื่อตรวจรายการที่ติดตั้ง แล้วเช็กสถานะของ Impeccable ในแชตด้วย
+
+```text
+/impeccable hooks status
+/impeccable hooks on
+/impeccable doctor
+```
+
+Agent สามารถแก้ตามผลตรวจหรืออธิบายการตัดสินใจที่ตั้งใจไว้ได้ หากไม่มีข้อความแจ้งก็อาจเป็นเพราะ hook ไม่ทำงาน จึงใช้ `doctor` ตรวจการตั้งค่าได้
+
+### เก็บบริบทผลิตภัณฑ์และดีไซน์ไว้กับโปรเจกต์
+
+[คู่มือ context](https://impeccable.style/docs/context/) แยกผู้ใช้และข้อกำหนดไว้ใน `PRODUCT.md`, กติกาภาพร่วมกันไว้ใน `DESIGN.md` และ brief รายหน้าใน `.impeccable/surfaces/` ส่วน metadata เชิงโครงสร้างอยู่ใน `.impeccable/design.json` ควรดูแลบันทึกให้ตรงกับงานจริง เพื่อให้รอบถัดไปใช้การตัดสินใจชุดเดียวกัน และตรวจค่าร่วมกับกฎยกเว้นผ่าน[คู่มือ Configuration & ignores](https://impeccable.style/docs/config/)
+
 ## Commands ทั้งหมด: ทำอะไร ใช้เมื่อไร
 
-[Command Reference](https://impeccable.style/docs/) ณ วันที่ 16 ตุลาคม 2026 แบ่ง 24 รายการเป็น 6 กลุ่ม ด้านล่างสรุปหน้าที่และจังหวะที่เหมาะกับแต่ละคำสั่ง พร้อมตัวอย่าง prompt ที่นำไปปรับใช้ได้ ตัวอย่างเป็นคำขอประกอบบทความ ไม่ใช่ผลการรันจริง
+[Command Reference](https://impeccable.style/docs/) ณ วันที่ 31 ตุลาคม 2026 แบ่ง 24 รายการเป็น 6 กลุ่ม ด้านล่างสรุปหน้าที่และจังหวะที่เหมาะกับแต่ละคำสั่ง พร้อมตัวอย่าง prompt ที่นำไปปรับใช้ได้ ตัวอย่างเป็นคำขอประกอบบทความ ไม่ใช่ผลการรันจริง
 
 รูปแบบทั่วไปคือเรียก skill ตามด้วยคำสั่งและเป้าหมาย โดยพิมพ์ในแชตของ agent
 
@@ -203,7 +233,7 @@ npx impeccable install
 
 ### craft และคำสั่งลัด pin / unpin
 
-**[craft](https://github.com/pbakaus/impeccable#24-commands)** ยังอยู่ในตารางคำสั่งของ README โดยอธิบายว่าเป็น flow วางแผนแล้วสร้าง พร้อมวนตรวจผลภาพ เช่น `/impeccable craft หน้าจองเวิร์กช็อป` ขณะที่เว็บไซต์จัดจุดเริ่มต้นงานสร้างไว้ใต้คำสั่ง `impeccable` โดยตรง หากรายการในเวอร์ชันที่ติดตั้งต่างจากบทความ ให้ตรวจรายการของ skill นั้นก่อนใช้งาน
+**[craft](https://github.com/pbakaus/impeccable#24-commands)** ปัจจุบันเป็น alias ที่ deprecated สำหรับคำขอสร้างงานทั่วไป ควรอธิบายงานตรง ๆ เช่น `/impeccable ออกแบบหน้าจองเวิร์กช็อป` หรือใช้ `shape` ถ้าต้องการ brief ก่อนลงมือ README นับรายการต่างจากหน้าอ้างอิงบนเว็บไซต์ที่ใช้ด้านบน จึงควรตรวจรายการในเวอร์ชันที่ติดตั้งด้วย
 
 **[pin / unpin](https://impeccable.style/docs/impeccable/)** ใช้เพิ่มหรือลบ shortcut ของคำสั่งที่เรียกบ่อย โดย shortcut ยังส่งงานเข้า skill หลัก เช่น
 
